@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Header from './components/AppHeader';
 import NavBar from './components/NavBar';
 import MainScreen from './components/MainScreen';
+import NavBarBot from './components/NavBarBot'
 import LinearGradient from 'react-native-linear-gradient';
 
 export default function App() {
@@ -16,6 +17,8 @@ export default function App() {
       <ScrollView>
       <MainScreen />
       </ScrollView>
+      <NavBarBot />
+
       
       
     </View>
