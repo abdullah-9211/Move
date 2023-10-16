@@ -5,6 +5,7 @@ import {Card} from 'react-native-shadow-cards'
 import { MaterialIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function NavBarBot() {
     const [loaded] = useFonts({
@@ -17,6 +18,7 @@ export default function NavBarBot() {
     }
   
     return (
+        
         <Card style={[basic.card, basic.elevation]}>
             <View style={basic.basic2}>
                 <View style={basic.columnView}>
@@ -40,9 +42,10 @@ export default function NavBarBot() {
 
 const basic =  StyleSheet.create({
     basic2: {
+        backgroundColor:"white",
         flex: 1,
         justifyContent: "center",
-        flexDirection:"row", marginHorizontal: 5, 
+        flexDirection:"row",
         alignItems: "center",
 
     },
@@ -57,10 +60,8 @@ const basic =  StyleSheet.create({
         position: "absolute",
         paddingBottom:10,
         paddingTop:10,
-        backgroundColor: 'white',  
         width: '100%',  
-        borderTopWidth: 2, // Border width
-        borderTopColor: '#900020', // Border color
+
         bottom: 0,
     },  
     elevation: {  

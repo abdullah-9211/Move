@@ -71,7 +71,7 @@ export default function MainScreen() {
           showsHorizontalScrollIndicator={false}
           />
         </View>
-      <View style={{marginBottom: 50}}/>
+      <View style={{marginBottom: 65}}/>
     </View>
   );
 }
