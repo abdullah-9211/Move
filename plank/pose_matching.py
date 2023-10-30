@@ -281,39 +281,39 @@ class Plank:
                     # Elbow angle matching
                     
                     if elbow_angle < (trainer_elbow_min - self.leniency):
-                        self.errors.append("Elbow Angle too low")
+                        self.errors.append("Push forearms away from shoulders, angle too small")
                         self.error_bool = True
                     elif elbow_angle > (trainer_elbow_max + self.leniency):
-                        self.errors.append("Elbow Angle too high")
+                        self.errors.append("Bring forearms closer to shoulders, separation too much")
                         self.error_bool = True
                     
                     
                     # Shoulder angle matching
                     
                     if shoulder_angle < (trainer_shoulder_min - self.leniency):
-                        self.errors.append("Shoulder Angle too low")
+                        self.errors.append("Push body backwards, too much forward lean")
                         self.error_bool = True
                     elif shoulder_angle > (trainer_shoulder_max + self.leniency):
-                        self.errors.append("Shoulder Angle too high")
+                        self.errors.append("Push body forwards, too much backward lean")
                         self.error_bool = True
                     
                     
                     # Hip Angle Matching
                     
                     if hip_angle < (trainer_hip_min - self.leniency):
-                        self.errors.append("Hip Angle too low")
+                        self.errors.append("Bring hips lower")
                         self.error_bool = True
                     elif hip_angle > (trainer_hip_max + self.leniency):
-                        self.errors.append("Hip Angle too high")
+                        self.errors.append("Push hips upwards")
                         self.error_bool = True
 
                     # Knee Angle Matching
                     
                     if knee_angle < (trainer_knee_min - self.leniency):
-                        self.errors.append("Knee Angle too low")
+                        self.errors.append("Straighten legs, too much bend")
                         self.error_bool = True
                     elif knee_angle > (trainer_knee_max + self.leniency):
-                        self.errors.append("Knee Angle too high")
+                        self.errors.append("Bend legs, too much straightening")
                         self.error_bool = True
                     
                 except:
@@ -358,5 +358,5 @@ class Plank:
 
 if "__main__" == __name__:
     
-    plank = Plank("sample_videos/abdullah_footage.mp4", "sample_videos/umar_footage.mp4")
+    plank = Plank("sample_videos/abdullah_footage.mp4", "sample_videos/aizaaz_footage.mp4")
     plank.run_process()
