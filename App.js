@@ -1,26 +1,33 @@
-// const React = require('react');
-import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import Header from './components/AppHeader';
-import NavBar from './components/NavBar';
-import MainScreen from './components/MainScreen';
-import NavBarBot from './components/NavBarBot'
-import LinearGradient from 'react-native-linear-gradient';
+import { StyleSheet, Text, View } from 'react-native';
+// import theme from './core/theme'
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Workouts from './Workouts';
+import SignUpScreen from './Screens/SignUpScreen'
+import SignUpDetails from './Screens/SignUpDetails'
+
+const Stack = createStackNavigator()
 
 export default function App() {
   return (
-    <View style = {{flex: 1, justifyContent: "flex-start"}}> 
     
-      <Header />
-      <NavBar />
-      <ScrollView>
-      <MainScreen />
-      </ScrollView>
-      <NavBarBot />
+    // <Provider theme= {theme}>
 
-      
-      
-    </View>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="SignUpDetails"
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="SignupScreen" component={SignUpScreen}/>
+          <Stack.Screen name="SignUpDetails" component={SignUpDetails}/>
+          <Stack.Screen name="MainScreen" component={Workouts}/>
+          
+        </Stack.Navigator>
+      </NavigationContainer>
+    // </Provider>
   );
 }
+    
