@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function SignUpDetails() {
+export default function SignUpDetails2() {
     const navigation = useNavigation();
 
     
@@ -38,14 +38,14 @@ export default function SignUpDetails() {
             <View style = {{flex: 1, alignItems: "flex-start", width: screenWidth-20,justifyContent:"flex-start"}}> 
       
             
-            <Text style={styles.textStyle}>What should we call you?</Text>
+            <Text style={styles.textStyle}>Create Password</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Name"
                 value={name}
                 onChangeText={(text) => setName(text)}
             />
-            <Text style={styles.textStyle}>Your email?</Text>
+            <Text style={styles.textStyle}>Confirm Password</Text>
             <TextInput
                 style={styles.input}
                 placeholder="email"
@@ -59,7 +59,7 @@ export default function SignUpDetails() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('SignUpDetails2')}>
+            onPress={() => console.log('Pressable pressed')}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>

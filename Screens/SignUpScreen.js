@@ -6,11 +6,13 @@ import Header from '../components/AppHeader';
 import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
+import { useNavigation } from '@react-navigation/native';
 
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function SignUpScreen() {
+  const navigation = useNavigation();
     
     const [loaded] = useFonts({
 
@@ -39,10 +41,10 @@ export default function SignUpScreen() {
         style={({ pressed }) => [
             styles.button,
         {
-            backgroundColor: pressed ? '#9000A0' : '#900020',
+            backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => console.log('Pressable pressed')}
+        onPress={() => navigation.navigate('SignUpDetails')}
 >
         <Text style={styles.buttonText}>
             Join Us
@@ -52,7 +54,7 @@ export default function SignUpScreen() {
         style={({ pressed }) => [
             styles.button,
         {
-            backgroundColor: pressed ? '#9000A0' : '#900020',
+            backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
         onPress={() => console.log('Pressable pressed')}>
