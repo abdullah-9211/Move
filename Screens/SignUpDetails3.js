@@ -23,6 +23,14 @@ export default function SignUpDetails3() {
     if (!loaded) {
       return null;
     }
+
+    const handlePress = () => {
+        // Store information (replace 'info' with the actual information)
+    // setUser('info');
+    navigation.navigate('HomePage');
+
+    };
+
     return (
     //     <ImageBackground
     //   source={require('../assets/images/red2.jpg')} // Replace with the path to your image
@@ -33,20 +41,28 @@ export default function SignUpDetails3() {
                 <Text style={styles.textStyle}>Select Your Gender</Text>
             </View>
             <View style={{ flex:3, flexDirection:'row', alignItems: "center", justifyContent: "center", marginTop:75}}>
-            <Image 
-                source={require('../assets/images/3.png')}
-                style={styles.image}
-                resizeMode="contain"/>
-                <Image 
-                source={require('../assets/images/1.png')}
-                style={styles.image}
-                resizeMode="contain"/>
+            <Pressable onPress={handlePress}>
+                    <Image
+                        source={require('../assets/images/3.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                </Pressable>
+                <Pressable onPress={handlePress}>
+                    <Image
+                        source={require('../assets/images/1.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                </Pressable>
                 
                 
           
             </View>
             <View style={{flex:1, marginBottom:20,justifyContent: "center", alignItems:"center",marginTop:20}}>
-            <Text style={{fontFamily:"QuickSand", fontSize: 16}}>Prefer Not to Say</Text>
+                <Pressable onPress={handlePress}>
+                    <Text style={{ fontFamily: "QuickSand", fontSize: 16 }}>Prefer Not to Say</Text>
+                </Pressable>
             </View>
         </View>
         

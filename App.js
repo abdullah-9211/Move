@@ -8,6 +8,7 @@ import SignUpScreen from './Screens/SignUpScreen'
 import SignUpDetails from './Screens/SignUpDetails'
 import SignUpDetails2 from './Screens/SignUpDetails2'
 import SignUpDetails3 from './Screens/SignUpDetails3'
+import HomePage from './Screens/HomePage'
 
 const Stack = createStackNavigator()
 
@@ -27,7 +28,7 @@ export default function App() {
           <Stack.Screen name="SignUpDetails" component={SignUpDetails}/>
           <Stack.Screen name="SignUpDetails2" component={SignUpDetails2}/>
           <Stack.Screen name="SignUpDetails3" component={SignUpDetails3}/>
-          <Stack.Screen name="MainScreen" component={Workouts}/>
+          <Stack.Screen name="HomePage" component={HomePage}/>
           
         </Stack.Navigator>
       </NavigationContainer>
