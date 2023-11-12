@@ -59,7 +59,7 @@ export default function SignUpDetails2() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => console.log('Pressable pressed')}>
+            onPress={() => navigation.navigate('SignUpDetails3')}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>
