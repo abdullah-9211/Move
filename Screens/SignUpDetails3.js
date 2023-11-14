@@ -27,7 +27,7 @@ export default function SignUpDetails3() {
     const handlePress = () => {
         // Store information (replace 'info' with the actual information)
     // setUser('info');
-    navigation.navigate('HomePage');
+    navigation.navigate('Goal');
 
     };
 
@@ -37,7 +37,7 @@ export default function SignUpDetails3() {
     //   style={styles.backgroundImage}
     // >
         <View style={{flex:1}}>
-            <View style={{flex:1, justifyContent: "center", alignItems: "center", justifyContent:"flex-end", marginTop:30}}>
+            <View style={{flex:1, justifyContent: "center", alignItems: "center", justifyContent:"flex-end", marginTop:20}}>
                 <Text style={styles.textStyle}>Select Your Gender</Text>
             </View>
             <View style={{ flex:3, flexDirection:'row', alignItems: "center", justifyContent: "center", marginTop:75}}>
