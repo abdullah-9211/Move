@@ -2,14 +2,13 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, Text, View, Dimensions} from 'react-native';
-import Header from './components/AppHeader';
 import NavBar from './components/NavBar';
 import MainScreen from './components/MainScreen';
 import NavBarBot from './components/NavBarBot'
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function HomePage() {
+export default function Workouts() {
     return (
       <View style = {{flex: 1, justifyContent: "flex-start"}}> 
       

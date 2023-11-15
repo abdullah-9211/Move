@@ -2,18 +2,18 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, Text, View, Dimensions} from 'react-native';
-import NavBar from '../components/NavBar';
-import MainScreen from '../components/MainScreen';
-import NavBarBot from '../components/NavBarBot'
+import NavBar from './components/NavBar';
+import MainScreen from './components/MainScreen';
+import NavBarBot from './components/NavBarBot'
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function HomePage() {
+export default function Workouts() {
     return (
-      <View style = {{flex: 1, justifyContent: "flex-start", backgroundColor:"#FFFFFF"}}> 
+      <View style = {{flex: 1, justifyContent: "flex-start"}}> 
       
         <NavBar />
-        <ScrollView style={{marginTop:160}}> 
+        <ScrollView>
         <MainScreen />
         </ScrollView>
         <NavBarBot />

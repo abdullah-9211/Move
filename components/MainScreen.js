@@ -80,7 +80,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingTop: 70, // Adjust this value as needed to position the content below your header
+    paddingTop: 0, // Adjust this value as needed to position the content below your header
+    marginTop:30
   },
   card: {
     overflow: 'hidden',
