@@ -9,6 +9,7 @@ export default function NavBar() {
     const navigation = useNavigation();
     const [loaded] = useFonts({
 
+        'BakbakOne': require('../assets/fonts/BakbakOne-Regular.ttf'),
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
     })
     if (!loaded) {
