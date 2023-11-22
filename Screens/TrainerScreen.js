@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, FlatList, View, StyleSheet, Text, Dimensions } from 'react-native';
+import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
@@ -36,9 +36,10 @@ export default function Trainers() {
   return (
     <View style={styles.container}>
       <NavBar />
-
-      <View style={{marginTop: 120 }}>
+      <View style={{marginTop: 120, flexDirection:"row",justifyContent: "space-between", alignItems: "center", marginRight:25}}>
         <Text style={styles.headingtext}>FILTER</Text>
+        <Image source={require('../assets/images/filter.png')}
+            style={{ width: 20, height: 20 }} />
       </View>
 
       <FlatList
