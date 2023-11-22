@@ -37,8 +37,12 @@ export default function Trainers() {
     <View style={styles.container}>
       <NavBar />
       <View style={{marginTop: 120, flexDirection:"row",justifyContent: "space-between", alignItems: "center", marginRight:25}}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Text style={styles.headingtext}>FILTER</Text>
-        <Image source={require('../assets/images/filter.png')}
+        <Image source={require('../assets/images/filter.png')} 
+          style={{ marginLeft: 10, width: 20, height: 20 }} />
+      </View>
+        <Image source={require('../assets/images/sort.png')}
             style={{ width: 20, height: 20 }} />
       </View>
 
