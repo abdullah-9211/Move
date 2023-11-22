@@ -58,7 +58,7 @@ const basic =  StyleSheet.create({
     },
     card: {  
         position: "absolute",
-        paddingBottom:10,
+        paddingBottom:15,
         paddingTop:10,
         width: '100%',  
 
@@ -68,11 +68,12 @@ const basic =  StyleSheet.create({
         shadowColor: 'black',
             shadowOffset: {
               width: 0,
-              height: -20,
+              height: -1,
             },
+        shadowOpacity:0.1,
         
 
-        elevation: 10, 
+        elevation: 2, 
     },    
     text: {
         marginTop:5,

@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Image, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
+import NavBarBot from '../components/NavBarBot';
+import NavBar from '../components/NavBar';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -24,7 +26,7 @@ const ListItem = ({ item }) => {
 };
 
 
-export default function MainScreen() {
+export default function Workouts() {
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
@@ -34,7 +36,14 @@ export default function MainScreen() {
     }
   return (
     <View style={styles.container}>
+      <NavBar />
+      <ScrollView style={{marginTop:120}}>
+      <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>FITNESS</Text>
+      <View style={{flex:1, alignItems:"flex-end"}}>
+      <Text style={styles.browseText}>Browse All</Text>
+      </View>
+      </View>
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
@@ -45,7 +54,12 @@ export default function MainScreen() {
           showsHorizontalScrollIndicator={false}
         />
       </View>
+      <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>STRENGTH</Text>
+      <View style={{flex:1, alignItems:"flex-end"}}>
+      <Text style={styles.browseText}>Browse All</Text>
+      </View>
+      </View>
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
@@ -56,7 +70,12 @@ export default function MainScreen() {
           showsHorizontalScrollIndicator={false}
         />
       </View>
+      <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>ENDURANCE</Text>
+      <View style={{flex:1, alignItems:"flex-end"}}>
+      <Text style={styles.browseText}>Browse All</Text>
+      </View>
+      </View>
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
@@ -67,7 +86,12 @@ export default function MainScreen() {
           showsHorizontalScrollIndicator={false}
         />
       </View>
+      <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>WEIGHT LOSS</Text>
+      <View style={{flex:1, alignItems:"flex-end"}}>
+      <Text style={styles.browseText}>Browse All</Text>
+      </View>
+      </View>
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
@@ -78,7 +102,12 @@ export default function MainScreen() {
           showsHorizontalScrollIndicator={false}
         />
       </View>
+      <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>YOGA</Text>
+      <View style={{flex:1, alignItems:"flex-end"}}>
+      <Text style={styles.browseText}>Browse All</Text>
+      </View>
+      </View>
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
@@ -89,7 +118,13 @@ export default function MainScreen() {
           showsHorizontalScrollIndicator={false}
         />
       </View>
+      <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>TONING</Text>
+      <View style={{flex:1, alignItems:"flex-end"}}>
+      <Text style={styles.browseText}>Browse All</Text>
+      </View>
+      </View>
+      
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
@@ -101,6 +136,8 @@ export default function MainScreen() {
         />
       </View>
       <View style={{marginBottom: 65}}/>
+      </ScrollView>
+      <NavBarBot />
     </View>
   );
 }
@@ -118,8 +155,15 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   headingtext:{
-    marginLeft:17,
+    marginLeft:25,
     fontSize: 16,
+    fontFamily: 'QuickSand',
+  },
+  browseText:{
+
+    marginTop:2,
+    marginRight:20,
+    fontSize: 14,
     fontFamily: 'QuickSand',
   },
   gradient: {
