@@ -1,18 +1,21 @@
 import * as React from 'react';
-import { Image, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Image, FlatList, SafeAreaView, Pressable, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
 import NavBar from '../components/NavBar';
+import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const ListItem = ({ item }) => {
+  const navigation = useNavigation();
   return (
       <LinearGradient
         colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
         style={styles.gradient}
       >
+      <Pressable onPress={() => navigation.navigate('StartWorkout')}>
       <Image
         source={{
           uri: item.uri,
@@ -20,6 +23,7 @@ const ListItem = ({ item }) => {
         style={{width: 135, height: 135, borderRadius: 9}}
         resizeMode="cover"
       />
+      </Pressable>
       </LinearGradient>
       
   );
@@ -27,6 +31,7 @@ const ListItem = ({ item }) => {
 
 
 export default function Workouts() {
+  const navigation = useNavigation();
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
@@ -41,7 +46,9 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>FITNESS</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Text style={styles.browseText}>Browse All</Text>
+      <Pressable onPress={() => navigation.navigate('WorkoutsFitness')}>
+        <Text style={styles.browseText}>Browse All</Text>
+      </Pressable>
       </View>
       </View>
       <View>
@@ -57,7 +64,9 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>STRENGTH</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Text style={styles.browseText}>Browse All</Text>
+      <Pressable onPress={() => navigation.navigate('WorkoutsStrength')}>
+        <Text style={styles.browseText}>Browse All</Text>
+      </Pressable>
       </View>
       </View>
       <View>
@@ -73,7 +82,9 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>ENDURANCE</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Text style={styles.browseText}>Browse All</Text>
+      <Pressable onPress={() => navigation.navigate('WorkoutsEndurance')}>
+        <Text style={styles.browseText}>Browse All</Text>
+      </Pressable>
       </View>
       </View>
       <View>
@@ -89,7 +100,9 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>WEIGHT LOSS</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Text style={styles.browseText}>Browse All</Text>
+      <Pressable onPress={() => navigation.navigate('WorkoutsWeightLoss')}>
+        <Text style={styles.browseText}>Browse All</Text>
+      </Pressable>
       </View>
       </View>
       <View>
@@ -105,7 +118,9 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>YOGA</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Text style={styles.browseText}>Browse All</Text>
+      <Pressable onPress={() => navigation.navigate('WorkoutsYoga')}>
+        <Text style={styles.browseText}>Browse All</Text>
+      </Pressable>
       </View>
       </View>
       <View>
@@ -121,7 +136,9 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>TONING</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Text style={styles.browseText}>Browse All</Text>
+      <Pressable onPress={() => navigation.navigate('WorkoutsToning')}>
+        <Text style={styles.browseText}>Browse All</Text>
+      </Pressable>
       </View>
       </View>
       

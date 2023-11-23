@@ -10,15 +10,19 @@ import SignUpDetails3 from './Screens/SignUpDetails3'
 import Workouts from './Screens/WorkoutScreen';
 import HomePage from './Screens/HomePage'
 import Goal from './Screens/Goal';
+import StartWorkout from './Screens/StartWorkout';
 import Trainers from './Screens/TrainerScreen';
+import WorkoutsFitness from './Screens/WorkoutsFitness';
+import WorkoutsEndurance from './Screens/WorkoutsEndurance';
+import WorkoutsWeightLoss from './Screens/WorkoutsWeightLoss';
+import WorkoutsStrength from './Screens/WorkoutsStrength';
+import WorkoutsToning from './Screens/WorkoutsToning';
+import WorkoutsYoga from './Screens/WorkoutsYoga';
 
 const Stack = createStackNavigator()
 
 export default function App() {
   return (
-    
-    // <Provider theme= {theme}>
-
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="SignUpScreen"
@@ -34,10 +38,17 @@ export default function App() {
           <Stack.Screen name="Goal" component={Goal}/>
           <Stack.Screen name="WorkoutScreen" component={Workouts}/>
           <Stack.Screen name="TrainerScreen" component={Trainers}/>
+          <Stack.Screen name="StartWorkout" component={StartWorkout}/>
+          <Stack.Screen name="WorkoutsFitness" component={WorkoutsFitness}/>
+          <Stack.Screen name="WorkoutsWeightLoss" component={WorkoutsWeightLoss}/>
+          <Stack.Screen name="WorkoutsEndurance" component={WorkoutsEndurance}/>
+          <Stack.Screen name="WorkoutsStrength" component={WorkoutsStrength}/>
+          <Stack.Screen name="WorkoutsToning" component={WorkoutsToning}/>
+          <Stack.Screen name="WorkoutsYoga" component={WorkoutsYoga}/>
+
           
         </Stack.Navigator>
       </NavigationContainer>
-    // </Provider>
   );
 }
     
