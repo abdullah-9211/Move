@@ -29,7 +29,7 @@ class Pushup:
         
         self.state = 0
         
-        self.leniency = 23
+        self.leniency = 21
         self.errors = []
         self.error_bool = False
         self.depth_bool = False
