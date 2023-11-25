@@ -14,6 +14,7 @@ class Plank:
         self.client_video_url = client_video_url
         self.leniency = 23
         self.errors = []
+        self.error_times = []
         self.error_bool = False
         self.elbow_angle = 0
         self.shoulder_angle = 0
@@ -199,6 +200,12 @@ class Plank:
                     
                     self.error_bool = False
                     
+                    # Get current timestamp of video
+                    
+                    current_time = cap.get(cv2.CAP_PROP_POS_MSEC)
+                    current_time /= 1000.0
+                    current_time = round(current_time, 1)
+                    
                     
                     # For Right side Points Visibility
                     
@@ -282,9 +289,11 @@ class Plank:
                     
                     if elbow_angle < (trainer_elbow_min - self.leniency):
                         self.errors.append("Push forearms away from shoulders, angle too small")
+                        self.error_times.append(current_time)
                         self.error_bool = True
                     elif elbow_angle > (trainer_elbow_max + self.leniency):
                         self.errors.append("Bring forearms closer to shoulders, separation too much")
+                        self.error_times.append(current_time)
                         self.error_bool = True
                     
                     
@@ -292,9 +301,11 @@ class Plank:
                     
                     if shoulder_angle < (trainer_shoulder_min - self.leniency):
                         self.errors.append("Push body backwards, too much forward lean")
+                        self.error_times.append(current_time)
                         self.error_bool = True
                     elif shoulder_angle > (trainer_shoulder_max + self.leniency):
                         self.errors.append("Push body forwards, too much backward lean")
+                        self.error_times.append(current_time)
                         self.error_bool = True
                     
                     
@@ -302,18 +313,22 @@ class Plank:
                     
                     if hip_angle < (trainer_hip_min - self.leniency):
                         self.errors.append("Bring hips lower")
+                        self.error_times.append(current_time)
                         self.error_bool = True
                     elif hip_angle > (trainer_hip_max + self.leniency):
                         self.errors.append("Push hips upwards")
+                        self.error_times.append(current_time)
                         self.error_bool = True
 
                     # Knee Angle Matching
                     
                     if knee_angle < (trainer_knee_min - self.leniency):
                         self.errors.append("Straighten legs, too much bend")
+                        self.error_times.append(current_time)
                         self.error_bool = True
                     elif knee_angle > (trainer_knee_max + self.leniency):
                         self.errors.append("Bend legs, too much straightening")
+                        self.error_times.append(current_time)
                         self.error_bool = True
                     
                 except:
@@ -349,14 +364,18 @@ class Plank:
         self.get_trainer_angles()
         self.assess_client()
         
-        for i in self.errors:
-            print(i)
-            
-        if len(self.errors) == 0:
-            print("No Errors")
+        return self.errors, self.error_times
         
 
 if "__main__" == __name__:
     
     plank = Plank("sample_videos/abdullah_footage.mp4", "sample_videos/aizaaz_footage.mp4")
-    plank.run_process()
+    
+    errors = []
+    error_times = []
+    
+    errors, error_times = plank.run_process()
+    
+    print("\nErrors:-\n")
+    for i in range(len(errors)):
+        print(errors[i], "at", error_times[i], "seconds")
