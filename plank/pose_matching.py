@@ -20,6 +20,7 @@ class Plank:
         self.shoulder_angle = 0
         self.hip_angle = 0
         self.knee_angle = 0
+        self.accuracy = 0
         
 
     def calculate_angle(self, point1, point2, point3):
@@ -157,6 +158,9 @@ class Plank:
             cv2.destroyAllWindows()
             
     def assess_client(self):
+        
+        correct_frames = 0
+        incorrect_frames = 0
         
         # getting max and min of all trainer angles for assessment
         
@@ -336,6 +340,7 @@ class Plank:
                 
                 
                 if self.error_bool == True:
+                    incorrect_frames += 1.0
                     cv2.putText(image, "Error", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
                     mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS
                                                 , mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2, circle_radius=2)
@@ -343,6 +348,7 @@ class Plank:
                                             )
                     
                 else:
+                    correct_frames += 1.0
                     cv2.putText(image, "No Error", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
                     mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS
                                                 , mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2, circle_radius=2)
@@ -358,24 +364,30 @@ class Plank:
                 
             cap.release()
             cv2.destroyAllWindows()
+
+        self.accuracy = round((correct_frames / (correct_frames + incorrect_frames)) * 100.0, 1)
         
     
     def run_process(self):
         self.get_trainer_angles()
         self.assess_client()
         
-        return self.errors, self.error_times
+        return self.errors, self.error_times, self.accuracy
         
 
 if "__main__" == __name__:
     
-    plank = Plank("sample_videos/abdullah_footage.mp4", "sample_videos/aizaaz_footage.mp4")
+    plank = Plank("sample_videos/abdullah_footage.mp4", "sample_videos/bilal_footage.mp4")
     
     errors = []
     error_times = []
+    accuracy = 0
     
-    errors, error_times = plank.run_process()
+    errors, error_times, accuracy = plank.run_process()
     
     print("\nErrors:-\n")
     for i in range(len(errors)):
         print(errors[i], "at", error_times[i], "seconds")
+        
+    print("\nAccuracy of user:-", accuracy, "%\n")
+    
