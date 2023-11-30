@@ -11,7 +11,5 @@ def get_supabase_client():
 app.include_router(exercise_router, prefix="/exercise", tags=["exercise"])
 
 if __name__ == "__main__":
-    url_video = "exercises/plank/sample_videos/abdullah_footage.mp4"
-    url_video2 = "exercises/plank/sample_videos/aizaaz_footage.mp4"
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
