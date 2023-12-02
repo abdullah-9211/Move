@@ -28,7 +28,7 @@ export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Statistics"
+          initialRouteName="CameraScreen"
           screenOptions={{
             headerShown: false,
           }}

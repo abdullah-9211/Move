@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Image, Text, View, Dimensions} from 'react-native';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
 import Report from '../components/Report';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+const { width: screenWidth } = Dimensions.get('window');
 
 export default function WorkoutCompleted() {
   const [loaded] = useFonts({
@@ -18,6 +20,7 @@ export default function WorkoutCompleted() {
 
   return (
     <View style={styles.container}>
+    <View style={styles.borderstuff}>
       <Text style={styles.heading2}>Congratulations!</Text>
       <Text style={styles.heading}>Workout Completed</Text>
       <View style={styles.level}>
@@ -32,10 +35,40 @@ export default function WorkoutCompleted() {
           </View>
         </View>
       </View>
+        <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+        <Icon name="fire" size={30} color="#900020" />
         <Text>+1</Text>
+        </View>
       
       <Report />
-      <NavBarBot />
+      <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center", marginBottom: 100 }}>
+  <Text style={styles.heading}>Badges Progressed</Text>
+  <View style={{ flexDirection: "row", marginTop: 20 }}>
+    <Image
+      source={require('../assets/images/clock.png')}
+      style={{ width: 70, height: 60 }}
+      resizeMode="center"
+    />
+    <Image
+      source={require('../assets/images/clock.png')}
+      style={{ width: 80, height: 60 }}
+      resizeMode="center"
+    />
+    <Image
+      source={require('../assets/images/clock.png')}
+      style={{ width: 80, height: 60 }}
+      resizeMode="center"
+    />
+    <Image
+      source={require('../assets/images/clock.png')}
+      style={{ width: 80, height: 60 }}
+      resizeMode="center"
+    />
+  </View>
+</View>
+    </View>
+    <NavBarBot />
+
     </View>
   );
 }
@@ -43,10 +76,19 @@ export default function WorkoutCompleted() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    paddingTop: 50,
+    paddingTop: 30,
   },
+  borderstuff:{
+    alignItems: 'center',
+    flex:1,
+    borderRightWidth: 4,
+    borderColor: "#900020",
+    borderLeftWidth: 4,
+    borderColor: "#900020",
+  },
+  
   level: {
+    
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
@@ -72,6 +114,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   progressBarTextContainer: {
+    
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',

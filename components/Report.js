@@ -3,6 +3,8 @@ import { Image, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Tex
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import * as Progress from 'react-native-progress';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -21,18 +23,32 @@ export default function Report() {
   return (
     <View style={styles.container}>
       <View style={{flexDirection:"row"}}>
-        <View style={{alignItems:"center", justifyContent: 'flex-end', marginRight:20}}>
-            <Text style={{fontSize:32, fontFamily: 'QuickSand', color: '#900020'}}>23:18</Text>
-            <Text style={{fontSize:18,fontFamily: 'QuickSand', marginTop:30}}>
-            Time Taken</Text>
+      <View style={styles.progressText}>
+            <Text style={{fontSize:32, fontFamily: 'QuickSand', color: '#900020'}}>32</Text>
+            <Text style={{fontSize:18,fontFamily: 'QuickSand', marginTop:10}}>
+            Days In A Row</Text>
         </View>
+        <View style={styles.progressText}>
+            <Text style={{fontSize:32, fontFamily: 'QuickSand', color: '#900020'}}>23:18</Text>
+            <Text style={{fontSize:18,fontFamily: 'QuickSand', marginTop:10}}>
+            Duration</Text>
+        </View>
+        
+        
+    </View>
+    <View style={{flexDirection:"row"}}>
         <View style={styles.progressText}>
             <Progress.Circle size={80} indeterminate={false} progress={0.75} color='#900020' borderWidth={0.3} showsText style={styles.progressBar}/>
             <Text style={{fontSize:18,fontFamily: 'QuickSand'}}>
                 Accuracy</Text>
         </View>
-        
+        <View style={styles.progressText}>
+            <Progress.Circle size={80} indeterminate={false} progress={0.90} color='#900020' borderWidth={0.3} showsText style={styles.progressBar}/>
+            <Text style={{fontSize:18,fontFamily: 'QuickSand'}}>
+               Avg Accuracy</Text>
+        </View>
     </View>
+    
       
     </View>
   );
@@ -41,20 +57,15 @@ export default function Report() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
     
     paddingTop: 0, // Adjust this value as needed to position the content below your header
-    marginTop:30
+    marginTop:50
   },
   progressText: {
     alignItems:"center", justifyContent: "center",
-    marginLeft:20,
-  },
-
-  card: {
-    overflow: 'hidden',
-    borderRadius: 12,
-    marginHorizontal:10,
-    marginVertical: 20,
+    marginHorizontal:20,
+    marginVertical:20,
   },
   progressBar: {
     marginHorizontal:20,
@@ -71,12 +82,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
 
   },
-  gradient: {
-    marginHorizontal:10,
-    marginVertical: 20,
-    flex: 1,
-    borderRadius: 12,
-  },
+  
 
 });
 
