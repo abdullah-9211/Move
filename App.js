@@ -18,6 +18,9 @@ import WorkoutsWeightLoss from './Screens/WorkoutsWeightLoss';
 import WorkoutsStrength from './Screens/WorkoutsStrength';
 import WorkoutsToning from './Screens/WorkoutsToning';
 import WorkoutsYoga from './Screens/WorkoutsYoga';
+import CameraScreen from './Screens/CameraScreen';
+import AccountSelect from './Screens/AccountSelect';
+import Statistics from './Screens/Statistics';
 
 const Stack = createStackNavigator()
 
@@ -25,12 +28,13 @@ export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="SignUpScreen"
+          initialRouteName="Statistics"
           screenOptions={{
             headerShown: false,
           }}
         >
-          <Stack.Screen name="SignupScreen" component={SignUpScreen}/>
+          <Stack.Screen name="AccountSelect" component={AccountSelect}/>
+          <Stack.Screen name="SignUpScreen" component={SignUpScreen}/>
           <Stack.Screen name="SignUpDetails" component={SignUpDetails}/>
           <Stack.Screen name="SignUpDetails2" component={SignUpDetails2}/>
           <Stack.Screen name="SignUpDetails3" component={SignUpDetails3}/>
@@ -45,6 +49,9 @@ export default function App() {
           <Stack.Screen name="WorkoutsStrength" component={WorkoutsStrength}/>
           <Stack.Screen name="WorkoutsToning" component={WorkoutsToning}/>
           <Stack.Screen name="WorkoutsYoga" component={WorkoutsYoga}/>
+          <Stack.Screen name="CameraScreen" component={CameraScreen}/>
+          <Stack.Screen name="Statistics" component={Statistics}/>
+          
 
           
         </Stack.Navigator>

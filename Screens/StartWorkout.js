@@ -84,7 +84,9 @@ export default function StartWorkout() {
                 </View>
                 <Pressable style={{flex:1, justifyContent: "flex-end"}}>
                   <View style={styles.button}>
+                  <Pressable onPress={() => navigation.navigate('CameraScreen')}>
                   <Text style={{color:"#ffffff", fontFamily: "QuickSand", fontSize:16}}>Start Workout</Text>
+                  </Pressable>
                   </View>
                 </Pressable>
             </View>
