@@ -2,29 +2,32 @@ import * as React from 'react';
 import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
-import NavBarBot from '../components/NavBarBot';
-import NavBar from '../components/NavBar';
+import NavBarBot from '../components/NavBarBotTrainer';
+import { useNavigation } from '@react-navigation/native';
+import NavBarTrainer from '../components/NavBarTrainer';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const ListItem = ({ item }) => {
+  
   return (
     <LinearGradient
-      colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
-      style={styles.gradient}
+      colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']}
+      style={[styles.gradient, { alignItems: 'center', justifyContent: 'center' }]}
     >
       <Image
         source={{
           uri: item.uri,
         }}
-        style={{ width: screenWidth / 2 - 40, height: 160, borderRadius: 180 }}
+        style={{ width: screenWidth / 2 - 40, height: 135, borderRadius: 12 }}
         resizeMode="cover"
       />
     </LinearGradient>
   );
 };
 
-export default function Trainers() {
+export default function TrainerClients() {
+  const navigation = useNavigation();
   const [loaded] = useFonts({
     'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
   });
@@ -35,26 +38,19 @@ export default function Trainers() {
 
   return (
     <View style={styles.container}>
-      <NavBar />
-      <View style={{marginTop: 120, flexDirection:"row",justifyContent: "space-between", alignItems: "center", marginRight:25}}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Text style={styles.headingtext}>FILTER</Text>
-        <Image source={require('../assets/images/filter.png')} 
-          style={{ marginLeft: 10, width: 20, height: 20 }} />
-      </View>
-        <Image source={require('../assets/images/sort.png')}
-            style={{ width: 20, height: 20 }} />
-      </View>
-
+        <NavBarTrainer/>
+        
+        <View  style={{flex:1, marginTop: 10, flexDirection:"row",marginTop:160}}>
       <FlatList
+        
         contentContainerStyle={{ paddingHorizontal: 10 }}
         data={SECTIONS[0].data}
         renderItem={({ item }) => <ListItem item={item} />}
         keyExtractor={(item) => item.key}
-        numColumns={2} // Set the number of columns to 2
+        numColumns={2} 
         showsHorizontalScrollIndicator={false}
       />
-
+</View>
       <View style={{ marginBottom: 65 }} />
 
       <NavBarBot />
@@ -66,7 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingTop: 70,
   },
   card: {
     marginRight:10,
@@ -87,10 +82,10 @@ const styles = StyleSheet.create({
     fontFamily: 'QuickSand',
   },
   gradient: {
-    marginHorizontal: 20,
+    marginRight:15,
+    marginLeft:15,
     marginVertical: 20,
-    flex: 1,
-    borderRadius: 180,
+    borderRadius: 12,
   },
 });
 
@@ -128,6 +123,16 @@ const SECTIONS = [
         key: '6',
         text: 'Item text 6',
         uri: 'https://wallpapercave.com/wp/wp7661163.jpg',
+      },
+      {
+        key: '7',
+        text: 'Item text 2',
+        uri: 'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg',
+      },
+      {
+        key: '8',
+        text: 'Item text 2',
+        uri: 'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg',
       },
     ],
   },

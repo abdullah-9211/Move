@@ -43,10 +43,10 @@ export default function SignUpScreen() {
             backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => navigation.navigate('SignUpDetails')}
+        onPress={() => navigation.navigate('TrainerDashboard')}
 >
         <Text style={styles.buttonText}>
-            Join Us
+            Sign In As Trainer
         </Text>
       </Pressable>
       <Pressable
@@ -56,12 +56,22 @@ export default function SignUpScreen() {
             backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => console.log('Pressable pressed')}>
+        onPress={() => navigation.navigate('Login')}>
         <Text style={styles.buttonText}>
-            Sign In
+            Sign In As User
         </Text>
       </Pressable>
       </View>
+      <Pressable
+        style={({ pressed }) => [
+            styles.SignUp,
+        
+        ]}
+        onPress={() => navigation.navigate('AccountSelect')}>
+        <Text style={styles.SignUpText}>
+            Join Us
+        </Text>
+      </Pressable>
       
     </View>
     </LinearGradient>
@@ -76,6 +86,15 @@ export default function SignUpScreen() {
         color: "#ffffff"
         
     },
+    SignUp: {
+      justifyContent: "flex-start", alignItems: "center", marginBottom: 20,
+    },
+    SignUpText: {
+      fontSize: 15,
+      fontFamily: 'QuickSand2',
+      textDecorationLine: "underline",
+      color: "#ffffff",
+  },
     buttonText: {
         fontSize: 16,
         fontFamily: 'QuickSand',
@@ -86,8 +105,8 @@ export default function SignUpScreen() {
         justifyContent: "center",
         alignItems: "center",
         height: 60,
-        marginHorizontal:15,
-        marginBottom:40,
+        marginHorizontal:12,
+        marginBottom:10,
         borderRadius: 9,
         marginTop:20,
     }

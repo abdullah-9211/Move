@@ -15,7 +15,9 @@ export default function AccountSelect() {
     
     const [loaded] = useFonts({
 
-        'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
+       'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
+        'QuickSand2': require('../assets/fonts/Quicksand-Regular.ttf'),
+        
     })
     if (!loaded) {
       return null;
@@ -46,7 +48,7 @@ export default function AccountSelect() {
         onPress={() => navigation.navigate('SignUpScreen')}
 >
         <Text style={styles.buttonText}>
-            Trainer
+            Sign Up As Trainer
         </Text>
       </Pressable>
       <Pressable
@@ -56,12 +58,23 @@ export default function AccountSelect() {
             backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => console.log('Pressable pressed')}>
+        onPress={() => navigation.navigate('SignUpDetails')}>
         <Text style={styles.buttonText}>
-            Member
+            Sign Up As User
         </Text>
       </Pressable>
       </View>
+      <Pressable
+        style={({ pressed }) => [
+            styles.existingUser,
+        
+        ]}
+        onPress={() => navigation.navigate('SignUpScreen')}>
+        <Text style={styles.SignInText}>
+            Existing User?
+        </Text>
+      </Pressable>
+     
       
     </View>
     </LinearGradient>
@@ -76,18 +89,27 @@ export default function AccountSelect() {
         color: "#ffffff"
         
     },
+    existingUser: {
+      justifyContent: "flex-start", alignItems: "center", marginBottom: 20,
+    },
     buttonText: {
         fontSize: 16,
         fontFamily: 'QuickSand',
         color: "#ffffff",
     },
+    SignInText: {
+      fontSize: 15,
+      fontFamily: 'QuickSand2',
+      textDecorationLine: "underline",
+      color: "#ffffff",
+  },
     button: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         height: 60,
-        marginHorizontal:15,
-        marginBottom:40,
+        marginHorizontal:12,
+        marginBottom:10,
         borderRadius: 9,
         marginTop:20,
     }

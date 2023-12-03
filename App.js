@@ -21,6 +21,9 @@ import WorkoutsYoga from './Screens/WorkoutsYoga';
 import CameraScreen from './Screens/CameraScreen';
 import AccountSelect from './Screens/AccountSelect';
 import Statistics from './Screens/Statistics';
+import Login from './Screens/Login';
+import TrainerDashboard from './Screens/TrainerDashboard';
+import TrainerClients from './Screens/TrainerClients';
 
 const Stack = createStackNavigator()
 
@@ -28,7 +31,7 @@ export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="CameraScreen"
+          initialRouteName="HomePage"
           screenOptions={{
             headerShown: false,
           }}
@@ -51,6 +54,9 @@ export default function App() {
           <Stack.Screen name="WorkoutsYoga" component={WorkoutsYoga}/>
           <Stack.Screen name="CameraScreen" component={CameraScreen}/>
           <Stack.Screen name="Statistics" component={Statistics}/>
+          <Stack.Screen name="Login" component={Login}/>
+          <Stack.Screen name="TrainerDashboard" component= {TrainerDashboard}/>
+          <Stack.Screen name="TrainerClients" component= {TrainerClients}/>
           
 
           
