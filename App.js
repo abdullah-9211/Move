@@ -11,7 +11,7 @@ import Workouts from './Screens/WorkoutScreen';
 import HomePage from './Screens/HomePage'
 import Goal from './Screens/Goal';
 import StartWorkout from './Screens/StartWorkout';
-import Trainers from './Screens/TrainerScreen';
+import TrainerScreen from './Screens/TrainerScreen';
 import WorkoutsFitness from './Screens/WorkoutsFitness';
 import WorkoutsEndurance from './Screens/WorkoutsEndurance';
 import WorkoutsWeightLoss from './Screens/WorkoutsWeightLoss';
@@ -24,6 +24,8 @@ import Statistics from './Screens/Statistics';
 import Login from './Screens/Login';
 import TrainerDashboard from './Screens/TrainerDashboard';
 import TrainerClients from './Screens/TrainerClients';
+import TrainerProfile from './Screens/TrainerProfile';
+import UserProfile from './Screens/UserProfile';
 
 const Stack = createStackNavigator()
 
@@ -44,7 +46,7 @@ export default function App() {
           <Stack.Screen name="HomePage" component={HomePage}/>
           <Stack.Screen name="Goal" component={Goal}/>
           <Stack.Screen name="WorkoutScreen" component={Workouts}/>
-          <Stack.Screen name="TrainerScreen" component={Trainers}/>
+          <Stack.Screen name="TrainerScreen" component={TrainerScreen}/>
           <Stack.Screen name="StartWorkout" component={StartWorkout}/>
           <Stack.Screen name="WorkoutsFitness" component={WorkoutsFitness}/>
           <Stack.Screen name="WorkoutsWeightLoss" component={WorkoutsWeightLoss}/>
@@ -57,6 +59,8 @@ export default function App() {
           <Stack.Screen name="Login" component={Login}/>
           <Stack.Screen name="TrainerDashboard" component= {TrainerDashboard}/>
           <Stack.Screen name="TrainerClients" component= {TrainerClients}/>
+          <Stack.Screen name= "TrainerProfile" component={TrainerProfile}/>
+          <Stack.Screen name= "UserProfile" component={UserProfile}/>
           
 
           

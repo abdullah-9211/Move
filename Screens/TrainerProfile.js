@@ -27,7 +27,7 @@ const ListItem = ({ item }) => {
   );
 };
 
-export default function UserProfile() {
+export default function TrainerProfile() {
 const shadowopacity = screenWidth * 0.2 / screenWidth;
   const navigation = useNavigation();
   const [loaded] = useFonts({

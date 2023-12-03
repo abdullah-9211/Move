@@ -1,13 +1,15 @@
 import * as React from 'react';
-import {StyleSheet, Text, View, Image, Icon} from 'react-native';
+import {StyleSheet, Text, View, Pressable, Image, Icon} from 'react-native';
 import { useFonts } from 'expo-font';
 import {Card} from 'react-native-shadow-cards'
 import { MaterialIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function NavBarBot() {
+    const navigation = useNavigation();
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -16,7 +18,7 @@ export default function NavBarBot() {
     if (!loaded) {
       return null;
     }
-  
+    
     return (
         
         <Card style={[basic.card, basic.elevation]}>
@@ -30,10 +32,10 @@ export default function NavBarBot() {
                     <Octicons name="checklist" size={24} color="black" />
                     <Text style={basic.text}>Your Plan</Text>
                 </View>
-                <View style={basic.columnView}>
+                <Pressable style={basic.columnView} onPress={() => navigation.navigate('UserProfile')}>
                     <Ionicons name="person" size={24} color="black" />
                     <Text style={basic.text}>Profile</Text>
-                </View>
+                </Pressable>
             </View>
            
         </Card>

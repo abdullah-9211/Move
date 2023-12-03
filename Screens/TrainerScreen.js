@@ -1,18 +1,22 @@
 import * as React from 'react';
-import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
+import { Image, FlatList, horizontal, View, StyleSheet, Text, Pressable, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
 import NavBar from '../components/NavBar';
+import { useNavigation } from '@react-navigation/native';
+import TrainerProfile from './TrainerProfile';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const ListItem = ({ item }) => {
+  const navigation = useNavigation();
   return (
     <LinearGradient
       colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
       style={styles.gradient}
     >
+      <Pressable onPress={() => navigation.navigate('TrainerProfile')}>
       <Image
         source={{
           uri: item.uri,
@@ -20,11 +24,14 @@ const ListItem = ({ item }) => {
         style={{ width: screenWidth / 2 - 40, height: 160, borderRadius: 180 }}
         resizeMode="cover"
       />
+      </Pressable>
     </LinearGradient>
+
   );
 };
 
-export default function Trainers() {
+export default function TrainerScreen() {
+  const navigation = useNavigation();
   const [loaded] = useFonts({
     'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
   });

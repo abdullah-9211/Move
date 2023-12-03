@@ -82,11 +82,11 @@ export default function StartWorkout() {
                     <Card key={index} cardInfo={info} />
                   ))}
                 </View>
-                <Pressable style={{flex:1, justifyContent: "flex-end"}}>
+                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={() => navigation.navigate('CameraScreen')}>
                   <View style={styles.button}>
-                  <Pressable onPress={() => navigation.navigate('CameraScreen')}>
+                  
                   <Text style={{color:"#ffffff", fontFamily: "QuickSand", fontSize:16}}>Start Workout</Text>
-                  </Pressable>
+                
                   </View>
                 </Pressable>
             </View>
