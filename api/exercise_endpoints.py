@@ -10,7 +10,6 @@ router = APIRouter()
 
 @router.post("/analyze")
 async def analyze_exercise(exercise_data: dict):
-    # TODO: put id of stored instance in response 
     exercise = exercise_data.get("exercise")
     client_video = exercise_data.get("client_video")
     trainer_video = exercise_data.get("trainer_video")
@@ -51,5 +50,4 @@ async def finish_workout(workout_data: dict):
     
 @router.get("/get-workout-information")
 async def get_workout_information():
-    #TODO: use workout id to get information of completed workout 
     db.get_workout_with_id(1)
