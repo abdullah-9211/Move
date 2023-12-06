@@ -25,15 +25,14 @@ def add_goal(goal: Goal):
         
 
 def get_users():
-    client = connect() 
+    client = connect()
+    print("Good connect") 
     try:
         res = client.table("Users").select("*").execute()
-        if res["status_code"] != 201:
-            raise Exception("\n\nError retrieving users information")
-        else:
-            return res["data"]
+        return res
     except Exception as e:
         print("\n\nError retrieving users, Exception Thrown: \n\n", e)
+  
         
 def get_user_with_id(id):
     client = connect() 
@@ -42,7 +41,7 @@ def get_user_with_id(id):
         if res["status_code"] != 201:
             raise Exception("\n\nError retrieving user information")
         else:
-            return res["data"][0]
+            return res
     except Exception as e:
         print("\n\nError retrieving user, Exception Thrown: \n\n", e)
         

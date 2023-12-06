@@ -50,4 +50,4 @@ async def finish_workout(workout_data: dict):
     
 @router.get("/get-workout-information")
 async def get_workout_information():
-    db.get_workout_with_id(1)
+    return db.get_workout_with_id(1)

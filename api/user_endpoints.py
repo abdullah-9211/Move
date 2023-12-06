@@ -35,7 +35,9 @@ async def add_goal(goal_data: dict):
 
 @router.get("/get_users")
 async def get_users():
-    return db.get_users()
+    res = db.get_users()
+    res = dict(res)
+    return res['data']
 
 @router.get("/get_user_with_id")
 async def get_user_with_id(id: int):
