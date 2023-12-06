@@ -20,8 +20,7 @@ class Plank:
         self.shoulder_angle = 0
         self.hip_angle = 0
         self.knee_angle = 0
-        self.accuracy = 0
-        
+        self.accuracy = 0        
 
     def calculate_angle(self, point1, point2, point3):
         point1 = np.array(point1)
@@ -161,7 +160,7 @@ class Plank:
         
         correct_frames = 0
         incorrect_frames = 0
-        
+
         # getting max and min of all trainer angles for assessment
         
         trainer_elbow_angle = np.array(self.trainer_elbow_angle)
@@ -209,7 +208,6 @@ class Plank:
                     current_time = cap.get(cv2.CAP_PROP_POS_MSEC)
                     current_time /= 1000.0
                     current_time = round(current_time, 1)
-                    
                     
                     # For Right side Points Visibility
                     
@@ -390,4 +388,3 @@ if "__main__" == __name__:
         print(errors[i], "at", error_times[i], "seconds")
         
     print("\nAccuracy of user:-", accuracy, "%\n")
-    
