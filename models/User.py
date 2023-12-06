@@ -9,6 +9,7 @@ class User:
         self.gender = gender
         if user_type == "trainer":
             self.user_type = "trainer"
+            self.goal_id = None
         elif user_type == "client":
             self.user_type = "client"
             self.goal_id = goal_id
