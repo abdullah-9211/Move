@@ -17,6 +17,8 @@ async def add_user(user_data: dict):
     user_type = user_data.get("user_type")
     goal_id = user_data.get("goal_id")
     
+    if goal_id == "None":
+        goal_id = None
     new_user = User(email, first_name, last_name, phone_number, dob, password, gender, user_type, goal_id)
     user_id = db.add_user(new_user)
     
@@ -35,10 +37,8 @@ async def add_goal(goal_data: dict):
 
 @router.get("/get_users")
 async def get_users():
-    res = db.get_users()
-    res = dict(res)
-    return res['data']
-
+    return db.get_users()
+    
 @router.get("/get_user_with_id")
 async def get_user_with_id(id: int):
     return db.get_user_with_id(id)
