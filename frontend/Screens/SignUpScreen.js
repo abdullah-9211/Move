@@ -6,6 +6,8 @@ import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+
 
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -43,7 +45,7 @@ export default function SignUpScreen() {
             backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => navigation.navigate('TrainerDashboard')}
+        onPress={() => navigation.navigate('Login')}
 >
         <Text style={styles.buttonText}>
             Sign In As Trainer

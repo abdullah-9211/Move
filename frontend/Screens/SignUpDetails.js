@@ -1,11 +1,14 @@
+//Sign up screen
+
 import * as React from 'react';
-import { Image, Pressable, ImageBackground,TextInput, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Image, Pressable, ImageBackground,TextInput, TimePickerAndroid, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -13,6 +16,26 @@ const { width: screenWidth } = Dimensions.get('window');
 export default function SignUpDetails() {
     const navigation = useNavigation();
 
+    const [date, setDate] = useState(new Date(1598051730000));
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
+      };
+    const showMode = (currentMode) => {
+        DateTimePickerAndroid.open({
+        value: date,
+        onChange,
+        mode: currentMode,
+        is24Hour: true,
+    });
+      };
+      const showDatepicker = () => {
+        showMode('date');
+      };
+    
+      
     
     const [name, setName] = React.useState('');
     const [loaded] = useFonts({
@@ -27,17 +50,25 @@ export default function SignUpDetails() {
       source={require('../assets/images/red2.jpg')} // Replace with the path to your image
       style={styles.backgroundImage}
     >
-        <View style = {{flex: 1}}>
-            <View style={{ alignItems: "center"}}>
+   
+        <View style = {{flex: 1, justifyContent:"flex-start", alignItems:"center", marginBottom:10}}>
+            <View style={{ alignItems: "flex-start", justifyContent: "flex-start"}}>
                 <Image 
                 source={require('../assets/images/full_logo.png')}
                 style={styles.image}
                 resizeMode="contain"/>
             </View>
             <View style = {{flex: 1, alignItems: "flex-start", width: screenWidth-20,justifyContent:"flex-start"}}> 
-      
+            <ScrollView>
             
-            <Text style={styles.textStyle}>What should we call you?</Text>
+            <Text style={styles.textStyle}>First Name</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Name"
+                value={name}
+                onChangeText={(text) => setName(text)}
+            />
+            <Text style={styles.textStyle}>Last Name</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Name"
@@ -51,6 +82,30 @@ export default function SignUpDetails() {
                 value={name}
                 onChangeText={(text) => setName(text)}
             />
+            <Text style={styles.textStyle}>Phone number</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="03022645745"
+                value={name}
+                onChangeText={(text) => setName(text)}
+            />
+            <Text style={styles.textStyle}>Age?</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Age"
+                value={name}
+                onChangeText={(text) => setName(text)}
+            />
+            <Button onPress={showDatepicker} title="Show date picker!" />
+            {showDatePicker && (
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="spinner"
+          onChange={onChange}
+        />
+      )}
+            <Text>selected: {date.toLocaleString()}</Text>
             <View style={{flex:1, justifyContent: "flex-end"}}>
             <Pressable
                 style={({ pressed }) => [styles.button,
@@ -64,7 +119,7 @@ export default function SignUpDetails() {
             </Text>
             </Pressable>
             </View>
-          
+            </ScrollView>
           
         </View>
         
@@ -86,7 +141,7 @@ export default function SignUpDetails() {
     width: 250,
     height: 250, 
     marginHorizontal:20,
-    marginTop: 20,
+    marginTop: 10,
   },
   input: {
     width: screenWidth-40,
@@ -96,9 +151,10 @@ export default function SignUpDetails() {
     borderRadius:9,
     marginLeft: 20,
     marginRight:20,
-    marginBottom:30,
+    marginBottom:15,
     marginTop:5,
-    padding: 10,
+    padding: 0,
+    color: '#ffffff'
   },
 
   buttonText: {
@@ -119,7 +175,7 @@ button: {
 backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
-    justifyContent: 'center',
+    
   },
 
     

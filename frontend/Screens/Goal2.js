@@ -6,16 +6,17 @@ import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
 import { useNavigation } from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function Login() {
+export default function Goal2() {
     const navigation = useNavigation();
-
     
-    const [email, setemail] = React.useState('');
-    const [password, setpassword] = React.useState('');
+    const [height, setheight] = React.useState('');
+    const [weight, setweight] = React.useState('');
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
@@ -25,7 +26,7 @@ export default function Login() {
     }
     return (
         <ImageBackground
-      source={require('../assets/images/red2.jpg')} // Replace with the path to your image
+      source={require('../assets/images/red2.jpg')} 
       style={styles.backgroundImage}
     >
         <View style = {{flex: 1}}>
@@ -38,19 +39,19 @@ export default function Login() {
             <View style = {{flex: 1, alignItems: "flex-start", width: screenWidth-20,justifyContent:"flex-start"}}> 
       
             
-            <Text style={styles.textStyle}>Email</Text>
+            <Text style={styles.textStyle}>Height?</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={(text) => setemail(text)}
+                placeholder="Height"
+                value={height}
+                onChangeText={(text) => setheight(text)}
             />
-            <Text style={styles.textStyle}>Password</Text>
+            <Text style={styles.textStyle}>Weight?</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Password"
-                value={password}
-                onChangeText={(text) => setpassword(text)}
+                placeholder="60kg"
+                value={weight}
+                onChangeText={(text) => setweight(text)}
             />
             <View style={{flex:1, justifyContent: "flex-end"}}>
             <Pressable
@@ -59,9 +60,9 @@ export default function Login() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('HomePage')}>
+            onPress={() => navigation.navigate('Goal')}>
             <Text style={styles.buttonText}>
-                Sign In
+                Continue
             </Text>
             </Pressable>
             </View>

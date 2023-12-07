@@ -1,3 +1,4 @@
+//gender selection
 import * as React from 'react';
 import { Image, Pressable, ImageBackground,TextInput, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -26,7 +27,7 @@ export default function SignUpDetails3() {
     const handlePress = () => {
         // Store information (replace 'info' with the actual information)
     // setUser('info');
-    navigation.navigate('Goal');
+    navigation.navigate('Goal2');
 
     };
 

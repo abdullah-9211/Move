@@ -1,3 +1,4 @@
+//Sign up screen
 import * as React from 'react';
 import { Image, Pressable, ImageBackground,TextInput, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -58,7 +59,7 @@ export default function SignUpDetails2() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('SignUpDetails3')}>
+            onPress={() => navigation.navigate('HomePage')}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>
@@ -99,6 +100,7 @@ export default function SignUpDetails2() {
     marginBottom:30,
     marginTop:5,
     padding: 10,
+    color: '#ffffff'
   },
 
   buttonText: {

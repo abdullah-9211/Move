@@ -57,7 +57,7 @@ export default function Goal() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('HomePage')}>
+            onPress={() => navigation.navigate('SignUpDetails')}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>

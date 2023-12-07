@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SignUpScreen from './Screens/SignUpScreen'
 import SignUpDetails from './Screens/SignUpDetails'
 import SignUpDetails2 from './Screens/SignUpDetails2'
-import SignUpDetails3 from './Screens/SignUpDetails3'
+import SignUpDetails3 from './Screens/GenderSelect'
 import Workouts from './Screens/WorkoutScreen';
 import HomePage from './Screens/HomePage'
 import Goal from './Screens/Goal';
@@ -26,14 +26,14 @@ import TrainerDashboard from './Screens/TrainerDashboard';
 import TrainerClients from './Screens/TrainerClients';
 import TrainerProfile from './Screens/TrainerProfile';
 import UserProfile from './Screens/UserProfile';
-
+import Goal2 from './Screens/Goal2';
 const Stack = createStackNavigator()
 
 export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="HomePage"
+          initialRouteName="AccountSelect"
           screenOptions={{
             headerShown: false,
           }}
@@ -42,7 +42,7 @@ export default function App() {
           <Stack.Screen name="SignUpScreen" component={SignUpScreen}/>
           <Stack.Screen name="SignUpDetails" component={SignUpDetails}/>
           <Stack.Screen name="SignUpDetails2" component={SignUpDetails2}/>
-          <Stack.Screen name="SignUpDetails3" component={SignUpDetails3}/>
+          <Stack.Screen name="GenderSelect" component={SignUpDetails3}/>
           <Stack.Screen name="HomePage" component={HomePage}/>
           <Stack.Screen name="Goal" component={Goal}/>
           <Stack.Screen name="WorkoutScreen" component={Workouts}/>
@@ -61,6 +61,7 @@ export default function App() {
           <Stack.Screen name="TrainerClients" component= {TrainerClients}/>
           <Stack.Screen name= "TrainerProfile" component={TrainerProfile}/>
           <Stack.Screen name= "UserProfile" component={UserProfile}/>
+          <Stack.Screen name= "Goal2" component={Goal2}/>
           
 
           
