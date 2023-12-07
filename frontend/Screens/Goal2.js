@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font';
 import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 
@@ -14,7 +14,12 @@ const { width: screenWidth } = Dimensions.get('window');
 
 export default function Goal2() {
     const navigation = useNavigation();
+    const route = useRoute();
     
+    const role = route.params.role;
+    const gender = route.params.gender;
+
+
     const [height, setheight] = React.useState('');
     const [weight, setweight] = React.useState('');
     const [loaded] = useFonts({
@@ -39,14 +44,14 @@ export default function Goal2() {
             <View style = {{flex: 1, alignItems: "flex-start", width: screenWidth-20,justifyContent:"flex-start"}}> 
       
             
-            <Text style={styles.textStyle}>Height?</Text>
+            <Text style={styles.textStyle}>Height</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Height"
                 value={height}
                 onChangeText={(text) => setheight(text)}
             />
-            <Text style={styles.textStyle}>Weight?</Text>
+            <Text style={styles.textStyle}>Weight</Text>
             <TextInput
                 style={styles.input}
                 placeholder="60kg"
@@ -60,7 +65,7 @@ export default function Goal2() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('Goal')}>
+            onPress={() => navigation.navigate('Goal', {role: role, gender: gender, height: height, weight: weight})}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>

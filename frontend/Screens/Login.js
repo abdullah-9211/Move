@@ -5,17 +5,19 @@ import { useFonts } from 'expo-font';
 import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function Login() {
     const navigation = useNavigation();
+    const route = useRoute();
 
-    
     const [email, setemail] = React.useState('');
     const [password, setpassword] = React.useState('');
+    const role = route.params.role;
+
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
@@ -23,6 +25,7 @@ export default function Login() {
     if (!loaded) {
       return null;
     }
+
     return (
         <ImageBackground
       source={require('../assets/images/red2.jpg')} // Replace with the path to your image
@@ -61,7 +64,7 @@ export default function Login() {
                 ]}
             onPress={() => navigation.navigate('HomePage')}>
             <Text style={styles.buttonText}>
-                Sign In
+                Continue
             </Text>
             </Pressable>
             </View>

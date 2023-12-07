@@ -45,7 +45,7 @@ export default function AccountSelect() {
             backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => navigation.navigate('SignUpDetails')}
+        onPress={() => navigation.navigate('SignUpDetails', {role: "trainer"})}
 >
         <Text style={styles.buttonText}>
             Sign Up As Trainer
@@ -58,7 +58,7 @@ export default function AccountSelect() {
             backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => navigation.navigate('GenderSelect')}>
+        onPress={() => navigation.navigate('GenderSelect', {role: "user"})}>
         <Text style={styles.buttonText}>
             Sign Up As User
         </Text>

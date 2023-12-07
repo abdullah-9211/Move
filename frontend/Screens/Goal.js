@@ -1,31 +1,43 @@
 import * as React from 'react';
-import { Image, FlatList, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Image, FlatList, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
-
-const ListItem = ({ item }) => {
-  return (
-      <LinearGradient
-        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
-        style={styles.gradient}
-      >
-      <Image
-        source={{
-          uri: item.uri,
-        }}
-        style={{width: screenWidth*0.85, height: 170, borderRadius: 12}}
-        resizeMode="cover"
-      />
-      </LinearGradient>
-  );
-};
 
 
 export default function Goal() {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const role = route.params.role;
+  const gender = route.params.gender;
+  const height = route.params.height;
+  const weight = route.params.weight;
+
+  const [goal, setgoal] = React.useState('');
+
+  const ListItem = ({ item }) => {
+    return (
+      <TouchableOpacity onPress={() => setgoal(item.text)}>
+        <LinearGradient
+          colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
+          style={styles.gradient}
+        >
+        <Image
+          source={{
+            uri: item.uri,
+          }}
+          style={{width: screenWidth*0.85, height: 170, borderRadius: 12}}
+          resizeMode="cover"
+        />
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  };
+  
+
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
@@ -57,7 +69,7 @@ export default function Goal() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('SignUpDetails')}>
+            onPress={() => navigation.navigate('SignUpDetails', {role: role, gender: gender, weight: weight, height: height, goal: goal})}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>

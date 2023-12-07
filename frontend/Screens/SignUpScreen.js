@@ -45,7 +45,7 @@ export default function SignUpScreen() {
             backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => navigation.navigate('Login')}
+        onPress={() => navigation.navigate('Login', {role: "trainer"})}
 >
         <Text style={styles.buttonText}>
             Sign In As Trainer
@@ -58,7 +58,7 @@ export default function SignUpScreen() {
             backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => navigation.navigate('Login')}>
+        onPress={() => navigation.navigate('Login', {role: "user"})}>
         <Text style={styles.buttonText}>
             Sign In As User
         </Text>
