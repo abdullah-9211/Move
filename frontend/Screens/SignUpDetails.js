@@ -96,7 +96,7 @@ export default function SignUpDetails() {
             <Text style={styles.textStyle}>Phone number</Text>
             <TextInput
                 style={styles.input}
-                placeholder="03022645745"
+                placeholder="Phone Number"
                 value={phone}
                 onChangeText={(text) => setPhone(text)}
             />

@@ -45,7 +45,7 @@ export default function AccountSelect() {
             backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => navigation.navigate('SignUpDetails', {role: "trainer"})}
+        onPress={() => navigation.navigate('GenderSelect', {role: "trainer"})}
 >
         <Text style={styles.buttonText}>
             Sign Up As Trainer

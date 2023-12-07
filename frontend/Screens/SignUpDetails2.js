@@ -41,16 +41,44 @@ export default function SignUpDetails2() {
     }
 
     async function createNewUser() {
-        try {
-            const apiUrl = 'http://192.168.100.19:5000/user/add_goal';
-            const requestBody = {
-                height: height,
-                weight: weight,
-                goal: goal
-            };
-            const response = await axios.post(apiUrl, requestBody);
-            goal_id = response.data.goal_id;
-            
+
+        if (role == "user") {
+            try {
+                const apiUrl = 'http://192.168.100.19:5000/user/add_goal';
+                const requestBody = {
+                    height: height,
+                    weight: weight,
+                    goal: goal
+                };
+                const response = await axios.post(apiUrl, requestBody);
+                goal_id = response.data.goal_id;
+                
+                try {
+                    const apiUrl = 'http://192.168.100.19:5000/user/add_user';
+                    const requestBody = {
+                        email: email,
+                        password: password,
+                        age: age,
+                        first_name: firstName,
+                        last_name: lastName,
+                        phone_number: phone,
+                        gender: gender,
+                        user_type: role,
+                        goal_id: goal_id
+                    };
+                    const response = await axios.post(apiUrl, requestBody);
+                    user_id = response.data.user_id;
+                    alert('User created successfully!', response.data.user_id);
+                    console.log(response.data.user_id)
+                    navigation.navigate('Login', {user_id: response.data.user_id});
+                } catch (error) {
+                    alert('Error creating user:', error);
+                }
+            } catch (error) {
+                alert('Error creating user:', error);
+            }   
+        }
+        else{
             try {
                 const apiUrl = 'http://192.168.100.19:5000/user/add_user';
                 const requestBody = {
@@ -62,18 +90,16 @@ export default function SignUpDetails2() {
                     phone_number: phone,
                     gender: gender,
                     user_type: role,
-                    goal_id: goal_id
+                    goal_id: "None"
                 };
                 const response = await axios.post(apiUrl, requestBody);
                 user_id = response.data.user_id;
-                alert('User created successfully!', response.data.user_id);
+                alert('Trainer created successfully!', response.data.user_id);
                 console.log(response.data.user_id)
                 navigation.navigate('Login', {user_id: response.data.user_id});
             } catch (error) {
-                alert('Error creating user:', error);
+                alert('Error creating trainer:', error);
             }
-        } catch (error) {
-            alert('Error creating user:', error);
         }
     }
 
