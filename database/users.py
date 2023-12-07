@@ -5,6 +5,7 @@ def add_user(user: User):
     client = connect()
     try:
         response = client.table("Users").insert([{"email": user.email, "first_name": user.first_name, "last_name": user.last_name, "phone_number": user.phone, "age": user.age, "password": user.password, "gender": user.gender, "user_type": user.user_type, "goal_id": user.goal_id}]).execute()
+        client.auth.sign_up({"email": user.email, "password": user.password})
         response = dict(response)
         return response["data"][0]["id"]
     except Exception as e:

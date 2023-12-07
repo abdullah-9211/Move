@@ -7,11 +7,5 @@ class User:
         self.age = age
         self.password = password
         self.gender = gender
-        if user_type == "trainer":
-            self.user_type = "trainer"
-            self.goal_id = None
-        elif user_type == "client":
-            self.user_type = "client"
-            self.goal_id = goal_id
-        else:
-            raise Exception("User type must be either 'trainer' or 'client'")
+        self.user_type = user_type
+        self.goal_id = goal_id

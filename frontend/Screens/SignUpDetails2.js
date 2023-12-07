@@ -7,6 +7,7 @@ import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
 import { useNavigation, useRoute } from '@react-navigation/native';
+import axios from 'axios';
 
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -25,6 +26,7 @@ export default function SignUpDetails2() {
     const email = route.params.email;
     const phone = route.params.phone;
     const age = route.params.age;
+    var goal_id = " ";
 
     
     const [password, setPassword] = React.useState('');
@@ -38,12 +40,57 @@ export default function SignUpDetails2() {
       return null;
     }
 
+    async function createNewUser() {
+        try {
+            const apiUrl = 'http://192.168.100.19:5000/user/add_goal';
+            const requestBody = {
+                height: height,
+                weight: weight,
+                goal: goal
+            };
+            const response = await axios.post(apiUrl, requestBody);
+            goal_id = response.data.goal_id;
+            
+            try {
+                const apiUrl = 'http://192.168.100.19:5000/user/add_user';
+                const requestBody = {
+                    email: email,
+                    password: password,
+                    age: age,
+                    first_name: firstName,
+                    last_name: lastName,
+                    phone_number: phone,
+                    gender: gender,
+                    user_type: role,
+                    goal_id: goal_id
+                };
+                const response = await axios.post(apiUrl, requestBody);
+                user_id = response.data.user_id;
+                alert('User created successfully!', response.data.user_id);
+                console.log(response.data.user_id)
+                navigation.navigate('Login', {user_id: response.data.user_id});
+            } catch (error) {
+                alert('Error creating user:', error);
+            }
+        } catch (error) {
+            alert('Error creating user:', error);
+        }
+    }
+
+
+
     function handlePress() {
         if (password != confirmPassword) {
             alert("Passwords do not match");
         }
         else if (password == "" || confirmPassword == "") {
             alert("Please enter a password");
+        }
+        else if (password.length < 6) {
+            alert("Password must be at least 6 characters");
+        }
+        else{
+            createNewUser();
         }
 
     }

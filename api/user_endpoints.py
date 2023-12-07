@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+
 from models.User import User
 from models.Goal import Goal
 import database.users as db
