@@ -11,7 +11,7 @@ async def add_user(user_data: dict):
     first_name = user_data.get("first_name")
     last_name = user_data.get("last_name")
     phone_number = user_data.get("phone_number")
-    dob = user_data.get("dob")
+    age = user_data.get("age")
     password = user_data.get("password")
     gender = user_data.get("gender")
     user_type = user_data.get("user_type")
@@ -19,7 +19,7 @@ async def add_user(user_data: dict):
     
     if goal_id == "None":
         goal_id = None
-    new_user = User(email, first_name, last_name, phone_number, dob, password, gender, user_type, goal_id)
+    new_user = User(email, first_name, last_name, phone_number, age, password, gender, user_type, goal_id)
     user_id = db.add_user(new_user)
     
     return {"user_id": user_id}

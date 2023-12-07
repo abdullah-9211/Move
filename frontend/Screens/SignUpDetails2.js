@@ -6,16 +6,30 @@ import { useFonts } from 'expo-font';
 import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function SignUpDetails2() {
     const navigation = useNavigation();
+    const route = useRoute();
+
+    const role = route.params.role;
+    const gender = route.params.gender;
+    const height = route.params.height;
+    const weight = route.params.weight;
+    const goal = route.params.goal;
+    const firstName = route.params.firstName;
+    const lastName = route.params.lastName;
+    const email = route.params.email;
+    const phone = route.params.phone;
+    const age = route.params.age;
 
     
-    const [name, setName] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [confirmPassword, setConfirmPassword] = React.useState('');
+
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
@@ -23,6 +37,17 @@ export default function SignUpDetails2() {
     if (!loaded) {
       return null;
     }
+
+    function handlePress() {
+        if (password != confirmPassword) {
+            alert("Passwords do not match");
+        }
+        else if (password == "" || confirmPassword == "") {
+            alert("Please enter a password");
+        }
+
+    }
+
     return (
         <ImageBackground
       source={require('../assets/images/red2.jpg')} // Replace with the path to your image
@@ -41,16 +66,18 @@ export default function SignUpDetails2() {
             <Text style={styles.textStyle}>Create Password</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Name"
-                value={name}
-                onChangeText={(text) => setName(text)}
+                placeholder="Password"
+                secureTextEntry={true}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
             />
             <Text style={styles.textStyle}>Confirm Password</Text>
             <TextInput
                 style={styles.input}
-                placeholder="email"
-                value={name}
-                onChangeText={(text) => setName(text)}
+                secureTextEntry={true}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChangeText={(text) => setConfirmPassword(text)}
             />
             <View style={{flex:1, justifyContent: "flex-end"}}>
             <Pressable
@@ -59,7 +86,7 @@ export default function SignUpDetails2() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('HomePage')}>
+            onPress={ handlePress }>
             <Text style={styles.buttonText}>
                 Continue
             </Text>

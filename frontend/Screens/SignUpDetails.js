@@ -7,7 +7,7 @@ import { useFonts } from 'expo-font';
 import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 
 
@@ -15,6 +15,13 @@ const { width: screenWidth } = Dimensions.get('window');
 
 export default function SignUpDetails() {
     const navigation = useNavigation();
+    const route = useRoute();
+
+    const role = route.params.role;
+    const gender = route.params.gender;
+    const height = route.params.height;
+    const weight = route.params.weight;
+    const goal = route.params.goal;
 
     const [date, setDate] = useState(new Date(1598051730000));
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -36,8 +43,12 @@ export default function SignUpDetails() {
       };
     
       
-    
-    const [name, setName] = React.useState('');
+    const [firstName, setFirstName] = React.useState('');
+    const [lastName, setLastName] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [phone, setPhone] = React.useState('');
+    const [age, setAge] = React.useState('');
+
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
@@ -65,47 +76,37 @@ export default function SignUpDetails() {
             <TextInput
                 style={styles.input}
                 placeholder="Name"
-                value={name}
-                onChangeText={(text) => setName(text)}
+                value={firstName}
+                onChangeText={(text) => setFirstName(text)}
             />
             <Text style={styles.textStyle}>Last Name</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Name"
-                value={name}
-                onChangeText={(text) => setName(text)}
+                value={lastName}
+                onChangeText={(text) => setLastName(text)}
             />
-            <Text style={styles.textStyle}>Your email?</Text>
+            <Text style={styles.textStyle}>Your email</Text>
             <TextInput
                 style={styles.input}
                 placeholder="email"
-                value={name}
-                onChangeText={(text) => setName(text)}
+                value={email}
+                onChangeText={(text) => setEmail(text)}
             />
             <Text style={styles.textStyle}>Phone number</Text>
             <TextInput
                 style={styles.input}
                 placeholder="03022645745"
-                value={name}
-                onChangeText={(text) => setName(text)}
+                value={phone}
+                onChangeText={(text) => setPhone(text)}
             />
-            <Text style={styles.textStyle}>Age?</Text>
+            <Text style={styles.textStyle}>Age</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Age"
-                value={name}
-                onChangeText={(text) => setName(text)}
+                value={age}
+                onChangeText={(text) => setAge(text)}
             />
-            <Button onPress={showDatepicker} title="Show date picker!" />
-            {showDatePicker && (
-        <DateTimePicker
-          value={date}
-          mode="date"
-          display="spinner"
-          onChange={onChange}
-        />
-      )}
-            <Text>selected: {date.toLocaleString()}</Text>
             <View style={{flex:1, justifyContent: "flex-end"}}>
             <Pressable
                 style={({ pressed }) => [styles.button,
@@ -113,7 +114,7 @@ export default function SignUpDetails() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('SignUpDetails2')}>
+            onPress={() => navigation.navigate('SignUpDetails2', {role: role, gender: gender, height: height, weight: weight, goal: goal, firstName: firstName, lastName: lastName, email: email, phone: phone, age: age})}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>
