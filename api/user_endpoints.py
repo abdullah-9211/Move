@@ -36,6 +36,17 @@ async def add_goal(goal_data: dict):
     
     return {"goal_id": goal_id}
 
+@router.post("/login")
+async def login(login_data: dict):
+    email = login_data.get("email")
+    password = login_data.get("password")
+    
+    user = db.login(email, password)
+    if user == None:
+        return {"user": "None"}
+    else:
+        return {"user": user}
+
 @router.get("/get_users")
 async def get_users():
     return db.get_users()

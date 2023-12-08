@@ -19,7 +19,22 @@ def add_goal(goal: Goal):
         return response["data"][0]["id"]
     except Exception as e:
         print("\n\nError inserting goal into database: ", e)
-        
+
+def login(email: str, password: str):
+    client = connect()
+    try:
+        res = client.table("Users").select("*").eq("email", email).execute()
+        res = dict(res)
+        if len(res["data"]) == 0:
+            return None
+        user = res["data"][0]
+        if user["password"] == password:
+            client.auth.sign_in_with_password({"email": email, "password": password})
+            return user
+        else:
+            return None
+    except Exception as e:
+        print("\n\nError logging in, Exception Thrown: \n\n", e)        
 
 def get_users():
     client = connect()

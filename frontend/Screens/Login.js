@@ -1,22 +1,23 @@
 import * as React from 'react';
-import { Image, Pressable, ImageBackground,TextInput, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Image, Pressable, ImageBackground,TextInput, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, Modal, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
 import { useNavigation, useRoute } from '@react-navigation/native';
+import axios from 'axios';
+import {API_URL} from "@env"
 
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function Login() {
     const navigation = useNavigation();
-    const route = useRoute();
 
+    const [isLoading, setLoading] = React.useState(false);
     const [email, setemail] = React.useState('');
     const [password, setpassword] = React.useState('');
-    const role = route.params.role;
 
     const [loaded] = useFonts({
 
@@ -25,6 +26,37 @@ export default function Login() {
     if (!loaded) {
       return null;
     }
+
+    async function handlePress() {
+        setLoading(true);
+        try {
+            const apiUrl = API_URL + '/user/login';
+            const requestBody = {
+                email: email,
+                password: password
+            };
+            const response = await axios.post(apiUrl, requestBody);
+            const data = response.data;
+
+            if (data["user"] == "None"){
+                alert("Invalid email or password, Login failed")
+            }
+            else{
+                alert("Login successful")
+                if (data["user"]["user_type"] == "user"){
+                    navigation.navigate("HomePage", {user: data["user"]});
+                }
+                else if (data["user"]["user_type"] == "trainer"){
+                    navigation.navigate("TrainerDashboard", {user: data["user"]});
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+        setLoading(false);
+    }
+
 
     return (
         <ImageBackground
@@ -48,6 +80,13 @@ export default function Login() {
                 value={email}
                 onChangeText={(text) => setemail(text)}
             />
+            {isLoading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+            )}
             <Text style={styles.textStyle}>Password</Text>
             <TextInput
                 style={styles.input}
@@ -62,7 +101,7 @@ export default function Login() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('HomePage')}>
+            onPress={handlePress}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>
@@ -125,6 +164,12 @@ backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
+  },
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
 
     
