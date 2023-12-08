@@ -663,4 +663,3 @@ if __name__ == "__main__":
     print("Errors: \n")
     for i in range(len(errors)):
         print(str(errors[i]) + " at " + str(error_timestamps[i]) + " seconds")
-    print("\nAccuracy: " + str(accuracy) + "%\n")

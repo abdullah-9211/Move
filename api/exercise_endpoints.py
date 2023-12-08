@@ -69,5 +69,4 @@ async def finish_workout(workout_data: dict):
     
 @router.get("/get-workout-information")
 async def get_workout_information():
-    #TODO: use workout id to get information of completed workout 
     db.get_workout_with_id(1)
