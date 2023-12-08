@@ -1,6 +1,6 @@
 //Sign up screen
 import * as React from 'react';
-import { Image, Pressable, ImageBackground,TextInput, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Image, Pressable, ImageBackground,TextInput, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, ActivityIndicator, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBar from '../components/NavBar';
@@ -33,6 +33,7 @@ export default function SignUpDetails2() {
     
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
+    const [isLoading, setLoading] = React.useState(false);
 
     const [loaded] = useFonts({
 
@@ -43,6 +44,8 @@ export default function SignUpDetails2() {
     }
 
     async function createNewUser() {
+
+        setLoading(true);
 
         if (role == "user") {
             try {
@@ -146,6 +149,13 @@ export default function SignUpDetails2() {
                 value={password}
                 onChangeText={(text) => setPassword(text)}
             />
+            {isLoading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+            )}
             <Text style={styles.textStyle}>Confirm Password</Text>
             <TextInput
                 style={styles.input}
@@ -166,8 +176,8 @@ export default function SignUpDetails2() {
                 Continue
             </Text>
             </Pressable>
+
             </View>
-          
           
         </View>
         
@@ -226,5 +236,11 @@ backgroundImage: {
     justifyContent: 'center',
   },
 
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
     
   });
