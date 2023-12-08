@@ -13,7 +13,5 @@ app.include_router(exercise_router, prefix="/exercise", tags=["exercise"])
 app.include_router(user_router, prefix="/user", tags=["user"])
 
 if __name__ == "__main__":
-    url = "./exercises/plank/sample_videos/abdullah_footage.mp4"
-    url2 = "./exercises/plank/sample_videos/aizaaz_footage.mp4"
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
