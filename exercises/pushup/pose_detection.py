@@ -37,6 +37,7 @@ class Pushup:
         self.reps = 0
         self.client_incorrect = []
         self.trainer_incorrect = []
+        self.accuracy = 0
         
         
     def calculate_angle(self, point1, point2, point3):
@@ -309,6 +310,9 @@ class Pushup:
             
             
     def assess_client(self):
+        correct_frames = 0
+        incorrect_frames = 0
+        
         cap = cv2.VideoCapture(self.client_url)
 
         self.state = 0
@@ -610,6 +614,7 @@ class Pushup:
                     
                             
                 if self.error_bool == True:
+                    incorrect_frames += 1.0
                     cv2.putText(image, "Error", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
                     mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS
                                                 , mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2, circle_radius=2)
@@ -617,6 +622,7 @@ class Pushup:
                                             )
                     
                 else:
+                    correct_frames += 1.0
                     cv2.putText(image, "No Error", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
                     mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS
                                                 , mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2, circle_radius=2)
@@ -632,13 +638,15 @@ class Pushup:
                 
             cap.release()
             cv2.destroyAllWindows()
+        
+        self.accuracy = round((correct_frames/(correct_frames + incorrect_frames))*100.0, 1)
             
     def run_process(self):
         self.set_state_thresholds()
         self.get_trainer_angles()
         self.assess_client()
         
-        return self.reps, self.errors, self.error_times
+        return self.reps, self.errors, self.error_times, self.accuracy
     
 if __name__ == "__main__":
     client_url = "./sample_videos/leena_footage.mp4"
@@ -646,11 +654,13 @@ if __name__ == "__main__":
     reps = 0
     errors = []
     error_timestamps = []
+    accuracy = 0
     
     pushup = Pushup(client_url, trainer_url)
-    reps, errors, error_timestamps = pushup.run_process()
+    reps, errors, error_timestamps, accuracy = pushup.run_process()
     
     print("\nUser performed " + str(reps) + " reps\n")
     print("Errors: \n")
     for i in range(len(errors)):
         print(str(errors[i]) + " at " + str(error_timestamps[i]) + " seconds")
+    print("\nAccuracy: " + str(accuracy) + "%\n")
