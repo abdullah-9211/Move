@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Image, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
+import { useRoute } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -40,6 +41,11 @@ const ListItemTrainer = ({ item }) => {
 
 
 export default function MainScreen() {
+
+  const route = useRoute();
+  const user = route.params?.user;
+
+
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')

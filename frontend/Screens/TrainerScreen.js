@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
 import NavBar from '../components/NavBar';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import TrainerProfile from './TrainerProfile';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -32,6 +32,10 @@ const ListItem = ({ item }) => {
 
 export default function TrainerScreen() {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const user = route.params?.user;
+
   const [loaded] = useFonts({
     'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
   });

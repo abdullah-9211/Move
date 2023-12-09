@@ -90,6 +90,7 @@ export default function Login() {
             <Text style={styles.textStyle}>Password</Text>
             <TextInput
                 style={styles.input}
+                secureTextEntry={true}
                 placeholder="Password"
                 value={password}
                 onChangeText={(text) => setpassword(text)}

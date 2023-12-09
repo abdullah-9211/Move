@@ -4,18 +4,24 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
 import NavBar from '../components/NavBar';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const ListItem = ({ item }) => {
   const navigation = useNavigation();
+
+  const route = useRoute();
+  const user = route.params?.user;
+
+
   return (
       <LinearGradient
         colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
         style={styles.gradient}
       >
-      <Pressable onPress={() => navigation.navigate('StartWorkout')}>
+      <Pressable onPress={() => navigation.navigate('StartWorkout', {user: user})}>
       <Image
         source={{
           uri: item.uri,
@@ -32,6 +38,11 @@ const ListItem = ({ item }) => {
 
 export default function Workouts() {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const user = route.params?.user;
+
+
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')

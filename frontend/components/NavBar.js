@@ -2,10 +2,15 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, Pressable } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Card } from 'react-native-shadow-cards';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 export default function NavBar() {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const user = route.params?.user;
+
+
   const { width: screenWidth } = Dimensions.get('window');
   const [loaded] = useFonts({
     'BakbakOne': require('../assets/fonts/BakbakOne-Regular.ttf'),
@@ -28,17 +33,17 @@ export default function NavBar() {
       </View>
       <View style={basic.basic2}>
         <View style={basic.basic2}>
-          <Pressable onPress={() => navigation.navigate('HomePage')}>
+          <Pressable onPress={() => navigation.navigate('HomePage', {user: user})}>
             <Text style={basic.text}>For You</Text>
           </Pressable>
         </View>
         <View style={basic.basic2}>
-          <Pressable onPress={() => navigation.navigate('WorkoutScreen')}>
+          <Pressable onPress={() => navigation.navigate('WorkoutScreen', {user: user})}>
             <Text style={basic.text}>Workouts</Text>
           </Pressable>
         </View>
         <View style={basic.basic2}>
-          <Pressable onPress={() => navigation.navigate('TrainerScreen')}>
+          <Pressable onPress={() => navigation.navigate('TrainerScreen', {user: user})}>
             <Text style={basic.text}>Trainers</Text>
           </Pressable>
         </View>

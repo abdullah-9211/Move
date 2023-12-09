@@ -6,7 +6,7 @@ import { ScrollView, ImageBackground, Pressable, StyleSheet, Text, View, Dimensi
 import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -20,6 +20,11 @@ const Card = ({ cardInfo}) => {
   );
 };
 export default function StartWorkout() {
+
+  const route = useRoute();
+  const user = route.params?.user;
+
+
   const data = [
     { title: 'Pushups', description: 'X20' },
     { title: 'Pull Ups', description: 'X10' },
