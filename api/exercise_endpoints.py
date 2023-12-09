@@ -8,50 +8,62 @@ import database.workouts as db
 
 router = APIRouter()
 
+# list of exercises 
+completed_exercises = []
+
 @router.post("/analyze")
 async def analyze_exercise(exercise_data: dict):
+    
+    # Extract data
     exercise = exercise_data.get("exercise")
     client_video = exercise_data.get("client_video")
     trainer_video = exercise_data.get("trainer_video")
+    duration = exercise_data.get("duration")
 
+    # Get exercise id
+    exercise_id = db.get_exercise_id(exercise)
+
+    # Initialize and analyze based on exercise type
     if exercise == "plank":
-        # initialize plank 
         plank_instance = Plank(trainer_video, client_video)
-        exercise_stats = Exercise(1,1,1,1,1)
-        db.add_exercise(exercise_stats)
-        
+        _, _, accuracy = plank_instance.run_process()
+        exercise_stats = Exercise(0, exercise_id, None, duration, accuracy)
     elif exercise == "pushup":
-        # initialize pushup
-        pushup_instance = Pushup(trainer_video, client_video)
-        workout_stats = Workout(1, 1, 1, 90)
-        db.add_exercise(workout_stats)
+        pushup_instance = Pushup(client_video, trainer_video)
+        _, _, _, accruacy = pushup_instance.run_process()
+        exercise_stats = Exercise(0, exercise_id, pushup_instance.reps, duration, accruacy)
     else:
         raise HTTPException(status_code=404, detail="Exercise not found")
+
+    # Add exercise stats
+    completed_exercises.append(exercise_stats)
     
+    # print completed_exercises
+    for exercise in completed_exercises:
+        print(exercise.exercise_id)
+        print(exercise.reps)
+        print(exercise.duration)
+        print(exercise.accuracy)
+        
+            
 @router.post("/finish-workout")
 async def finish_workout(workout_data: dict):
     plan_id = workout_data.get("plan_id")
     client_id = workout_data.get("client_id")
-    durations = workout_data.get("durations", [])
-    accuracies = workout_data.get("accuracies", [])
-    
     total_duration = 0
-    # sum durations array
-    for duration in durations:
-        total_duration += duration
-    
-    # calculate average accuracy
-    total_accuracy = 0
-    for accuracy in accuracies:
-        total_accuracy += accuracy
-    average_accuracy = total_accuracy / len(accuracies)
-    workout_stats = Workout(plan_id, client_id, average_accuracy, total_duration)  
-    db.add_workout(workout_stats)  
-    
-@router.get("/get-workout-information")
-async def get_workout_information():
-    return db.get_workout_with_id(12)
+    total = 0
 
-@router.get("/get-workout")
-async def get_workout():
-    return db.get_workout()
+    for exercise in completed_exercises: 
+        total_duration += exercise.duration
+        total += exercise.accuracy
+
+
+    workout = Workout(plan_id, client_id, total_duration, total/len(completed_exercises))
+    workout_id = db.add_workout(workout)
+
+    for exercise in completed_exercises:
+        exercise.workout_id = workout_id
+        db.add_exercise(exercise)
+
+    completed_exercises.clear()
+    return workout_id

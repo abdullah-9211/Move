@@ -5,3 +5,9 @@ class Exercise:
         self.reps = reps
         self.duration = duration
         self.accuracy = accuracy
+        
+    def get_workout_id(self):
+        return self.workout_id
+
+    def set_workout_id(self, workout_id):
+        self.workout_id = workout_id
