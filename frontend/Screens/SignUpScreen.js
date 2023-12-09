@@ -45,22 +45,10 @@ export default function SignUpScreen() {
             backgroundColor: pressed ? '#140004' : '#900020',
         },
         ]}
-        onPress={() => navigation.navigate('Login', {role: "trainer"})}
+        onPress={() => navigation.navigate('Login')}
 >
         <Text style={styles.buttonText}>
-            Sign In As Trainer
-        </Text>
-      </Pressable>
-      <Pressable
-        style={({ pressed }) => [
-            styles.button,
-        {
-            backgroundColor: pressed ? '#140004' : '#900020',
-        },
-        ]}
-        onPress={() => navigation.navigate('Login', {role: "user"})}>
-        <Text style={styles.buttonText}>
-            Sign In As User
+            Sign In
         </Text>
       </Pressable>
       </View>

@@ -375,7 +375,7 @@ class Plank:
 
 if "__main__" == __name__:
     
-    plank = Plank("sample_videos/abdullah_footage.mp4", "sample_videos/bilal_footage.mp4")
+    plank = Plank("sample_videos/bilal_footage.mp4", "sample_videos/abdullah_footage.mp4")
     
     errors = []
     error_times = []
