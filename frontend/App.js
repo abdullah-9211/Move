@@ -33,7 +33,7 @@ export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="AccountSelect"
+          initialRouteName="StartWorkout"
           screenOptions={{
             headerShown: false,
           }}

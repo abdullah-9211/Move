@@ -15,7 +15,9 @@
       "**/*"
     ],
     "plugins": [
+      
       [
+        
         "expo-camera",
         {
           "cameraPermission": "Allow $(MoveApp) to access your camera."
