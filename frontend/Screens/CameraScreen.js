@@ -56,7 +56,7 @@ export default function CameraScreen({ route }) {
             const video = await cameraRef.current.recordAsync(recordingOptions);
             console.log('Recording started at', video.uri);
             setVideoUri(video.uri);
-            console.log(video.uri)
+            console.log(videoUri)
         } catch (error) {
             console.error('Error starting recording:', error);
             setIsRecording(false);
@@ -67,7 +67,7 @@ export default function CameraScreen({ route }) {
 
 
 async function uploadFile(file, exercise_name) {
-  const { data, error } = await supabase.storage.from('videos').upload(exercise_name + '/user_video/', file, {
+  const { data, error } = await supabase.storage.from('videos').upload(exercise_name + '/user_video/user.mp4', file, {
     contentType: 'video/mp4',
   })
   if (error) {
