@@ -48,12 +48,12 @@ export default function CameraScreen({ route }) {
     })();
   }, []);
 
-  const startRecording = async () => {
+  const startRecording = () => {
     console.log("Current exercise text: ", exerciseText);
     if (cameraRef.current && !isRecording) {
         setIsRecording(true);
         try {
-            const video = await cameraRef.current.recordAsync(recordingOptions);
+            const video = cameraRef.current.recordAsync(recordingOptions);
             console.log('Recording started at', video.uri);
             setVideoUri(video.uri);
             console.log(videoUri)
