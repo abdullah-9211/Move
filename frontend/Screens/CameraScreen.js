@@ -29,6 +29,11 @@ export default function CameraScreen({ route }) {
     };
 
   useEffect(() => {
+    console.log('Video URI updated:', videoUri);
+  
+  }, [videoUri]);
+
+  useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       
@@ -48,15 +53,14 @@ export default function CameraScreen({ route }) {
     })();
   }, []);
 
-  const startRecording = () => {
+  const startRecording = async () => {
     console.log("Current exercise text: ", exerciseText);
     if (cameraRef.current && !isRecording) {
         setIsRecording(true);
         try {
-            const video = cameraRef.current.recordAsync(recordingOptions);
+            const video = await cameraRef.current.recordAsync(recordingOptions);
             console.log('Recording started at', video.uri);
             setVideoUri(video.uri);
-            console.log(videoUri)
         } catch (error) {
             console.error('Error starting recording:', error);
             setIsRecording(false);
@@ -77,7 +81,7 @@ async function uploadFile(file, exercise_name) {
   }
 }
 
-const stopRecording = () => {
+const stopRecording = async () => {
     if (cameraRef.current && isRecording) {
         cameraRef.current.stopRecording();
         console.log('Recording stopped');
@@ -90,8 +94,14 @@ const stopRecording = () => {
           exercise_name = "plank";
         }
         
-        uploadFile(videoUri, exercise_name);
-        handleFinish();
+        try {
+          await uploadFile(videoUri, exercise_name);
+          console.log('Upload successful', videoUri);
+          handleFinish();
+      } catch (error) {
+          console.error('Error uploading file:', error);
+      }
+
     }
 };
 
