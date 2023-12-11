@@ -123,14 +123,18 @@ const stopRecording = () => {
     <View style={styles.container}>
       
       <Camera ref={cameraRef} style={styles.camera} type={type} ratio="16:9" audio={true}>
-      <Text style={styles.exerciseText}>{exerciseText}</Text>
+      <View style={styles.headerContainer}>
+        <View style={{ flex: 1 }} />
+        <Text style={styles.exerciseText}>{exerciseText}</Text>
+        <TouchableOpacity style={styles.nextButton} onPress={handleFinish}>
+          <Text style={styles.text}>skip</Text>
+        </TouchableOpacity>
+      </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={isRecording ? stopRecording : startRecording}>
             <Text style={styles.text}>{isRecording ? 'Stop Recording' : 'Start Recording'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.nextButton} onPress={handleFinish}>
-            <Text style={styles.text}>Next</Text>
-          </TouchableOpacity>
+          
           {isRecording && <Text style={styles.recordingText}>Recording...</Text>}
         </View>
       </Camera>
@@ -172,10 +176,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   nextButton: {
-    backgroundColor: '#007BFF',
+    backgroundColor: '#900020',
     padding: 15,
-    width: screenWidth - 20,
-    justifyContent: 'center',
+    margin:25,
+    width: 100,
+    justifyContent: 'flex-end',
     alignItems: 'center',
     borderRadius: 10,
   },
