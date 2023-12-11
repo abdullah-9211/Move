@@ -28,7 +28,6 @@ export default function StartWorkout() {
   const data = [
     { title: 'Pushups', description: 'X10' },
     { title: 'Plank', description: '60 seconds' },
-    // Add more objects for additional cards
   ];
   const navigation = useNavigation();
     const [loaded] = useFonts({

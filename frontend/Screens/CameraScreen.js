@@ -2,13 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import { Camera } from 'expo-camera';
-import * as FileSystem from 'expo-file-system';
 import { Audio } from 'expo-av';
+import 'react-native-url-polyfill/auto';
+import { createClient } from '@supabase/supabase-js';
 
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function CameraScreen({ route }) {
+
+  const supabase = createClient('https://bwqhkxfnzrvxsiwzyywb.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3cWhreGZuenJ2eHNpd3p5eXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTg4NTU1NjAsImV4cCI6MjAxNDQzMTU2MH0.PjcLzVbrU_kcuiBTaq5zMs-YlkBE9tI2U1OTMgEa-_4');
+
+
   const navigation = useNavigation();
   const { workouts } = route.params || { workouts: 1 };
   const [hasPermission, setHasPermission] = useState(null);
@@ -21,7 +26,7 @@ export default function CameraScreen({ route }) {
   const [videoUri, setVideoUri] = useState(null);
   const recordingOptions = {
     quality: Camera.Constants.VideoQuality['720p'],
-  };
+    };
 
   useEffect(() => {
     (async () => {
@@ -59,11 +64,31 @@ export default function CameraScreen({ route }) {
     }
 };
 
+
+
+async function uploadFile(file, exercise_name) {
+  const { data, error } = await supabase.storage.from('videos').upload(exercise_name + '/user_video/', file)
+  if (error) {
+    console.log(error)
+  } else {
+    console.log(data)
+  }
+}
+
 const stopRecording = () => {
     if (cameraRef.current && isRecording) {
         cameraRef.current.stopRecording();
         console.log('Recording stopped');
         setIsRecording(false);
+        let exercise_name = "";
+        if (counter === 0){
+          exercise_name = "pushup";
+        }
+        else{
+          exercise_name = "plank";
+        }
+        
+        uploadFile(videoUri, exercise_name);
         handleFinish();
     }
 };
