@@ -67,7 +67,9 @@ export default function CameraScreen({ route }) {
 
 
 async function uploadFile(file, exercise_name) {
-  const { data, error } = await supabase.storage.from('videos').upload(exercise_name + '/user_video/', file)
+  const { data, error } = await supabase.storage.from('videos').upload(exercise_name + '/user_video/', file, {
+    contentType: 'video/mp4',
+  })
   if (error) {
     console.log(error)
   } else {
