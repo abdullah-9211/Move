@@ -16,6 +16,9 @@ export default function CameraScreen({ route }) {
   const [isRecording, setIsRecording] = useState(false);
   const [counter, setCounter] = useState(0);
   const cameraRef = useRef(null);
+  const exercises = ["Push up", "Plank"];
+  const exerciseText = exercises[counter] || "Exercise";
+  const [videoUri, setVideoUri] = useState(null);
   const recordingOptions = {
     quality: Camera.Constants.VideoQuality['720p'],
   };
@@ -41,26 +44,29 @@ export default function CameraScreen({ route }) {
   }, []);
 
   const startRecording = async () => {
-    if (cameraRef.current) {
-      try {
-        const { uri } = await cameraRef.current.recordAsync({
-          quality: Camera.Constants.VideoQuality['720p'],
-        });
-        console.log('Recording started:', uri);
+    console.log("Current exercise text: ", exerciseText);
+    if (cameraRef.current && !isRecording) {
         setIsRecording(true);
-      } catch (error) {
-        console.error('Error starting recording:', error);
-      }
+        try {
+            const video = await cameraRef.current.recordAsync(recordingOptions);
+            console.log('Recording started at', video.uri);
+            setVideoUri(video.uri);
+            console.log(video.uri)
+        } catch (error) {
+            console.error('Error starting recording:', error);
+            setIsRecording(false);
+        }
     }
-  };
+};
 
-  const stopRecording = () => {
-    if (cameraRef.current) {
-      cameraRef.current.stopRecording();
-      setIsRecording(false);
-      console.log('Recording stopped');
+const stopRecording = () => {
+    if (cameraRef.current && isRecording) {
+        cameraRef.current.stopRecording();
+        console.log('Recording stopped');
+        setIsRecording(false);
+        handleFinish();
     }
-  };
+};
 
   const handleFinish = () => {
     setCounter((prevCounter) => prevCounter + 1);
@@ -90,7 +96,9 @@ export default function CameraScreen({ route }) {
 
   return (
     <View style={styles.container}>
+      
       <Camera ref={cameraRef} style={styles.camera} type={type} ratio="16:9" audio={true}>
+      <Text style={styles.exerciseText}>{exerciseText}</Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={isRecording ? stopRecording : startRecording}>
             <Text style={styles.text}>{isRecording ? 'Stop Recording' : 'Start Recording'}</Text>
@@ -111,6 +119,16 @@ const styles = StyleSheet.create({
   },
   camera: {
     flex: 1,
+  },
+  exerciseText: {
+    position: 'absolute',
+    top: 20, // Adjust this value as needed
+    alignSelf: 'center',
+    color: 'white',
+    marginTop:25,
+    fontSize: 20,
+    fontWeight: 'bold',
+    zIndex: 2, // Ensure text is above camera view
   },
   buttonContainer: {
     position: 'absolute',
