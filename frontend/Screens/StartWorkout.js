@@ -26,9 +26,8 @@ export default function StartWorkout() {
 
 
   const data = [
-    { title: 'Pushups', description: 'X20' },
-    { title: 'Pull Ups', description: 'X10' },
-    { title: 'Plank', description: '1 min' },
+    { title: 'Pushups', description: 'X10' },
+    { title: 'Plank', description: '60 seconds' },
     // Add more objects for additional cards
   ];
   const navigation = useNavigation();
@@ -79,7 +78,7 @@ export default function StartWorkout() {
                 <View style={{flexDirection: "row", marginTop:5}}>
                 <Icon name="clock-outline" size={20} color="#000000" style={styles.icon}/>
                 <Text style={styles.subtext}>
-                  10 min
+                  120 seconds
                 </Text>
                 </View>
                 <View style={styles.container}>
