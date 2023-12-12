@@ -1,10 +1,12 @@
 // @ts-ignore
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Dimensions, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Dimensions, Text, TouchableOpacity, View, ActivityIndicator, Modal } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import 'react-native-url-polyfill/auto';
+import axios from 'axios';
+import {API_URL} from "@env"
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -44,6 +46,7 @@ export default function CameraScreen({ route }) {
   const [trainerVideoUri, setTrainerVideoUri] = useState(null);
   const cameraRef = useRef(null);
   const [counter, setCounter] = useState(0);
+  const [isLoading, setLoading] = useState(false);
   
   const recordingOptions = {
     quality: Camera.Constants.VideoQuality['720p'],
@@ -84,6 +87,29 @@ export default function CameraScreen({ route }) {
     }
   };
 
+  const analyzeFootage = async (exercise_name, client_url, trainer_url) => {
+    setLoading(true);
+
+    const duration = 60;
+
+    try {
+      const apiUrl = API_URL + '/exercise/analyze';
+      const requestBody = {
+        exercise: exercise_name,
+        client_video: client_url,
+        trainer_video: trainer_url,
+        duration: duration,
+      };
+      const response = await axios.post(apiUrl, requestBody);
+      console.log(response.data);
+      setLoading(false);     
+    } catch (error) {
+      alert('Error analyzing video:', error);
+      setLoading(false);
+    }
+  };
+
+
   async function uploadFile(file, uri, name, exercise_name) {
 
     /* const { data, error } = await supabase.storage
@@ -104,6 +130,8 @@ export default function CameraScreen({ route }) {
     var storageRef = ref(getStorage(), "Videos/" + name);
     const uploadTask = uploadBytesResumable(storageRef, blob);
 
+    setLoading(true);
+
     // Listen for state changes, errors, and completion of the upload.
     uploadTask.on('state_changed',
       (snapshot) => {
@@ -114,13 +142,12 @@ export default function CameraScreen({ route }) {
 
     await uploadTask.then(() => {
       console.log('Uploaded a blob or file!');
-      getDownloadURL(ref(getStorage(), "Videos/" + name)).then((url) => {
-        console.log("Client Video URL: ", url);
-        setClientVideoUri(url);
-      });
-      getDownloadURL(ref(getStorage(), "Videos/abdullah_trainer_" + exercise_name + ".mp4")).then((url) => {
-        console.log("Trainer Video URL: ", url);
-        setTrainerVideoUri(url);
+      getDownloadURL(ref(getStorage(), "Videos/" + name)).then((url1) => {
+        console.log("Client Video URL: ", url1);
+        getDownloadURL(ref(getStorage(), "Videos/abdullah_trainer_" + exercise_name + ".mp4")).then((url2) => {
+          console.log("Trainer Video URL: ", url2);
+          analyzeFootage(exercise_name, url1, url2);
+        });
       });
     });
 
@@ -154,13 +181,31 @@ export default function CameraScreen({ route }) {
     }
   };
 
+  const finishWorkout = async () => {
+    setLoading(true);
+    try{
+      const apiUrl = API_URL + '/exercise/finish-workout';
+      const requestBody = {
+        plan_id: 2,
+        client_id: 7,
+      };
+      const response = await axios.post(apiUrl, requestBody);
+      console.log(response.data);
+      setLoading(false);
+      navigation.navigate('Statistics', {user: user, duration: response.data.duration, accuracy: response.data.accuracy, workout: response.data.workout});
+    } catch (error) {
+      alert('Error finishing workout:', error);
+      setLoading(false);
+    }
+  };
+
   const handleFinish = () => {
     setCounter((prevCounter) => prevCounter + 1);
 
     if (counter < workouts - 1) {
-      navigation.navigate('CameraScreen', { workouts});
+      navigation.navigate('CameraScreen', { workouts, user: user});
     } else {
-      navigation.navigate('Statistics');
+      finishWorkout();
     }
   };
 
@@ -183,6 +228,13 @@ export default function CameraScreen({ route }) {
   return (
     <View style={styles.container}>
       <Camera ref={cameraRef} style={styles.camera} type={type} ratio="16:9" audio={true}>
+      {isLoading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+          )}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={pickVideo}>
             <Text style={styles.text}>Upload Video</Text>
@@ -236,5 +288,11 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 18,
     marginTop: 10,
+  },
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
 });

@@ -56,9 +56,11 @@ async def finish_workout(workout_data: dict):
     for exercise in completed_exercises: 
         total_duration += exercise.duration
         total += exercise.accuracy
+        
+    accuracy = total/len(completed_exercises)
 
 
-    workout = Workout(plan_id, client_id, total_duration, total/len(completed_exercises))
+    workout = Workout(plan_id, client_id, total_duration, accuracy)
     workout_id = db.add_workout(workout)
 
     for exercise in completed_exercises:
@@ -66,4 +68,4 @@ async def finish_workout(workout_data: dict):
         db.add_exercise(exercise)
 
     completed_exercises.clear()
-    return workout_id
+    return {"workout": workout_id, "total_duration": total_duration, "accuracy": accuracy}

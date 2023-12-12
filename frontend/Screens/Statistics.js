@@ -4,9 +4,17 @@ import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
 import Report from '../components/Report';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useRoute } from '@react-navigation/native';
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function WorkoutCompleted() {
+  const route = useRoute();
+
+  const user = route.params?.user;
+  const workout = route.params?.workout;
+  const duration = route.params?.duration;
+  const accuracy = route.params?.accuracy;
+
   const [loaded] = useFonts({
     'Quicksand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
   });

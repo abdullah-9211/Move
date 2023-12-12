@@ -4,11 +4,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useRoute } from '@react-navigation/native';
 
 
 const { width: screenWidth } = Dimensions.get('window');
+const route = useRoute();
 
-
+const user = route.params?.user;
+const workout = route.params?.workout;
+const duration = route.params?.duration;
+const accuracy = route.params?.accuracy;
 
 export default function Report() {
     const [loaded] = useFonts({
