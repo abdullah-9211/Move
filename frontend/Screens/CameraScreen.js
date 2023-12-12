@@ -5,7 +5,6 @@ import { StyleSheet, Dimensions, Text, TouchableOpacity, View } from 'react-nati
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import 'react-native-url-polyfill/auto';
-import { createClient } from '@supabase/supabase-js';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -30,31 +29,25 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-const tus = require('tus-js-client');
 const { width: screenWidth } = Dimensions.get('window');
-const supabaseUrl = 'https://bwqhkxfnzrvxsiwzyywb.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3cWhreGZuenJ2eHNpd3p5eXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTg4NTU1NjAsImV4cCI6MjAxNDQzMTU2MH0.PjcLzVbrU_kcuiBTaq5zMs-YlkBE9tI2U1OTMgEa-_4';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 firebase.initializeApp(firebaseConfig);
 
 
 export default function CameraScreen({ route }) {
   const navigation = useNavigation();
   const { workouts } = route.params || { workouts: 1 };
+  const user = route.params?.user;
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [isRecording, setIsRecording] = useState(false);
-  const [videoUri, setVideoUri] = useState(null);
+  const [clientVideoUri, setClientVideoUri] = useState(null);
+  const [trainerVideoUri, setTrainerVideoUri] = useState(null);
   const cameraRef = useRef(null);
   const [counter, setCounter] = useState(0);
   
   const recordingOptions = {
     quality: Camera.Constants.VideoQuality['720p'],
   };
-
-  useEffect(() => {
-    console.log('Video URI updated:', videoUri);
-  }, [videoUri]);
 
   useEffect(() => {
     (async () => {
@@ -83,15 +76,15 @@ export default function CameraScreen({ route }) {
     });
 
     if (!result.cancelled) {
-      setVideoUri(result.assets[0].uri);
       console.log('Video picked:', result.assets[0].uri);
       // timestamp as video name
-      const video_name = Date.now().toString() + '.mp4';
-      uploadFile(result, result.assets[0].uri, video_name);
+      const exercise_name = counter === 0 ? 'plank' : 'pushup';
+      const video_name = "abdullah_" + exercise_name + '.mp4';
+      uploadFile(result, result.assets[0].uri, video_name, exercise_name);
     }
   };
 
-  async function uploadFile(file, uri, name) {
+  async function uploadFile(file, uri, name, exercise_name) {
 
     /* const { data, error } = await supabase.storage
       .from('videos')
@@ -118,6 +111,18 @@ export default function CameraScreen({ route }) {
         console.log('Upload is ' + progress + '% done');
       },
     )
+
+    await uploadTask.then(() => {
+      console.log('Uploaded a blob or file!');
+      getDownloadURL(ref(getStorage(), "Videos/" + name)).then((url) => {
+        console.log("Client Video URL: ", url);
+        setClientVideoUri(url);
+      });
+      getDownloadURL(ref(getStorage(), "Videos/abdullah_trainer_" + exercise_name + ".mp4")).then((url) => {
+        console.log("Trainer Video URL: ", url);
+        setTrainerVideoUri(url);
+      });
+    });
 
   }
 
@@ -153,7 +158,7 @@ export default function CameraScreen({ route }) {
     setCounter((prevCounter) => prevCounter + 1);
 
     if (counter < workouts - 1) {
-      navigation.navigate('CameraScreen', { workouts, video: videoUri });
+      navigation.navigate('CameraScreen', { workouts});
     } else {
       navigation.navigate('Statistics');
     }
