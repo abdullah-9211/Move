@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import { Camera } from 'expo-camera';
-import { Audio } from 'expo-av';
 import 'react-native-url-polyfill/auto';
 import { createClient } from '@supabase/supabase-js';
 
@@ -25,13 +24,9 @@ export default function CameraScreen({ route }) {
   const exerciseText = exercises[counter] || "Exercise";
   const [videoUri, setVideoUri] = useState(null);
   const recordingOptions = {
-    quality: Camera.Constants.VideoQuality['720p'],
     };
 
-  useEffect(() => {
-    console.log('Video URI updated:', videoUri);
-  
-  }, [videoUri]);
+
 
   useEffect(() => {
     (async () => {
@@ -56,11 +51,13 @@ export default function CameraScreen({ route }) {
   const startRecording = async () => {
     console.log("Current exercise text: ", exerciseText);
     if (cameraRef.current && !isRecording) {
-        setIsRecording(true);
+      setIsRecording(true);
         try {
-            const video = await cameraRef.current.recordAsync(recordingOptions);
-            console.log('Recording started at', video.uri);
-            setVideoUri(video.uri);
+          await cameraRef.current.recordAsync(recordingOptions).then((recordedVideo) =>{
+            setVideoUri(recordedVideo);
+            console.log('Recording started');
+            console.log('Recording started', recordedVideo);
+          });
         } catch (error) {
             console.error('Error starting recording:', error);
             setIsRecording(false);
@@ -83,6 +80,10 @@ async function uploadFile(file, exercise_name) {
 
 const stopRecording = async () => {
     if (cameraRef.current && isRecording) {
+
+        // while (videoUri === null){
+        //   console.log("Waiting for videoUri");
+        // }
         cameraRef.current.stopRecording();
         console.log('Recording stopped');
         setIsRecording(false);
@@ -109,7 +110,7 @@ const stopRecording = async () => {
     setCounter((prevCounter) => prevCounter + 1);
 
     if (counter < workouts - 1) {
-      navigation.navigate('CameraScreen', { workouts });
+      navigation.navigate('CameraScreen', { workouts , video: videoUri});
     } else {
       navigation.navigate('Statistics');
     }
