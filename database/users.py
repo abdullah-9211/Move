@@ -29,7 +29,7 @@ def login(email: str, password: str):
             return None
         user = res["data"][0]
         if user["password"] == password:
-            client.auth.sign_in_with_password({"email": email, "password": password})
+            # client.auth.sign_in_with_password({"email": email, "password": password})
             return user
         else:
             return None

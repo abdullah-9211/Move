@@ -75,6 +75,7 @@ export default function SignUpDetails2() {
                     user_id = response.data.user_id;
                     alert('User created successfully!', response.data.user_id);
                     console.log(response.data.user_id)
+                    setLoading(false);
                     navigation.navigate('Login', {user_id: response.data.user_id});
                 } catch (error) {
                     alert('Error creating user:', error);
@@ -101,6 +102,7 @@ export default function SignUpDetails2() {
                 user_id = response.data.user_id;
                 alert('Trainer created successfully!', response.data.user_id);
                 console.log(response.data.user_id)
+                setLoading(false);
                 navigation.navigate('Login', {user_id: response.data.user_id});
             } catch (error) {
                 alert('Error creating trainer:', error);

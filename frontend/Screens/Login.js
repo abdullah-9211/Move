@@ -37,6 +37,7 @@ export default function Login() {
             };
             const response = await axios.post(apiUrl, requestBody);
             const data = response.data;
+            console.log(data);
 
             if (data["user"] == "None"){
                 alert("Invalid email or password, Login failed")
