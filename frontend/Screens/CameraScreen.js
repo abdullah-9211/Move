@@ -85,7 +85,9 @@ export default function CameraScreen({ route }) {
     if (!result.cancelled) {
       setVideoUri(result.assets[0].uri);
       console.log('Video picked:', result.assets[0].uri);
-      uploadFile(result, result.assets[0].uri, 'umar_video.mp4');
+      // timestamp as video name
+      const video_name = Date.now().toString() + '.mp4';
+      uploadFile(result, result.assets[0].uri, video_name);
     }
   };
 
