@@ -9,7 +9,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function CameraScreen({ route }) {
+export default function CameraScreen2({ route }) {
 
   const supabase = createClient('https://bwqhkxfnzrvxsiwzyywb.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3cWhreGZuenJ2eHNpd3p5eXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTg4NTU1NjAsImV4cCI6MjAxNDQzMTU2MH0.PjcLzVbrU_kcuiBTaq5zMs-YlkBE9tI2U1OTMgEa-_4');
 
@@ -92,14 +92,17 @@ const stopRecording = async () => {
         setIsRecording(false);
         let exercise_name = "";
         if (counter === 0){
-          exercise_name = "pushup";
+          exercise_name = "";
+        }
+        else if (counter===1){
+            exercise_name = "pushup";
         }
         else{
           exercise_name = "plank";
         }
         
         try {
-          handleFinish();
+            handleFinish();
           await uploadFile(videoUri, exercise_name);
           console.log('Upload successful', videoUri);
           
@@ -111,14 +114,14 @@ const stopRecording = async () => {
 };
 
   const handleFinish = () => {
-    setCounter((prevCounter) => prevCounter + 1);
+    navigation.navigate('Statistics');
 
-    if (counter < workouts - 2) {
-      navigation.navigate('CameraScreen', { workouts , video: videoUri});
-    } 
-    else {
-      navigation.navigate('CameraScreen2', { workouts , video: videoUri});
-    }
+    // if (counter < workouts - 2) {
+    //   navigation.navigate('CameraScreen', { workouts , video: videoUri});
+    // } 
+    // else if (counter < workouts - 1) {
+    //   navigation.navigate('CameraScreen', { workouts , video: videoUri});
+    // }
     // else {
     //   navigation.navigate('Statistics');
     // }
@@ -153,10 +156,8 @@ const stopRecording = async () => {
       </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={isRecording ? stopRecording : startRecording}>
-            <Text style={styles.text}>{isRecording ? 'Stop Recording' : 'Start Recording'}</Text>
+            <Text style={styles.text}>{isRecording ? 'Continue' : 'Welldone!'}</Text>
           </TouchableOpacity>
-          
-          {isRecording && <Text style={styles.recordingText}>Recording...</Text>}
         </View>
       </Camera>
     </View>

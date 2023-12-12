@@ -27,6 +27,7 @@ import TrainerClients from './Screens/TrainerClients';
 import TrainerProfile from './Screens/TrainerProfile';
 import UserProfile from './Screens/UserProfile';
 import Goal2 from './Screens/Goal2';
+import CameraScreen2 from './Screens/CameraScreen2';
 const Stack = createStackNavigator()
 
 export default function App() {
@@ -62,6 +63,10 @@ export default function App() {
           <Stack.Screen name= "TrainerProfile" component={TrainerProfile}/>
           <Stack.Screen name= "UserProfile" component={UserProfile}/>
           <Stack.Screen name= "Goal2" component={Goal2}/>
+          <Stack.Screen name= "CameraScreen2" component={CameraScreen2}/>
+
+          
+          {/*  */}
           
 
           
