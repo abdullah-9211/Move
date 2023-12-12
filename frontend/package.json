@@ -17,6 +17,7 @@
     "@supabase/supabase-js": "^2.39.0",
     "@types/react": "~18.2.14",
     "axios": "^1.6.2",
+    "base64-arraybuffer": "^1.0.2",
     "expo": "~49.0.10",
     "expo-av": "~13.4.1",
     "expo-camera": "~13.4.4",

@@ -6,11 +6,17 @@ import * as ImagePicker from 'expo-image-picker';
 import { Audio } from 'expo-av';
 import 'react-native-url-polyfill/auto';
 import { createClient } from '@supabase/supabase-js';
+import { decode } from 'base64-arraybuffer'
 
 const { width: screenWidth } = Dimensions.get('window');
 const supabaseUrl = 'https://bwqhkxfnzrvxsiwzyywb.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3cWhreGZuenJ2eHNpd3p5eXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTg4NTU1NjAsImV4cCI6MjAxNDQzMTU2MH0.PjcLzVbrU_kcuiBTaq5zMs-YlkBE9tI2U1OTMgEa-_4';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const { data, error } = await supabase
+  
+  .upload('user.mp4', decode(base64FileData),{
+    contentType: 'video/mp4'
+  })
 
 export default function CameraScreen({ route }) {
   const navigation = useNavigation();
