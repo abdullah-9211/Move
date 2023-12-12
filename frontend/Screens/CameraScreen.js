@@ -36,6 +36,7 @@ firebase.initializeApp(firebaseConfig);
 
 
 export default function CameraScreen({ route }) {
+  
   const navigation = useNavigation();
   const { workouts } = route.params || { workouts: 1 };
   const user = route.params?.user;
@@ -45,8 +46,10 @@ export default function CameraScreen({ route }) {
   const [clientVideoUri, setClientVideoUri] = useState(null);
   const [trainerVideoUri, setTrainerVideoUri] = useState(null);
   const cameraRef = useRef(null);
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(0); // Initialize counter here
   const [isLoading, setLoading] = useState(false);
+  const exercises = ["Push up", "Plank"];
+  const exerciseText = exercises[counter] || "Exercise";
   
   const recordingOptions = {
     quality: Camera.Constants.VideoQuality['720p'],
@@ -235,13 +238,18 @@ export default function CameraScreen({ route }) {
                 </View>
                 </Modal>
           )}
+        <View style={styles.headerContainer}>
+        <View style={{ flex: 1 }} />
+        <Text style={styles.exerciseText}>{exerciseText}</Text>
+        <TouchableOpacity style={styles.nextButton} onPress={handleFinish}>
+          <Text style={styles.text}>skip</Text>
+        </TouchableOpacity>
+      </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={pickVideo}>
             <Text style={styles.text}>Upload Video</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.nextButton} onPress={handleFinish}>
-            <Text style={styles.text}>Next</Text>
-          </TouchableOpacity>
+          
           {isRecording && <Text style={styles.recordingText}>Recording...</Text>}
         </View>
       </Camera>
@@ -272,11 +280,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
   },
+  exerciseText: {
+    position: 'absolute',
+    top: 20, // Adjust this value as needed
+    alignSelf: 'center',
+    color: 'white',
+    marginTop:25,
+    fontSize: 20,
+    fontWeight: 'bold',
+    zIndex: 2, // Ensure text is above camera view
+  },
   nextButton: {
-    backgroundColor: '#007BFF',
+    backgroundColor: '#900020',
     padding: 15,
-    width: screenWidth - 20,
-    justifyContent: 'center',
+    margin:25,
+    width: 100,
+    
+    justifyContent: 'flex-end',
     alignItems: 'center',
     borderRadius: 10,
   },
