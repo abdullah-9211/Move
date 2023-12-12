@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.11",
     "@react-native-community/viewpager": "^5.0.11",
+    "@react-native-firebase/app": "^18.7.2",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
     "@supabase/supabase-js": "^2.39.0",
@@ -27,10 +28,12 @@
     "expo-linear-gradient": "~12.3.0",
     "expo-screen-orientation": "~6.0.6",
     "expo-status-bar": "~1.6.0",
+    "firebase": "^10.7.1",
     "react": "18.2.0",
     "react-native": "0.72.5",
     "react-native-base64": "^0.2.1",
     "react-native-dotenv": "^3.4.9",
+    "react-native-fetch-blob": "^0.10.8",
     "react-native-ffmpeg": "^0.5.2",
     "react-native-gesture-handler": "^2.13.4",
     "react-native-linear-gradient": "^2.8.3",
@@ -44,7 +47,9 @@
     "react-native-shadow-cards": "^1.0.2",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-vector-icons": "^10.0.0",
-    "react-native-video-processing": "^1.7.2"
+    "react-native-video-processing": "^1.7.2",
+    "rn-fetch-blob": "^0.12.0",
+    "tus-js-client": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

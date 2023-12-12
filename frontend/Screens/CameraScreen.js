@@ -1,22 +1,42 @@
+// @ts-ignore
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-import { Audio } from 'expo-av';
 import 'react-native-url-polyfill/auto';
 import { createClient } from '@supabase/supabase-js';
-import { decode } from 'base64-arraybuffer'
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import * as firebase from "firebase/app";
+import { getStorage } from "firebase/storage";
+import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBJQ8eu5gLYOgooLU4VKxxDIVYzK1XBjxE",
+  authDomain: "move-1699869988043.firebaseapp.com",
+  projectId: "move-1699869988043",
+  storageBucket: "move-1699869988043.appspot.com",
+  messagingSenderId: "630043626016",
+  appId: "1:630043626016:web:889775012715c7b7b58a45",
+  measurementId: "G-QYD1SXS4VT"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const tus = require('tus-js-client');
 const { width: screenWidth } = Dimensions.get('window');
 const supabaseUrl = 'https://bwqhkxfnzrvxsiwzyywb.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3cWhreGZuenJ2eHNpd3p5eXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTg4NTU1NjAsImV4cCI6MjAxNDQzMTU2MH0.PjcLzVbrU_kcuiBTaq5zMs-YlkBE9tI2U1OTMgEa-_4';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-const { data, error } = await supabase
-  
-  .upload('user.mp4', decode(base64FileData),{
-    contentType: 'video/mp4'
-  })
+firebase.initializeApp(firebaseConfig);
+
 
 export default function CameraScreen({ route }) {
   const navigation = useNavigation();
@@ -27,6 +47,7 @@ export default function CameraScreen({ route }) {
   const [videoUri, setVideoUri] = useState(null);
   const cameraRef = useRef(null);
   const [counter, setCounter] = useState(0);
+  
   const recordingOptions = {
     quality: Camera.Constants.VideoQuality['720p'],
   };
@@ -64,13 +85,13 @@ export default function CameraScreen({ route }) {
     if (!result.cancelled) {
       setVideoUri(result.assets[0].uri);
       console.log('Video picked:', result.assets[0].uri);
-      uploadFile(result.assets[0].uri, 'user_video.mp4');
+      uploadFile(result, result.assets[0].uri, 'umar_video.mp4');
     }
   };
 
-  async function uploadFile(uri, name) {
+  async function uploadFile(file, uri, name) {
 
-    const { data, error } = await supabase.storage
+    /* const { data, error } = await supabase.storage
       .from('videos')
       .upload(`plank/user_video/${name}`, uri, {
         contentType: 'video/mp4',
@@ -80,7 +101,22 @@ export default function CameraScreen({ route }) {
       console.error('Upload error:', error);
       return;
     }
-    console.log('Upload successful:', data);
+    console.log('Upload successful:', data); */
+
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    var storageRef = ref(getStorage(), "Videos/" + name);
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+      },
+    )
+
   }
 
   const handleNext = () => {
