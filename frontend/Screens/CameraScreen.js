@@ -84,7 +84,7 @@ export default function CameraScreen({ route }) {
     if (!result.cancelled) {
       console.log('Video picked:', result.assets[0].uri);
       // timestamp as video name
-      const exercise_name = counter === 0 ? 'plank' : 'pushup';
+      const exercise_name = counter === 0 ? 'pushup' : 'plank';
       const video_name = "abdullah_" + exercise_name + '.mp4';
       uploadFile(result, result.assets[0].uri, video_name, exercise_name);
     }
