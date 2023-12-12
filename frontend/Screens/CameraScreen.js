@@ -1,156 +1,65 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Dimensions, Text, TouchableOpacity, View } from 'react-native';
-import { Camera } from 'expo-camera';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import 'react-native-url-polyfill/auto';
 import { createClient } from '@supabase/supabase-js';
 
+const supabaseUrl = 'https://bwqhkxfnzrvxsiwzyywb.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3cWhreGZuenJ2eHNpd3p5eXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTg4NTU1NjAsImV4cCI6MjAxNDQzMTU2MH0.PjcLzVbrU_kcuiBTaq5zMs-YlkBE9tI2U1OTMgEa-_4';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const { width: screenWidth } = Dimensions.get('window');
-
-export default function CameraScreen({ route }) {
-
-  const supabase = createClient('https://bwqhkxfnzrvxsiwzyywb.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3cWhreGZuenJ2eHNpd3p5eXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTg4NTU1NjAsImV4cCI6MjAxNDQzMTU2MH0.PjcLzVbrU_kcuiBTaq5zMs-YlkBE9tI2U1OTMgEa-_4');
-
-
-  const navigation = useNavigation();
-  const { workouts } = route.params || { workouts: 1 };
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const [isRecording, setIsRecording] = useState(false);
-  const [counter, setCounter] = useState(0);
-  const cameraRef = useRef(null);
-  const exercises = ["Push up", "Plank"];
-  const exerciseText = exercises[counter] || "Exercise";
+export default function UploadScreen({ navigation, route }) {
+  const { exerciseName, nextExercise } = route.params;
   const [videoUri, setVideoUri] = useState(null);
-  const recordingOptions = {
-    };
 
-
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      
-      if (status !== 'granted') {
-        console.error('Camera permission not granted');
-        return;
-      }
-    //   const audioStatus = await Camera.requestMicrophonePermissionsAsync();
-    
-    // if (audioStatus !== 'granted') {
-    //   console.error('Audio permission not granted');
-    //   return;
-    // }
-
-
-      setHasPermission(true);
-    })();
-  }, []);
-
-  const startRecording = async () => {
-    console.log("Current exercise text: ", exerciseText);
-    if (cameraRef.current && !isRecording) {
-      setIsRecording(true);
-        try {
-          await cameraRef.current.recordAsync(recordingOptions).then((recordedVideo) =>{
-            setVideoUri(recordedVideo);
-            console.log('Recording started');
-            console.log('Recording started', recordedVideo);
-          });
-        } catch (error) {
-            console.error('Error starting recording:', error);
-            setIsRecording(false);
-        }
+  const pickVideo = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert('Permissions required', 'Permission to access media library is required to select a video.');
+      return;
     }
-};
 
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      allowsEditing: true,
+      quality: 1,
+    });
 
-
-async function uploadFile(file, exercise_name) {
-  const { data, error } = await supabase.storage.from('videos').upload(exercise_name + '/user_video/user.mp4', file, {
-    contentType: 'video/mp4',
-  })
-  if (error) {
-    console.log(error)
-  } else {
-    console.log(data)
-  }
-}
-
-const stopRecording = async () => {
-    if (cameraRef.current && isRecording) {
-
-        // while (videoUri === null){
-        //   console.log("Waiting for videoUri");
-        // }
-        cameraRef.current.stopRecording();
-        console.log('Recording stopped');
-        setIsRecording(false);
-        let exercise_name = "";
-        if (counter === 0){
-          exercise_name = "pushup";
-        }
-        else{
-          exercise_name = "plank";
-        }
-        
-        try {
-          await uploadFile(videoUri, exercise_name);
-          console.log('Upload successful', videoUri);
-          handleFinish();
-      } catch (error) {
-          console.error('Error uploading file:', error);
-      }
-
-    }
-};
-
-  const handleFinish = () => {
-    setCounter((prevCounter) => prevCounter + 1);
-
-    if (counter < workouts - 1) {
-      navigation.navigate('CameraScreen', { workouts , video: videoUri});
-    } else {
-      navigation.navigate('Statistics');
+    if (!result.cancelled) {
+      setVideoUri(result.assets[0].uri);
+      console.log('Video picked:', result.assets[0].uri);
+      uploadFile(result.assets[0].uri, 'user_video.mp4');
     }
   };
 
-  if (hasPermission === null) {
-    return <View />;
+  async function uploadFile(uri, name) {
+
+    const { data, error } = await supabase.storage
+      .from('videos')
+      .upload(`plank/user_video/${name}`, uri, {
+        contentType: 'video/mp4',
+      });
+
+    if (error) {
+      console.error('Upload error:', error);
+      return;
+    }
+    console.log('Upload successful:', data);
   }
 
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-
-  const toggleCameraType = () => {
-    setType((currentType) =>
-      currentType === Camera.Constants.Type.back
-        ? Camera.Constants.Type.front
-        : Camera.Constants.Type.back
-    );
+  const handleNext = () => {
+    navigation.push('CameraScreen', { exerciseName: nextExercise });
   };
 
   return (
     <View style={styles.container}>
-      
-      <Camera ref={cameraRef} style={styles.camera} type={type} ratio="16:9" audio={true}>
-      <View style={styles.headerContainer}>
-        <View style={{ flex: 1 }} />
-        <Text style={styles.exerciseText}>{exerciseText}</Text>
-        <TouchableOpacity style={styles.nextButton} onPress={handleFinish}>
-          <Text style={styles.text}>skip</Text>
-        </TouchableOpacity>
-      </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={isRecording ? stopRecording : startRecording}>
-            <Text style={styles.text}>{isRecording ? 'Stop Recording' : 'Start Recording'}</Text>
-          </TouchableOpacity>
-          
-          {isRecording && <Text style={styles.recordingText}>Recording...</Text>}
-        </View>
-      </Camera>
+      <Text style={styles.headerText}>{exerciseName}</Text>
+      <TouchableOpacity style={styles.button} onPress={pickVideo}>
+        <Text style={styles.buttonText}>Upload Video</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleNext}>
+        <Text style={styles.buttonText}>Next Exercise</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -158,52 +67,21 @@ const stopRecording = async () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  camera: {
-    flex: 1,
-  },
-  exerciseText: {
-    position: 'absolute',
-    top: 20, // Adjust this value as needed
-    alignSelf: 'center',
-    color: 'white',
-    marginTop:25,
-    fontSize: 20,
-    fontWeight: 'bold',
-    zIndex: 2, // Ensure text is above camera view
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 24,
+    color: 'black',
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: '#900020',
-    padding: 15,
-    marginBottom: 10,
-    width: screenWidth - 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
+    backgroundColor: '#007bff',
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
   },
-  nextButton: {
-    backgroundColor: '#900020',
-    padding: 15,
-    margin:25,
-    width: 100,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  text: {
+  buttonText: {
     color: 'white',
-    fontSize: 18,
-  },
-  recordingText: {
-    color: 'red',
-    fontSize: 18,
-    marginTop: 10,
   },
 });
