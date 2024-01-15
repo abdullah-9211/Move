@@ -41,7 +41,7 @@ export default function CameraScreen({ route }) {
   const { workouts } = route.params || { workouts: 1 };
   const user = route.params?.user;
   const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [type, setType] = useState(Camera.Constants.Type.front);
   const [isRecording, setIsRecording] = useState(false);
   const [clientVideoUri, setClientVideoUri] = useState(null);
   const [trainerVideoUri, setTrainerVideoUri] = useState(null);
@@ -54,9 +54,14 @@ export default function CameraScreen({ route }) {
   const recordingOptions = {
     quality: Camera.Constants.VideoQuality['720p'],
   };
+  useEffect(() => {
+    console.log('Video URI updated:', videoUri);
+  }, [videoUri]);
 
   useEffect(() => {
     (async () => {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+
       const { status } = await Camera.requestCameraPermissionsAsync();
 
       if (status !== 'granted') {
@@ -211,6 +216,9 @@ export default function CameraScreen({ route }) {
     } else {
       finishWorkout();
     }
+    // else {
+    //   navigation.navigate('Statistics');
+    // }
   };
 
   if (hasPermission === null) {
@@ -261,6 +269,7 @@ export default function CameraScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row',
   },
   camera: {
     flex: 1,
