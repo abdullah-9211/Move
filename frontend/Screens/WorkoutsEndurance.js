@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
+import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
@@ -9,12 +9,19 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 const { width: screenWidth } = Dimensions.get('window');
 
 const ListItem = ({ item }) => {
+
+  const navigation = useNavigation();
+
+  const route = useRoute();
+  const user = route.params?.user;
+
   
   return (
     <LinearGradient
       colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
       style={styles.gradient}
     >
+      <Pressable onPress={() => navigation.navigate('StartWorkout', {user: user})}>
       <Image
         source={{
           uri: item.uri,
@@ -22,6 +29,7 @@ const ListItem = ({ item }) => {
         style={{ width: screenWidth / 2 - 40, height: 135, borderRadius: 9 }}
         resizeMode="cover"
       />
+      </Pressable>
     </LinearGradient>
   );
 };
