@@ -4,12 +4,16 @@ import { useFonts } from 'expo-font';
 import {Card} from 'react-native-shadow-cards'
 import { MaterialIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function NavBarBot() {
     const navigation = useNavigation();
+    const route = useRoute();
+
+    const user = route.params?.user;
+
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -23,11 +27,11 @@ export default function NavBarBot() {
         
         <Card style={[basic.card, basic.elevation]}>
             <View style={basic.basic2}>
-                <View style={basic.columnView}>
+                <Pressable style={basic.columnView} onPress={() => navigation.navigate('WorkoutScreen')}>
                     <MaterialIcons name="fitness-center" size={24} color="#900020" />
                     <Text style={basic.text}>Workouts</Text>
             
-                </View> 
+                </Pressable> 
                 <View style={basic.columnView}>
                     <Octicons name="checklist" size={24} color="black" />
                     <Text style={basic.text}>Your Plan</Text>

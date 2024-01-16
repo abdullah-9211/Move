@@ -4,11 +4,24 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useRoute } from '@react-navigation/native';
 
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function Report() {
+
+  const route = useRoute();
+
+  const user = route.params?.user;
+  const workout = route.params?.workout;
+  const duration = route.params?.duration;
+  const accuracy = route.params?.accuracy;
+
+  React.useEffect(() => {
+    console.log(accuracy, duration);
+  }, []);
+
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
@@ -27,7 +40,7 @@ export default function Report() {
             Days In A Row</Text>
         </View>
         <View style={styles.progressText}>
-            <Text style={{fontSize:32, fontFamily: 'QuickSand', color: '#900020'}}>23:18</Text>
+            <Text style={{fontSize:32, fontFamily: 'QuickSand', color: '#900020'}}>{duration}</Text>
             <Text style={{fontSize:18,fontFamily: 'QuickSand', marginTop:10}}>
             Duration</Text>
         </View>
@@ -36,7 +49,7 @@ export default function Report() {
     </View>
     <View style={{flexDirection:"row"}}>
         <View style={styles.progressText}>
-            <Progress.Circle size={80} indeterminate={false} progress={0.75} color='#900020' borderWidth={0.3} showsText style={styles.progressBar}/>
+            <Progress.Circle size={80} indeterminate={false} progress={accuracy/100} color='#900020' borderWidth={0.3} showsText style={styles.progressBar}/>
             <Text style={{fontSize:18,fontFamily: 'QuickSand'}}>
                 Accuracy</Text>
         </View>

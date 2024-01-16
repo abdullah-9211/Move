@@ -55,27 +55,9 @@ export default function Workouts() {
       <NavBar />
       <ScrollView style={{marginTop:120}}>
       <View style={{flex:1, flexDirection: "row"}}>
-      <Text style={styles.headingtext}>FITNESS</Text>
-      <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsFitness')}>
-        <Text style={styles.browseText}>Browse All</Text>
-      </Pressable>
-      </View>
-      </View>
-      <View>
-        <FlatList
-          contentContainerStyle={{ paddingHorizontal: 10 }}
-          data={SECTIONS[0].data}
-          renderItem={({ item }) => <ListItem item={item} />}
-          keyExtractor={(item) => item.key}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        />
-      </View>
-      <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>STRENGTH</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsStrength')}>
+      <Pressable onPress={() => navigation.navigate('WorkoutsStrength', {user: user})}>
         <Text style={styles.browseText}>Browse All</Text>
       </Pressable>
       </View>
@@ -93,7 +75,7 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>ENDURANCE</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsEndurance')}>
+      <Pressable onPress={() => navigation.navigate('WorkoutsEndurance', {user: user})}>
         <Text style={styles.browseText}>Browse All</Text>
       </Pressable>
       </View>
@@ -111,7 +93,7 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>WEIGHT LOSS</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsWeightLoss')}>
+      <Pressable onPress={() => navigation.navigate('WorkoutsWeightLoss', {user: user})}>
         <Text style={styles.browseText}>Browse All</Text>
       </Pressable>
       </View>
@@ -129,7 +111,7 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>YOGA</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsYoga')}>
+      <Pressable onPress={() => navigation.navigate('WorkoutsYoga', {user: user})}>
         <Text style={styles.browseText}>Browse All</Text>
       </Pressable>
       </View>
@@ -147,7 +129,7 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>TONING</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsToning')}>
+      <Pressable onPress={() => navigation.navigate('WorkoutsToning', {user: user})}>
         <Text style={styles.browseText}>Browse All</Text>
       </Pressable>
       </View>

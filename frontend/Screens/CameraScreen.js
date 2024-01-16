@@ -85,7 +85,7 @@ export default function CameraScreen({ route }) {
       console.log('Video picked:', result.assets[0].uri);
       // timestamp as video name
       const exercise_name = counter === 0 ? 'pushup' : 'plank';
-      const video_name = user.first_name + "_" + exercise_name + '.mp4';
+      const video_name = user.first_name + "_footage.mp4";
       uploadFile(result, result.assets[0].uri, video_name, exercise_name);
     }
   };
@@ -106,6 +106,7 @@ export default function CameraScreen({ route }) {
       const response = await axios.post(apiUrl, requestBody);
       console.log(response.data);
       setLoading(false);     
+      handleFinish();
     } catch (error) {
       alert('Error analyzing video:', error);
       setLoading(false);
@@ -130,7 +131,7 @@ export default function CameraScreen({ route }) {
     const response = await fetch(uri);
     const blob = await response.blob();
 
-    var storageRef = ref(getStorage(), "Videos/" + name);
+    var storageRef = ref(getStorage(), "Videos/" + exercise_name + "/user/" + name);
     const uploadTask = uploadBytesResumable(storageRef, blob);
 
     setLoading(true);
@@ -145,9 +146,10 @@ export default function CameraScreen({ route }) {
 
     await uploadTask.then(() => {
       console.log('Uploaded a blob or file!');
-      getDownloadURL(ref(getStorage(), "Videos/" + name)).then((url1) => {
+      getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/user/" + name)).then((url1) => {
         console.log("Client Video URL: ", url1);
-        getDownloadURL(ref(getStorage(), "Videos/abdullah_trainer_" + exercise_name + ".mp4")).then((url2) => {
+        // TODO: Replace abdullah_footage with trainer footage
+        getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/abdullah_footage.mp4")).then((url2) => {
           console.log("Trainer Video URL: ", url2);
           analyzeFootage(exercise_name, url1, url2);
         });
@@ -195,7 +197,7 @@ export default function CameraScreen({ route }) {
       const response = await axios.post(apiUrl, requestBody);
       console.log(response.data);
       setLoading(false);
-      navigation.navigate('Statistics', {user: user, duration: response.data.duration, accuracy: response.data.accuracy, workout: response.data.workout});
+      navigation.navigate('Statistics', {user: user, duration: response.data.total_duration, accuracy: response.data.accuracy, workout: response.data.workout});
     } catch (error) {
       alert('Error finishing workout:', error);
       setLoading(false);

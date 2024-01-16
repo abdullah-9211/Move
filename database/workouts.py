@@ -81,11 +81,7 @@ def get_plans():
     client = connect() 
     try:
         res = client.table("Workout Plan").select("*").execute()
-        if res and isinstance(res.data, list) and len(res.data) > 0:
-            for item in res.data:
-                print(item.get('id'))  # Print 'id' and 'name' for each item
-            return 
-        else:
-            print("\nNo data found in the response or empty data.")
+        res = dict(res)
+        return res["data"]
     except Exception as e:
         print("\nError retrieving workouts. Exception Thrown:\n", e)
