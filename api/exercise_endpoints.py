@@ -8,9 +8,14 @@ import database.workouts as db
 
 router = APIRouter()
 
+#===============================================================================
+# Exercise analysis and workout completion endpoints
+#===============================================================================
+
 # list of exercises 
 completed_exercises = []
 
+# Analyze exercise
 @router.post("/analyze")
 async def analyze_exercise(exercise_data: dict):
     
@@ -45,7 +50,8 @@ async def analyze_exercise(exercise_data: dict):
         print(exercise.duration)
         print(exercise.accuracy)
         
-            
+        
+# Finalize workout and add to database            
 @router.post("/finish-workout")
 async def finish_workout(workout_data: dict):
     plan_id = workout_data.get("plan_id")
@@ -69,3 +75,19 @@ async def finish_workout(workout_data: dict):
 
     completed_exercises.clear()
     return {"workout": workout_id, "total_duration": total_duration, "accuracy": accuracy}
+
+
+# =============================================================================
+# Workout data fetching endpoints
+# =============================================================================
+
+# Get all workout plans
+@router.get("/get-all-workouts")
+async def get_all_workouts():
+    return db.get_plans()
+
+
+# Get workout plans according to workout type
+@router.get("/get-workouts/{plan_type}")
+async def get_workouts(plan_type: str):
+    return db.get_plan_by_type(plan_type)

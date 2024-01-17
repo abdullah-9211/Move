@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
 import NavBar from '../components/NavBar';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import axios from 'axios';
 
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -41,6 +42,7 @@ export default function Workouts() {
   const route = useRoute();
 
   const user = route.params?.user;
+
 
 
     const [loaded] = useFonts({
@@ -185,6 +187,8 @@ const styles = StyleSheet.create({
 
 });
 
+
+// Dummy data for list, MUST REPLACE WITH ACTUAL DATA
 const SECTIONS = [
   {
     title: 'Made for you',
