@@ -95,3 +95,16 @@ def get_plan_by_type(plan_type):
         return res["data"]
     except Exception as e:
         print("\nError retrieving workouts. Exception Thrown:\n", e)
+        
+        
+def get_plan_exercises(plan_id):
+    client = connect()
+    try:
+        workout_plan_exercises_table = "Workout Plan Exercises"
+        exercises_table = "Exercise"
+        
+        res = client.table(workout_plan_exercises_table).select('exercise_id', 'plan_id', 'reps', 'duration', 'Exercise(exercise_name)').eq("plan_id", plan_id).execute()
+        res = dict(res)
+        return res["data"]
+    except Exception as e:
+        print("\nError retrieving workouts. Exception Thrown:\n", e)

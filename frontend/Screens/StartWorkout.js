@@ -23,7 +23,11 @@ export default function StartWorkout() {
 
   const route = useRoute();
   const user = route.params?.user;
+  const workout = route.params?.workout;
 
+  React.useEffect(() => {
+    console.log(workout);
+  }, []);
 
   const data = [
     { title: 'Pushups', description: 'X10' },

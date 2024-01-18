@@ -11,45 +11,65 @@ import {API_URL} from "@env"
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const ListItem = ({ item }) => {
-  const navigation = useNavigation();
-
-  const route = useRoute();
-  const user = route.params?.user;
-
-
-  return (
-      <LinearGradient
-        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
-        style={styles.gradient}
-      >
-      <Pressable onPress={() => navigation.navigate('StartWorkout', {user: user})}>
-      <Image
-        source={{
-          uri: item.plan_image,
-        }}
-        style={{width: 135, height: 135, borderRadius: 9}}
-        resizeMode="cover"
-      />
-      </Pressable>
-      </LinearGradient>
-      
-  );
-};
-
 
 export default function Workouts() {
+
+
+  const ListItem = ({ item }) => {
+    const navigation = useNavigation();
+  
+    const route = useRoute();
+    const user = route.params?.user;
+  
+    const handleWorkoutClick = (item) => () => {
+      setLoading(true);
+  
+      const apiUrl = API_URL + '/exercise/get-exercises/' + item.id;
+      axios.get(apiUrl)
+      .then((response) => {
+        console.log(response.data);
+        setLoading(false);
+        navigation.navigate('StartWorkout', {user: user, workout: item});
+      })
+      .catch((error) => {
+        console.log(error);
+      })    
+  
+    }
+  
+    return (
+        <LinearGradient
+          colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
+          style={styles.gradient}
+        >
+        <Pressable onPress={handleWorkoutClick(item)}>
+        <Image
+          source={{
+            uri: item.plan_image,
+          }}
+          style={{width: 135, height: 135, borderRadius: 9}}
+          resizeMode="cover"
+        />
+        </Pressable>
+        </LinearGradient>
+        
+    );
+  };
+
+
   const navigation = useNavigation();
   const route = useRoute();
 
   const user = route.params?.user;
 
   const [loading, setLoading] = React.useState(true);
+  const [screenWhite, setScreenWhite] = React.useState(true);
 
   React.useEffect(() => {
 
     // fetch workouts from backend using axios and store in arrays
     setLoading(true);
+    setScreenWhite(true);
     const apiUrl = API_URL + '/exercise/get-all-workouts';
     axios.get(apiUrl)
     .then((response) => {
@@ -60,6 +80,7 @@ export default function Workouts() {
       WORKOUTS[3].data = response.data["Yoga"];
       WORKOUTS[4].data = response.data["Toning"];
       setLoading(false);
+      setScreenWhite(false);
     })
     .catch((error) => {
       console.log(error);
@@ -72,7 +93,7 @@ export default function Workouts() {
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
     })
-    if (loading) {
+    if (loading && screenWhite) {
         return (
           <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'white'}}>
                 <Modal transparent={true} animationType="fade">
