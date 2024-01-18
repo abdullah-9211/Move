@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Image, FlatList, SafeAreaView, Pressable, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Image, FlatList, SafeAreaView, Pressable, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, ActivityIndicator, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
 import NavBar from '../components/NavBar';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
+import {API_URL} from "@env"
 
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -25,7 +26,7 @@ const ListItem = ({ item }) => {
       <Pressable onPress={() => navigation.navigate('StartWorkout', {user: user})}>
       <Image
         source={{
-          uri: item.uri,
+          uri: item.plan_image,
         }}
         style={{width: 135, height: 135, borderRadius: 9}}
         resizeMode="cover"
@@ -43,23 +44,61 @@ export default function Workouts() {
 
   const user = route.params?.user;
 
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+
+    // fetch workouts from backend using axios and store in arrays
+    setLoading(true);
+    const apiUrl = API_URL + '/exercise/get-all-workouts';
+    axios.get(apiUrl)
+    .then((response) => {
+      console.log(response.data);
+      WORKOUTS[0].data = response.data["Strength"];
+      WORKOUTS[1].data = response.data["Endurance"];
+      WORKOUTS[2].data = response.data["Weight Loss"];
+      WORKOUTS[3].data = response.data["Yoga"];
+      WORKOUTS[4].data = response.data["Toning"];
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.log(error);
+      setLoading(false);
+    })
+  }, []);
 
 
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
     })
-    if (!loaded) {
-      return null;
+    if (loading) {
+        return (
+          <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'white'}}>
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+          </View>
+        );
     }
   return (
     <View style={styles.container}>
+    
       <NavBar />
       <ScrollView style={{marginTop:120}}>
+      {loading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+      )}
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>STRENGTH</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsStrength', {user: user})}>
+      <Pressable onPress={() => navigation.navigate('WorkoutsStrength', {user: user, workouts: WORKOUTS[0].data})}>
         <Text style={styles.browseText}>Browse All</Text>
       </Pressable>
       </View>
@@ -67,9 +106,9 @@ export default function Workouts() {
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
-          data={SECTIONS[0].data}
+          data={WORKOUTS[0].data}
           renderItem={({ item }) => <ListItem item={item} />}
-          keyExtractor={(item) => item.key}
+          keyExtractor={(item) => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
         />
@@ -77,7 +116,7 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>ENDURANCE</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsEndurance', {user: user})}>
+      <Pressable onPress={() => navigation.navigate('WorkoutsEndurance', {user: user, workouts: WORKOUTS[1].data})}>
         <Text style={styles.browseText}>Browse All</Text>
       </Pressable>
       </View>
@@ -85,7 +124,7 @@ export default function Workouts() {
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
-          data={SECTIONS[0].data}
+          data={WORKOUTS[1].data}
           renderItem={({ item }) => <ListItem item={item} />}
           keyExtractor={(item) => item.key}
           horizontal
@@ -95,7 +134,7 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>WEIGHT LOSS</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsWeightLoss', {user: user})}>
+      <Pressable onPress={() => navigation.navigate('WorkoutsWeightLoss', {user: user, workouts: WORKOUTS[2].data})}>
         <Text style={styles.browseText}>Browse All</Text>
       </Pressable>
       </View>
@@ -103,7 +142,7 @@ export default function Workouts() {
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
-          data={SECTIONS[0].data}
+          data={WORKOUTS[2].data}
           renderItem={({ item }) => <ListItem item={item} />}
           keyExtractor={(item) => item.key}
           horizontal
@@ -113,7 +152,7 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>YOGA</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsYoga', {user: user})}>
+      <Pressable onPress={() => navigation.navigate('WorkoutsYoga', {user: user, workouts: WORKOUTS[3].data})}>
         <Text style={styles.browseText}>Browse All</Text>
       </Pressable>
       </View>
@@ -121,7 +160,7 @@ export default function Workouts() {
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
-          data={SECTIONS[0].data}
+          data={WORKOUTS[3].data}
           renderItem={({ item }) => <ListItem item={item} />}
           keyExtractor={(item) => item.key}
           horizontal
@@ -131,7 +170,7 @@ export default function Workouts() {
       <View style={{flex:1, flexDirection: "row"}}>
       <Text style={styles.headingtext}>TONING</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
-      <Pressable onPress={() => navigation.navigate('WorkoutsToning', {user: user})}>
+      <Pressable onPress={() => navigation.navigate('WorkoutsToning', {user: user, workouts: WORKOUTS[4].data})}>
         <Text style={styles.browseText}>Browse All</Text>
       </Pressable>
       </View>
@@ -140,7 +179,7 @@ export default function Workouts() {
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
-          data={SECTIONS[0].data}
+          data={WORKOUTS[4].data}
           renderItem={({ item }) => <ListItem item={item} />}
           keyExtractor={(item) => item.key}
           horizontal
@@ -185,7 +224,43 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
 
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+
+
 });
+
+const WORKOUTS = [
+  {
+    title: 'Strength',
+    horizontal: true,
+    data:[]
+  },
+  {
+    title: 'Endurance',
+    horizontal: true,
+    data:[]
+  },
+  {
+    title: 'Weight Loss',
+    horizontal: true,
+    data:[]
+  },
+  {
+    title: 'Yoga',
+    horizontal: true,
+    data:[]
+  },
+  {
+    title: 'Toning',
+    horizontal: true,
+    data:[]
+  },
+]
 
 
 // Dummy data for list, MUST REPLACE WITH ACTUAL DATA

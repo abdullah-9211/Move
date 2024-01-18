@@ -84,7 +84,17 @@ async def finish_workout(workout_data: dict):
 # Get all workout plans
 @router.get("/get-all-workouts")
 async def get_all_workouts():
-    return db.get_plans()
+    plans = db.get_plans()
+    division = {
+        'Strength': [],
+        'Endurance': [],
+        'Toning': [],
+        'Weight Loss': [],
+        'Yoga': []
+    }
+    for plan in plans:
+        division[plan['workout_type']].append(plan)
+    return division
 
 
 # Get workout plans according to workout type

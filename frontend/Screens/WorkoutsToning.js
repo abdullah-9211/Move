@@ -14,6 +14,7 @@ const ListItem = ({ item }) => {
 
   const route = useRoute();
   const user = route.params?.user;
+  const workouts = route.params?.workouts;
 
   
   return (
@@ -24,7 +25,7 @@ const ListItem = ({ item }) => {
     <Pressable onPress={() => navigation.navigate('StartWorkout', {user: user})}>
       <Image
         source={{
-          uri: item.uri,
+          uri: item.plan_image,
         }}
         style={{ width: screenWidth / 2 - 40, height: 135, borderRadius: 9 }}
         resizeMode="cover"
@@ -38,6 +39,7 @@ export default function WorkoutsToning() {
   const navigation = useNavigation();
   const route = useRoute();
   const user = route.params?.user;
+  const workouts = route.params?.workouts;
 
   const [loaded] = useFonts({
     'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -61,9 +63,9 @@ export default function WorkoutsToning() {
 
       <FlatList
         contentContainerStyle={{ paddingHorizontal: 10 }}
-        data={SECTIONS[0].data}
+        data={workouts}
         renderItem={({ item }) => <ListItem item={item} />}
-        keyExtractor={(item) => item.key}
+        keyExtractor={(item) => item.id}
         numColumns={2} 
         showsHorizontalScrollIndicator={false}
       />
@@ -102,7 +104,6 @@ const styles = StyleSheet.create({
   gradient: {
     marginHorizontal: 20,
     marginVertical: 20,
-    flex: 1,
     borderRadius: 12,
   },
 });
