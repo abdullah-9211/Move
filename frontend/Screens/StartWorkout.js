@@ -24,15 +24,43 @@ export default function StartWorkout() {
   const route = useRoute();
   const user = route.params?.user;
   const workout = route.params?.workout;
+  const exercises = route.params?.exercises;
+  const trainer = route.params?.trainer;
+  const [trainerName, setTrainerName] = React.useState("");
+  const [totalExercises, setTotalExercises] = React.useState(0);
+  const [totalDuration, setTotalDuration] = React.useState(0);
+  const [exercisesData, setExercisesData] = React.useState([]);
+
+
+  var data = [
+  ];
 
   React.useEffect(() => {
     console.log(workout);
+    console.log(exercises);
+    console.log(trainer);
+    setTrainerName(trainer["first_name"] + " " + trainer["last_name"]);
+
+    // Iterate over exercises and add up total duration
+    var total_duration = 0;
+    var total_exercises = 0;
+    for (var i = 0; i < exercises.length; i++) {
+      if (exercises[i]["duration"] == null) {
+        total_duration += exercises[i]["reps"] * 3;
+        data.push({title: exercises[i]["Exercise"]["exercise_name"].charAt(0).toUpperCase() + exercises[i]["Exercise"]["exercise_name"].slice(1), description: exercises[i]["reps"] + " reps"});
+      }
+      else{
+        total_duration += exercises[i]["duration"];
+        data.push({title: exercises[i]["Exercise"]["exercise_name"].charAt(0).toUpperCase() + exercises[i]["Exercise"]["exercise_name"].slice(1), description: exercises[i]["duration"] + " seconds"});
+      }
+      total_exercises += 1;
+
+    }
+    setTotalDuration(total_duration);
+    setTotalExercises(total_exercises);
+    setExercisesData(data);
   }, []);
 
-  const data = [
-    { title: 'Pushups', description: 'X10' },
-    { title: 'Plank', description: '60 seconds' },
-  ];
   const navigation = useNavigation();
     const [loaded] = useFonts({
 
@@ -45,7 +73,7 @@ export default function StartWorkout() {
 
       <View style = {{flex: 1, justifyContent: "flex-start", backgroundColor:"#FFFFFF"}}>
              <ImageBackground
-      source={{ uri: 'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg' }}
+      source={{ uri: workout["plan_image"] }}
       style={styles.backgroundImage}
       resizeMode="cover"
     >
@@ -59,7 +87,7 @@ export default function StartWorkout() {
           </View>
           <View style={{ flex: 1, alignItems: "flex-start", justifyContent: "flex-end" }}>
             <Text style={styles.headingtext}>
-              Workout Name
+              {workout["plan_name"]}
             </Text>
           </View>
           {/* ... (rest of your content) */}
@@ -69,27 +97,27 @@ export default function StartWorkout() {
             <View style={{flex:1}}>
             <View style={{flexDirection: "row", marginTop:5, justifyContent: 'space-between', marginRight:20}}>
                 <Text style={styles.trainerText}>
-                Trainer Name
+                {trainerName}
                 </Text>
                 <View style={{flexDirection: 'row', marginTop:3}}>
                 <Icon name="dumbbell" size={20} color="#000000" style={styles.icon}/>
                 <Text style={styles.subtext}>
-                  Strength
+                  {workout["workout_type"]}
                 </Text>
                 </View>
               </View>
                 <View style={{flexDirection: "row", marginTop:5}}>
                 <Icon name="clock-outline" size={20} color="#000000" style={styles.icon}/>
                 <Text style={styles.subtext}>
-                  120 seconds
+                  {totalDuration + " seconds"}
                 </Text>
                 </View>
                 <View style={styles.container}>
-                  {data.map((info, index) => (
+                  {exercisesData.map((info, index) => (
                     <Card key={index} cardInfo={info} />
                   ))}
                 </View>
-                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={() => navigation.navigate('CameraScreen', {workouts:2, user: user})}>
+                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={() => navigation.navigate('CameraScreen', {workouts:totalExercises, user: user, trainer: trainer})}>
                   <View style={styles.button}>
                   
                   <Text style={{color:"#ffffff", fontFamily: "QuickSand", fontSize:16}}>Start Workout</Text>

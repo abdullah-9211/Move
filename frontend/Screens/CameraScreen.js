@@ -40,6 +40,7 @@ export default function CameraScreen({ route }) {
   const navigation = useNavigation();
   const { workouts } = route.params || { workouts: 1 };
   const user = route.params?.user;
+  const trainer = route.params?.trainer;
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [isRecording, setIsRecording] = useState(false);
@@ -85,7 +86,7 @@ export default function CameraScreen({ route }) {
       console.log('Video picked:', result.assets[0].uri);
       // timestamp as video name
       const exercise_name = counter === 0 ? 'pushup' : 'plank';
-      const video_name = user.first_name + "_footage.mp4";
+      const video_name = user.first_name + "_" + user.last_name + "_footage.mp4";
       uploadFile(result, result.assets[0].uri, video_name, exercise_name);
     }
   };
@@ -148,8 +149,7 @@ export default function CameraScreen({ route }) {
       console.log('Uploaded a blob or file!');
       getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/user/" + name)).then((url1) => {
         console.log("Client Video URL: ", url1);
-        // TODO: Replace abdullah_footage with trainer footage
-        getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/abdullah_footage.mp4")).then((url2) => {
+        getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + trainer["first_name"] + "_" + trainer["last_name"] + ".mp4")).then((url2) => {
           console.log("Trainer Video URL: ", url2);
           analyzeFootage(exercise_name, url1, url2);
         });

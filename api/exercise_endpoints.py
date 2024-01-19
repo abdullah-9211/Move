@@ -107,5 +107,8 @@ async def get_workouts(plan_type: str):
 @router.get("/get-exercises/{plan_id}")
 async def get_exercises(plan_id: int):
     exercises = db.get_plan_exercises(plan_id)
-    exercises.append(len(exercises))
     return exercises
+
+@router.get("/get-plan-trainer/{trainer_id}")
+async def get_plan_trainer(trainer_id: int):
+    return db.get_plan_trainer(trainer_id)

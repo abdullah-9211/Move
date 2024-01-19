@@ -28,8 +28,15 @@ export default function Workouts() {
       axios.get(apiUrl)
       .then((response) => {
         console.log(response.data);
-        setLoading(false);
-        navigation.navigate('StartWorkout', {user: user, workout: item});
+        const exercises_data = response.data;
+        const apiUrl = API_URL + '/exercise/get-plan-trainer/' + item.plan_trainer;
+        axios.get(apiUrl)
+        .then((response) => {
+          console.log(response.data);
+          setLoading(false);
+          navigation.navigate('StartWorkout', {user: user, workout: item, exercises: exercises_data, trainer: response.data[0]});
+        }
+        )
       })
       .catch((error) => {
         console.log(error);
