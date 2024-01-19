@@ -18,8 +18,11 @@ export default function Report() {
   const duration = route.params?.duration;
   const accuracy = route.params?.accuracy;
 
+  const [Accuracy, setAccuracy] = React.useState(0);
+
   React.useEffect(() => {
-    console.log(accuracy, duration);
+    setAccuracy(Math.round(accuracy));
+    console.log(Accuracy, duration);
   }, []);
 
     const [loaded] = useFonts({
@@ -49,7 +52,7 @@ export default function Report() {
     </View>
     <View style={{flexDirection:"row"}}>
         <View style={styles.progressText}>
-            <Progress.Circle size={80} indeterminate={false} progress={accuracy/100} color='#900020' borderWidth={0.3} showsText style={styles.progressBar}/>
+            <Progress.Circle size={80} indeterminate={false} progress={Accuracy/100.0} color='#900020' borderWidth={0.3} showsText style={styles.progressBar}/>
             <Text style={{fontSize:18,fontFamily: 'QuickSand'}}>
                 Accuracy</Text>
         </View>
