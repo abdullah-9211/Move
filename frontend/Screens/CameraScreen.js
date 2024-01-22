@@ -41,6 +41,7 @@ export default function CameraScreen({ route }) {
   const { workouts } = route.params || { workouts: 1 };
   const user = route.params?.user;
   const trainer = route.params?.trainer;
+  const exerciseNames = route.params?.exerciseNames;
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [isRecording, setIsRecording] = useState(false);
@@ -49,7 +50,7 @@ export default function CameraScreen({ route }) {
   const cameraRef = useRef(null);
   const [counter, setCounter] = useState(0); // Initialize counter here
   const [isLoading, setLoading] = useState(false);
-  const exercises = ["Push up", "Plank"];
+  const [exercises, setExercises] = useState(exerciseNames);
   const exerciseText = exercises[counter] || "Exercise";
   
   const recordingOptions = {

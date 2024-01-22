@@ -30,10 +30,11 @@ export default function StartWorkout() {
   const [totalExercises, setTotalExercises] = React.useState(0);
   const [totalDuration, setTotalDuration] = React.useState(0);
   const [exercisesData, setExercisesData] = React.useState([]);
+  const [exerciseNames, setExerciseNames] = React.useState([]);
 
 
-  var data = [
-  ];
+  var data = [];
+  var exerciseNamesTemp = [];
 
   React.useEffect(() => {
     console.log(workout);
@@ -53,12 +54,14 @@ export default function StartWorkout() {
         total_duration += exercises[i]["duration"];
         data.push({title: exercises[i]["Exercise"]["exercise_name"].charAt(0).toUpperCase() + exercises[i]["Exercise"]["exercise_name"].slice(1), description: exercises[i]["duration"] + " seconds"});
       }
+      exerciseNamesTemp.push(exercises[i]["Exercise"]["exercise_name"].charAt(0).toUpperCase() + exercises[i]["Exercise"]["exercise_name"].slice(1));
       total_exercises += 1;
 
     }
     setTotalDuration(total_duration);
     setTotalExercises(total_exercises);
     setExercisesData(data);
+    setExerciseNames(exerciseNamesTemp);
   }, []);
 
   const navigation = useNavigation();
@@ -117,7 +120,7 @@ export default function StartWorkout() {
                     <Card key={index} cardInfo={info} />
                   ))}
                 </View>
-                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={() => navigation.navigate('CameraScreen', {workouts:totalExercises, user: user, trainer: trainer})}>
+                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={() => navigation.navigate('CameraScreen', {workouts:totalExercises, user: user, trainer: trainer, exerciseNames: exerciseNames})}>
                   <View style={styles.button}>
                   
                   <Text style={{color:"#ffffff", fontFamily: "QuickSand", fontSize:16}}>Start Workout</Text>
