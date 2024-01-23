@@ -133,28 +133,28 @@ const SECTIONS = [
     data: [
       {
         key: '1',
-        text: 'Item text 1',
+        text: 'Endurance',
         uri: 'https://www.mindpumpmedia.com/hubfs/Exercise%20for%20more%20than%20just%20aesthetics.png',
       },
       {
         key: '2',
-        text: 'Item text 2',
+        text: 'Yoga',
         uri: 'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg',
       },
 
       {
         key: '3',
-        text: 'Item text 3',
+        text: 'Toning',
         uri: 'https://media.istockphoto.com/id/1151770135/photo/athletic-woman-exercising-push-ups-in-a-health-club.jpg?s=612x612&w=0&k=20&c=c28WRyEbYfWmf0BGG6fyWo1Hwe0JxRIswfsywAsZhKI=',
       },
       {
         key: '4',
-        text: 'Item text 4',
+        text: 'Weight Loss',
         uri: 'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg',
       },
       {
         key: '5',
-        text: 'Item text 5',
+        text: 'Strength',
         uri: 'https://wallpapercave.com/wp/wp7661163.jpg',
       },
     ],
