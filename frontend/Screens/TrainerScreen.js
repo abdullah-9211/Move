@@ -6,31 +6,36 @@ import NavBarBot from '../components/NavBarBot';
 import NavBar from '../components/NavBar';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import TrainerProfile from './TrainerProfile';
+import axios from 'axios';
+import {API_URL} from "@env"
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const ListItem = ({ item }) => {
-  const navigation = useNavigation();
-  return (
-    <LinearGradient
-      colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
-      style={styles.gradient}
-    >
-      <Pressable onPress={() => navigation.navigate('TrainerProfile')}>
-      <Image
-        source={{
-          uri: item.uri,
-        }}
-        style={{ width: screenWidth / 2 - 40, height: 160, borderRadius: 180 }}
-        resizeMode="cover"
-      />
-      </Pressable>
-    </LinearGradient>
-
-  );
-};
-
 export default function TrainerScreen() {
+
+  const ListItem = ({ item }) => {
+    const navigation = useNavigation();
+    return (
+      <LinearGradient
+        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
+        style={styles.gradient}
+      >
+        <Pressable onPress={() => navigation.navigate('TrainerProfile')}>
+        <Image
+          source={{
+            uri: item.uri,
+          }}
+          style={{ width: screenWidth / 2 - 40, height: 160, borderRadius: 180 }}
+          resizeMode="cover"
+        />
+        </Pressable>
+      </LinearGradient>
+  
+    );
+  };
+
+  
+
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -104,6 +109,8 @@ const styles = StyleSheet.create({
     borderRadius: 180,
   },
 });
+
+const TRAINERS = []
 
 const SECTIONS = [
   {
