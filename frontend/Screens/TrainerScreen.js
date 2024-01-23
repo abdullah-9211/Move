@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, FlatList, horizontal, View, StyleSheet, Text, Pressable, Dimensions } from 'react-native';
+import { Image, FlatList, horizontal, View, StyleSheet, Text, Pressable, Dimensions, ActivityIndicator, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
@@ -20,10 +20,10 @@ export default function TrainerScreen() {
         colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
         style={styles.gradient}
       >
-        <Pressable onPress={() => navigation.navigate('TrainerProfile')}>
+        <Pressable onPress={() => navigation.navigate('TrainerProfile', {user: user, trainer: item})}>
         <Image
           source={{
-            uri: item.uri,
+            uri: item.profile_picture,
           }}
           style={{ width: screenWidth / 2 - 40, height: 160, borderRadius: 180 }}
           resizeMode="cover"
@@ -38,8 +38,25 @@ export default function TrainerScreen() {
 
   const navigation = useNavigation();
   const route = useRoute();
+  const [loading, setLoading] = React.useState(true);
 
   const user = route.params?.user;
+
+  React.useEffect(() => {
+    setLoading(true);
+
+    const apiUrl = API_URL + '/user/get-trainers';
+    axios.get(apiUrl)
+    .then((response) => {
+      console.log(response.data);
+      TRAINERS.data = response.data;
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }, []);
+
 
   const [loaded] = useFonts({
     'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -47,6 +64,18 @@ export default function TrainerScreen() {
 
   if (!loaded) {
     return null;
+  }
+
+  if (loading) {
+    return (
+      <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'white'}}>
+            <Modal transparent={true} animationType="fade">
+            <View style={styles.modal}>
+                <ActivityIndicator size="large" color="#fff" />
+            </View>
+            </Modal>
+      </View>
+    );
   }
 
   return (
@@ -64,9 +93,9 @@ export default function TrainerScreen() {
 
       <FlatList
         contentContainerStyle={{ paddingHorizontal: 10 }}
-        data={SECTIONS[0].data}
+        data={TRAINERS.data}
         renderItem={({ item }) => <ListItem item={item} />}
-        keyExtractor={(item) => item.key}
+        keyExtractor={(item) => item.id}
         numColumns={2} // Set the number of columns to 2
         showsHorizontalScrollIndicator={false}
       />
@@ -108,9 +137,22 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 180,
   },
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
 });
 
-const TRAINERS = []
+const TRAINERS = [
+  {
+    title: "Trainers",
+    data: [
+
+    ]
+  }
+]
 
 const SECTIONS = [
   {
