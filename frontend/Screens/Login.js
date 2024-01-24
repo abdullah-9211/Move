@@ -31,6 +31,7 @@ export default function Login() {
         setLoading(true);
         try {
             const apiUrl = API_URL + '/user/login';
+            console.log("test : " + apiUrl);
             const requestBody = {
                 email: email,
                 password: password
@@ -52,9 +53,26 @@ export default function Login() {
                 }
             }
 
-        } catch (error) {
-            console.log(error);
+        } 
+        catch (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.log(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+            }
         }
+        
+        // catch (error) {
+        //     console.log(error);
+        // }
         setLoading(false);
     }
 
