@@ -58,6 +58,9 @@ async def finish_workout(workout_data: dict):
     client_id = workout_data.get("client_id")
     total_duration = 0
     total = 0
+    
+    if len(completed_exercises) == 0:
+        return {"workout": 0, "total_duration": 0, "accuracy": 0}
 
     for exercise in completed_exercises: 
         total_duration += exercise.duration
