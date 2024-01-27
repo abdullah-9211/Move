@@ -233,7 +233,13 @@ export default function CameraScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      
+      {isLoading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+      )}
         <View style={styles.headerContainer}>
         <View style={{ flex: 1 }} />
         <Text style={styles.exerciseText}>{exerciseText}</Text>
