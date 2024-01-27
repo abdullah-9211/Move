@@ -37,11 +37,6 @@ export default function Report() {
   return (
     <View style={styles.container}>
       <View style={{flexDirection:"row"}}>
-      <View style={styles.progressText}>
-            <Text style={{fontSize:32, fontFamily: 'QuickSand', color: '#900020'}}>32</Text>
-            <Text style={{fontSize:18,fontFamily: 'QuickSand', marginTop:10}}>
-            Days In A Row</Text>
-        </View>
         <View style={styles.progressText}>
             <Text style={{fontSize:32, fontFamily: 'QuickSand', color: '#900020'}}>{duration}</Text>
             <Text style={{fontSize:18,fontFamily: 'QuickSand', marginTop:10}}>
@@ -56,11 +51,7 @@ export default function Report() {
             <Text style={{fontSize:18,fontFamily: 'QuickSand'}}>
                 Accuracy</Text>
         </View>
-        <View style={styles.progressText}>
-            <Progress.Circle size={80} indeterminate={false} progress={0.90} color='#900020' borderWidth={0.3} showsText style={styles.progressBar}/>
-            <Text style={{fontSize:18,fontFamily: 'QuickSand'}}>
-               Avg Accuracy</Text>
-        </View>
+      
     </View>
     
       

@@ -2,10 +2,9 @@ import * as React from 'react';
 import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
-import NavBarBot from '../components/NavBarBotTrainer';
+import NavBarBot from '../components/NavBarBot';
 import { Card } from 'react-native-shadow-cards';
 import { useNavigation } from '@react-navigation/native';
-import NavBarTrainer from '../components/NavBarTrainer';
 
 const { width: screenWidth } = Dimensions.get('window');
 
