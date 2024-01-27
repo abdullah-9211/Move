@@ -233,14 +233,7 @@ export default function CameraScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      <Camera ref={cameraRef} style={styles.camera} type={type} ratio="16:9" audio={true}>
-      {isLoading && (
-                <Modal transparent={true} animationType="fade">
-                <View style={styles.modal}>
-                    <ActivityIndicator size="large" color="#fff" />
-                </View>
-                </Modal>
-          )}
+      
         <View style={styles.headerContainer}>
         <View style={{ flex: 1 }} />
         <Text style={styles.exerciseText}>{exerciseText}</Text>
@@ -255,7 +248,6 @@ export default function CameraScreen({ route }) {
           
           {isRecording && <Text style={styles.recordingText}>Recording...</Text>}
         </View>
-      </Camera>
     </View>
   );
 }
@@ -287,7 +279,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 20, // Adjust this value as needed
     alignSelf: 'center',
-    color: 'white',
+    color: 'black',
     marginTop:25,
     fontSize: 20,
     fontWeight: 'bold',

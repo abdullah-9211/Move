@@ -25,6 +25,7 @@ export default function Workouts() {
       setLoading(true);
   
       const apiUrl = API_URL + '/exercise/get-exercises/' + item.id;
+      console.log("test : " + apiUrl);
       axios.get(apiUrl)
       .then((response) => {
         console.log(response.data);
