@@ -7,7 +7,7 @@ import NavBar from '../components/NavBar';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import TrainerProfile from './TrainerProfile';
 import axios from 'axios';
-import {API_URL} from "@env"
+import {REACT_APP_API_URL} from "@env"
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -45,7 +45,7 @@ export default function TrainerScreen() {
   React.useEffect(() => {
     setLoading(true);
 
-    const apiUrl = API_URL + '/user/get-trainers';
+    const apiUrl = REACT_APP_API_URL + '/user/get-trainers';
     axios.get(apiUrl)
     .then((response) => {
       console.log(response.data);

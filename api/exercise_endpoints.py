@@ -77,7 +77,7 @@ async def finish_workout(workout_data: dict):
         db.add_exercise(exercise)
 
     completed_exercises.clear()
-    return {"workout": workout_id, "total_duration": total_duration, "accuracy": accuracy}
+    return {"workout": workout_id, "total_duration": total_duration, "accuracy": round(accuracy, 1)}
 
 
 # =============================================================================

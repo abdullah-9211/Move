@@ -1,12 +1,12 @@
 // @ts-ignore
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { StyleSheet, Dimensions, Text, TouchableOpacity, View, ActivityIndicator, Modal } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import 'react-native-url-polyfill/auto';
 import axios from 'axios';
-import {API_URL} from "@env"
+import {REACT_APP_API_URL} from "@env"
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -35,13 +35,15 @@ const { width: screenWidth } = Dimensions.get('window');
 firebase.initializeApp(firebaseConfig);
 
 
-export default function CameraScreen({ route }) {
+export default function CameraScreen() {
   
   const navigation = useNavigation();
-  const { workouts } = route.params || { workouts: 1 };
+  const route = useRoute();
+  const workouts = route.params?.workouts || { workouts: 1 };
   const user = route.params?.user;
   const trainer = route.params?.trainer;
   const exerciseNames = route.params?.exerciseNames;
+  const workout = route.params?.workout;
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [isRecording, setIsRecording] = useState(false);
@@ -65,7 +67,8 @@ export default function CameraScreen({ route }) {
         console.error('Camera permission not granted');
         return;
       }
-
+      console.log("Exercises: " + workouts);
+      console.log("Counter: " + counter);
       setHasPermission(true);
     })();
   }, []);
@@ -86,7 +89,7 @@ export default function CameraScreen({ route }) {
     if (!result.cancelled) {
       console.log('Video picked:', result.assets[0].uri);
       // timestamp as video name
-      const exercise_name = counter === 0 ? 'pushup' : 'plank';
+      const exercise_name = exercises[counter];
       const video_name = user.first_name + "_" + user.last_name + ".mp4";
       uploadFile(result, result.assets[0].uri, video_name, exercise_name);
     }
@@ -98,7 +101,7 @@ export default function CameraScreen({ route }) {
     const duration = 60;
 
     try {
-      const apiUrl = API_URL + '/exercise/analyze';
+      const apiUrl = REACT_APP_API_URL + '/exercise/analyze';
       const requestBody = {
         exercise: exercise_name,
         client_video: client_url,
@@ -190,7 +193,7 @@ export default function CameraScreen({ route }) {
   const finishWorkout = async () => {
     setLoading(true);
     try{
-      const apiUrl = API_URL + '/exercise/finish-workout';
+      const apiUrl = REACT_APP_API_URL + '/exercise/finish-workout';
       const requestBody = {
         plan_id: 2,
         client_id: 7,
@@ -207,9 +210,10 @@ export default function CameraScreen({ route }) {
 
   const handleFinish = () => {
     setCounter((prevCounter) => prevCounter + 1);
+    console.log("Counter: " + counter + " -- Workouts: " + workouts);
 
     if (counter < workouts - 1) {
-      navigation.navigate('CameraScreen', { workouts, user: user});
+      navigation.navigate('CameraScreen', { workouts:workouts, user: user, trainer: trainer, exerciseNames: exerciseNames, workout: workout});
     } else {
       finishWorkout();
     }

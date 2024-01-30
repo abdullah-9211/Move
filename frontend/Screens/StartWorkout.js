@@ -54,7 +54,7 @@ export default function StartWorkout() {
         total_duration += exercises[i]["duration"];
         data.push({title: exercises[i]["Exercise"]["exercise_name"].charAt(0).toUpperCase() + exercises[i]["Exercise"]["exercise_name"].slice(1), description: exercises[i]["duration"] + " seconds"});
       }
-      exerciseNamesTemp.push(exercises[i]["Exercise"]["exercise_name"].charAt(0).toUpperCase() + exercises[i]["Exercise"]["exercise_name"].slice(1));
+      exerciseNamesTemp.push(exercises[i]["Exercise"]["exercise_name"]);
       total_exercises += 1;
 
     }
@@ -62,6 +62,7 @@ export default function StartWorkout() {
     setTotalExercises(total_exercises);
     setExercisesData(data);
     setExerciseNames(exerciseNamesTemp);
+
   }, []);
 
   const navigation = useNavigation();
@@ -120,7 +121,7 @@ export default function StartWorkout() {
                     <Card key={index} cardInfo={info} />
                   ))}
                 </View>
-                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={() => navigation.navigate('CameraScreen', {workouts:totalExercises, user: user, trainer: trainer, exerciseNames: exerciseNames})}>
+                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={() => navigation.navigate('CameraScreen', {workouts:totalExercises, user: user, trainer: trainer, exerciseNames: exerciseNames, workout: workout})}>
                   <View style={styles.button}>
                   
                   <Text style={{color:"#ffffff", fontFamily: "QuickSand", fontSize:16}}>Start Workout</Text>
