@@ -111,7 +111,7 @@ def get_plan_exercises(plan_id):
 def get_plan_trainer(trainer_id):
     client = connect()
     try:
-        res = client.table("Users").select("first_name", "last_name").eq("id", trainer_id).execute()
+        res = client.table("Users").select("*").eq("id", trainer_id).execute()
         res = dict(res)
         return res["data"]
     except Exception as e:

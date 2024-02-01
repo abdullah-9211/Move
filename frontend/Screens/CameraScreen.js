@@ -69,6 +69,7 @@ export default function CameraScreen() {
       }
       console.log("Exercises: " + workouts);
       console.log("Counter: " + counter);
+      console.log(trainer);
       setHasPermission(true);
     })();
   }, []);
@@ -90,7 +91,7 @@ export default function CameraScreen() {
       console.log('Video picked:', result.assets[0].uri);
       // timestamp as video name
       const exercise_name = exercises[counter];
-      const video_name = user.first_name + "_" + user.last_name + ".mp4";
+      const video_name = user.email + "_" + workout.id + ".mp4";    // NAMING CONVENTION: email_workoutID.mp4
       uploadFile(result, result.assets[0].uri, video_name, exercise_name);
     }
   };
@@ -149,11 +150,13 @@ export default function CameraScreen() {
       },
     )
 
+    // NAMING CONVENTION: email_workoutID.mp4
+
     await uploadTask.then(() => {
       console.log('Uploaded a blob or file!');
       getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/user/" + name)).then((url1) => {
         console.log("Client Video URL: ", url1);
-        getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + trainer["first_name"] + "_" + trainer["last_name"] + ".mp4")).then((url2) => {
+        getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + trainer["email"] + "_" + workout["id"] + ".mp4")).then((url2) => {
           console.log("Trainer Video URL: ", url2);
           analyzeFootage(exercise_name, url1, url2);
         });
