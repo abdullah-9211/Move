@@ -33,7 +33,7 @@ class Squat:
         
         self.state = 0
         
-        self.leniency = 5
+        self.leniency = 8
         self.knee_feet_leniency = 0.25
         self.feet_shoulder_leniency = 0.25
         self.errors = []
