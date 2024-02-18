@@ -442,9 +442,18 @@ class Squat:
                     elif knee_angle >= state3_angle_threshold[0] and knee_angle <= state3_angle_threshold[1]:
                         self.state = 3
                         states_visited.append(3)
-                    else:
-                        self.state = 0
-                        states_visited.append(0)
+                    elif knee_angle < (state1_angle_threshold[0] - self.leniency):
+                        self.state = 1
+                        self.errors.append("Knee Angle too low")
+                        self.error_bool = True
+                        self.client_incorrect.append(knee_angle)
+                        self.trainer_incorrect.append(state1_angle_threshold[0] - self.leniency)
+                    elif knee_angle > (state3_angle_threshold[1] + self.leniency):
+                        self.state = 3
+                        self.errors.append("Knee Angle too high")
+                        self.error_bool = True
+                        self.client_incorrect.append(knee_angle)
+                        self.trainer_incorrect.append(state3_angle_threshold[1] + self.leniency)
                     
                     
                     # Knee Feet Ratio Calculation
@@ -582,10 +591,12 @@ class Squat:
                         if user_knee_feet_ratio < (trainer_knee_feet_ratio_min - self.knee_feet_leniency):
                             self.errors.append("Knees too open")
                             self.error_bool = True
+                            self.error_times.append(current_time)
                             self.client_incorrect.append(user_knee_feet_ratio)
                             self.trainer_incorrect.append(trainer_knee_feet_ratio_min - self.knee_feet_leniency)
                         elif user_knee_feet_ratio > (trainer_knee_feet_ratio_max + self.knee_feet_leniency):
                             self.errors.append("Knees too close to one another")
+                            self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(user_knee_feet_ratio)
                             self.trainer_incorrect.append(trainer_knee_feet_ratio_max + self.knee_feet_leniency)
@@ -595,11 +606,13 @@ class Squat:
                         
                         if user_feet_shoulder_ratio < (trainer_feet_shoulder_ratio_min - self.feet_shoulder_leniency):
                             self.errors.append("Feet too close to one another")
+                            self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(user_feet_shoulder_ratio)
                             self.trainer_incorrect.append(trainer_feet_shoulder_ratio_min - self.feet_shoulder_leniency)
                         elif user_feet_shoulder_ratio > (trainer_feet_shoulder_ratio_max + self.feet_shoulder_leniency):
                             self.errors.append("Feet too open")
+                            self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(user_feet_shoulder_ratio)
                             self.trainer_incorrect.append(trainer_feet_shoulder_ratio_max + self.feet_shoulder_leniency)
@@ -651,6 +664,7 @@ class Squat:
         self.accuracy = round((correct_frames/(correct_frames + incorrect_frames))*100.0, 1)
         
         return self.reps, self.errors, self.error_times, self.accuracy
+            
             
     def run_process(self):
         thresholds = self.set_state_thresholds()
