@@ -35,7 +35,7 @@ export default function Report() {
     <View style={styles.container}>
       <View style={{flexDirection:"row"}}>
         <View style={styles.progressText}>
-            <Text style={{fontSize:32, fontFamily: 'QuickSand', color: '#900020'}}>{duration}</Text>
+            <Text style={{fontSize:32, fontFamily: 'QuickSand', color: '#900020'}}>{duration + " s"}</Text>
             <Text style={{fontSize:18,fontFamily: 'QuickSand', marginTop:10}}>
             Duration</Text>
         </View>

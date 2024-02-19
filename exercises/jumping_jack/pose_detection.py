@@ -58,6 +58,7 @@ class JumpingJack:
         self.client_incorrect = []
         self.trainer_incorrect = []
         self.accuracy = 0
+        self.duration = 0
         
         
     def calculate_angle(self, point1, point2, point3):
@@ -743,12 +744,16 @@ class JumpingJack:
                 if cv2.waitKey(10) & 0xFF == ord('q'):
                     break
                 
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            totalFrames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+            self.duration = totalFrames/fps
+            
             cap.release()
             cv2.destroyAllWindows()
         
         self.accuracy = round((correct_frames/(correct_frames + incorrect_frames))*100.0, 1)
         
-        return self.reps, self.errors, self.error_times, self.accuracy
+        return self.reps, self.errors, self.error_times, self.accuracy, int(round(self.duration, 0))
     
             
     def run_process(self):
@@ -783,8 +788,8 @@ class JumpingJack:
     
     
 if __name__ == "__main__":
-    client_url = "./sample_videos/Abdul_Rehman.mp4"
-    trainer_url = "./sample_videos/Abdullah_Umar.mp4"
+    client_url = "./sample_videos/Abdullah_Umar.mp4"
+    trainer_url = "./sample_videos/Abdul_Rehman.mp4"
 
     jj = JumpingJack(client_url, trainer_url)
     

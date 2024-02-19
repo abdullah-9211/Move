@@ -20,7 +20,8 @@ class Plank:
         self.shoulder_angle = 0
         self.hip_angle = 0
         self.knee_angle = 0
-        self.accuracy = 0        
+        self.accuracy = 0 
+        self.duration = 0    
 
     def calculate_angle(self, point1, point2, point3):
         point1 = np.array(point1)
@@ -357,20 +358,24 @@ class Plank:
                 if cv2.waitKey(10) & 0xFF == ord('q'):
                     break
                 
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            totalFrames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+            self.duration = totalFrames/fps
+                
             cap.release()
             cv2.destroyAllWindows()
 
         self.accuracy = round((correct_frames / (correct_frames + incorrect_frames)) * 100.0, 1)
         
-        return self.errors, self.error_times, self.accuracy
+        return self.errors, self.error_times, self.accuracy, int(round(self.duration, 0))
         
     
     def run_process(self):
         elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max = self.get_trainer_angles()
         
-        self.errors, self.error_times, self.accuracy = self.assess_client(elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max)
+        self.errors, self.error_times, self.accuracy, self.duration = self.assess_client(elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max)
         
-        return self.errors, self.error_times, self.accuracy
+        return self.errors, self.error_times, self.accuracy, self.duration
         
 
 if "__main__" == __name__:

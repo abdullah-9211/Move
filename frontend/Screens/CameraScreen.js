@@ -99,7 +99,6 @@ export default function CameraScreen() {
   const analyzeFootage = async (exercise_name, client_url, trainer_url) => {
     setLoading(true);
 
-    const duration = 60;
 
     try {
       const apiUrl = REACT_APP_API_URL + '/exercise/analyze';
@@ -107,7 +106,6 @@ export default function CameraScreen() {
         exercise: exercise_name,
         client_video: client_url,
         trainer_video: trainer_url,
-        duration: duration,
       };
       const response = await axios.post(apiUrl, requestBody);
       console.log(response.data);

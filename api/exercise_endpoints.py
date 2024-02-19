@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from exercises.plank.pose_matching import Plank
 from exercises.pushup.pose_detection import Pushup
+from exercises.squat.pose_detection import Squat
+from exercises.jumping_jack.pose_detection import JumpingJack
 from models.Exercise import Exercise
 from models.Workout import Workout
 import database.workouts as db
@@ -23,7 +25,6 @@ async def analyze_exercise(exercise_data: dict):
     exercise = exercise_data.get("exercise")
     client_video = exercise_data.get("client_video")
     trainer_video = exercise_data.get("trainer_video")
-    duration = exercise_data.get("duration")
 
     # Get exercise id
     exercise_id = db.get_exercise_id(exercise)
@@ -31,12 +32,21 @@ async def analyze_exercise(exercise_data: dict):
     # Initialize and analyze based on exercise type
     if exercise == "plank":
         plank_instance = Plank(trainer_video, client_video)
-        _, _, accuracy = plank_instance.run_process()
+        _, _, accuracy, duration = plank_instance.run_process()
         exercise_stats = Exercise(0, exercise_id, None, duration, accuracy)
     elif exercise == "pushup":
         pushup_instance = Pushup(client_video, trainer_video)
-        _, _, _, accruacy = pushup_instance.run_process()
-        exercise_stats = Exercise(0, exercise_id, pushup_instance.reps, duration, accruacy)
+        reps, _, _, accruacy, duration = pushup_instance.run_process()
+        exercise_stats = Exercise(0, exercise_id, reps, duration, accruacy)
+    elif exercise == "squat":
+        squat_instance = Squat(client_video, trainer_video)
+        reps, _, _, accuracy, duration = squat_instance.run_process()
+        exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
+    elif exercise == "jumping jack":
+        jj_instance = JumpingJack(client_video, trainer_video)
+        reps, _, _, accuracy, duration = jj_instance.run_process()
+        exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
+        
     else:
         raise HTTPException(status_code=404, detail="Exercise not found")
 

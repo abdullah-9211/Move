@@ -44,6 +44,7 @@ class Squat:
         self.client_incorrect = []
         self.trainer_incorrect = []
         self.accuracy = 0
+        self.duration = 0
         
         
     def calculate_angle(self, point1, point2, point3):
@@ -657,13 +658,17 @@ class Squat:
                 
                 if cv2.waitKey(10) & 0xFF == ord('q'):
                     break
+            
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            totalFrames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+            self.duration = totalFrames/fps
                 
             cap.release()
             cv2.destroyAllWindows()
         
         self.accuracy = round((correct_frames/(correct_frames + incorrect_frames))*100.0, 1)
         
-        return self.reps, self.errors, self.error_times, self.accuracy
+        return self.reps, self.errors, self.error_times, self.accuracy, int(round(self.duration, 0))
             
             
     def run_process(self):
@@ -687,9 +692,9 @@ class Squat:
         knee_feet_ratio_state3 = angles[20], angles[21]
         feet_shoulder_ratio_state3 = angles[22], angles[23]
         
-        self.reps, self.errors, self.error_times, self.accuracy = self.assess_client(knee_angle_state1, knee_angle_state2, knee_angle_state3, hip_angle_state1, hip_angle_state2, hip_angle_state3, knee_feet_ratio_state1, feet_shoulder_ratio_state1, knee_feet_ratio_state2, feet_shoulder_ratio_state2, knee_feet_ratio_state3, feet_shoulder_ratio_state3, thresholds[0], thresholds[1], thresholds[2])
+        self.reps, self.errors, self.error_times, self.accuracy, self.duration = self.assess_client(knee_angle_state1, knee_angle_state2, knee_angle_state3, hip_angle_state1, hip_angle_state2, hip_angle_state3, knee_feet_ratio_state1, feet_shoulder_ratio_state1, knee_feet_ratio_state2, feet_shoulder_ratio_state2, knee_feet_ratio_state3, feet_shoulder_ratio_state3, thresholds[0], thresholds[1], thresholds[2])
         
-        return self.reps, self.errors, self.error_times, self.accuracy
+        return self.reps, self.errors, self.error_times, self.accuracy, self.duration
     
     
 if __name__ == "__main__":
