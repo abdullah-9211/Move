@@ -1,13 +1,16 @@
 import * as React from 'react';
-import {StyleSheet, Text, View, Image, Icon} from 'react-native';
+import {StyleSheet, Text, View, Image, Icon, Pressable} from 'react-native';
 import { useFonts } from 'expo-font';
 import {Card} from 'react-native-shadow-cards'
 import { MaterialIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function NavBarBotTrainer() {
+export default function NavBarBotTrainer({ color1, color2 }) {
+    const navigation = useNavigation();
+    const route = useRoute();
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -22,18 +25,21 @@ export default function NavBarBotTrainer() {
         <Card style={[basic.card, basic.elevation]}>
             <View style={basic.basic2}>
                 <View style={basic.columnView}>
-                    <MaterialIcons name="fitness-center" size={24} color="#900020" />
-                    <Text style={basic.text}>Workouts</Text>
+                <Pressable style={basic.columnView} onPress={() => navigation.navigate('TrainerHomepage')}>
+                    <MaterialIcons name="assignment" size={24} color={color1}/>
+                    <Text style={basic.text}>Reports</Text>
+                </Pressable>
             
                 </View> 
+                
                 <View style={basic.columnView}>
-                    <Octicons name="checklist" size={24} color="black" />
-                    <Text style={basic.text}>Create Plan</Text>
-                </View>
-                <View style={basic.columnView}>
-                    <Ionicons name="person" size={24} color="black" />
+                <Pressable style={basic.columnView} onPress={() => navigation.navigate('ProfileWithPlans')}>
+                    <Ionicons name="person" size={24} color={color2}/>
                     <Text style={basic.text}>Profile</Text>
+                </Pressable>
                 </View>
+
+                
             </View>
            
         </Card>

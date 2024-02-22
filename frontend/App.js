@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-// import theme from './core/theme'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignUpScreen from './Screens/SignUpScreen'
@@ -27,13 +26,19 @@ import TrainerClients from './Screens/TrainerClients';
 import TrainerProfile from './Screens/TrainerProfile';
 import UserProfile from './Screens/UserProfile';
 import Goal2 from './Screens/Goal2';
+import ProfileWithPlans from './Screens/ProfileWithPlans';
+import ProfileWithClients from './Screens/ProfileWithClients';
+import TrainerHomepage from './Screens/TrainerHomepage';
+import AddPlan from './Screens/AddPlan';
+import AddExerciseInPlan from './Screens/AddExerciseInPlan';
 const Stack = createStackNavigator()
 
 export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="AccountSelect"
+          initialRouteName="TrainerHomepage"
+          // initialRouteName="AccountSelect"
           screenOptions={{
             headerShown: false,
           }}
@@ -62,7 +67,11 @@ export default function App() {
           <Stack.Screen name= "TrainerProfile" component={TrainerProfile}/>
           <Stack.Screen name= "UserProfile" component={UserProfile}/>
           <Stack.Screen name= "Goal2" component={Goal2}/>
-          
+          <Stack.Screen name= "AddPlan" component={AddPlan}/>
+          <Stack.Screen name= "ProfileWithPlans" component={ProfileWithPlans}/>   
+          <Stack.Screen name= "ProfileWithClients" component={ProfileWithClients}/> 
+          <Stack.Screen name= "TrainerHomepage" component={TrainerHomepage}/>      
+          <Stack.Screen name= "AddExerciseInPlan" component={AddExerciseInPlan}/>
 
           
         </Stack.Navigator>
