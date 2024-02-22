@@ -20,7 +20,8 @@ class Plank:
         self.shoulder_angle = 0
         self.hip_angle = 0
         self.knee_angle = 0
-        self.accuracy = 0        
+        self.accuracy = 0 
+        self.duration = 0    
 
     def calculate_angle(self, point1, point2, point3):
         point1 = np.array(point1)
@@ -156,29 +157,26 @@ class Plank:
             cap.release()
             cv2.destroyAllWindows()
             
-    def assess_client(self):
+        return min(self.trainer_elbow_angle), max(self.trainer_elbow_angle), min(self.trainer_shoulder_angle), max(self.trainer_shoulder_angle), min(self.trainer_hip_angle), max(self.trainer_hip_angle), min(self.trainer_knee_angle), max(self.trainer_knee_angle)
+            
+    def assess_client(self, elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max):
         
         correct_frames = 0
         incorrect_frames = 0
 
         # getting max and min of all trainer angles for assessment
         
-        trainer_elbow_angle = np.array(self.trainer_elbow_angle)
-        trainer_shoulder_angle = np.array(self.trainer_shoulder_angle)
-        trainer_hip_angle = np.array(self.trainer_hip_angle)
-        trainer_knee_angle = np.array(self.trainer_knee_angle)
-        
-        trainer_elbow_max = trainer_elbow_angle.max()
-        trainer_elbow_min = trainer_elbow_angle.min()
+        trainer_elbow_max = elbow_max
+        trainer_elbow_min = elbow_min
 
-        trainer_shoulder_max = trainer_shoulder_angle.max()
-        trainer_shoulder_min = trainer_shoulder_angle.min()
+        trainer_shoulder_max = shoulder_max
+        trainer_shoulder_min = shoulder_min
 
-        trainer_hip_max = trainer_hip_angle.max()
-        trainer_hip_min = trainer_hip_angle.min()
+        trainer_hip_max = hip_max
+        trainer_hip_min = hip_min
 
-        trainer_knee_max = trainer_knee_angle.max()
-        trainer_knee_min = trainer_knee_angle.min()
+        trainer_knee_max = knee_max
+        trainer_knee_min = knee_min
         
         
         cap = cv2.VideoCapture(self.client_video_url)
@@ -360,22 +358,29 @@ class Plank:
                 if cv2.waitKey(10) & 0xFF == ord('q'):
                     break
                 
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            totalFrames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+            self.duration = totalFrames/fps
+                
             cap.release()
             cv2.destroyAllWindows()
 
         self.accuracy = round((correct_frames / (correct_frames + incorrect_frames)) * 100.0, 1)
         
+        return self.errors, self.error_times, self.accuracy, int(round(self.duration, 0))
+        
     
     def run_process(self):
-        self.get_trainer_angles()
-        self.assess_client()
+        elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max = self.get_trainer_angles()
         
-        return self.errors, self.error_times, self.accuracy
+        self.errors, self.error_times, self.accuracy, self.duration = self.assess_client(elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max)
+        
+        return self.errors, self.error_times, self.accuracy, self.duration
         
 
 if "__main__" == __name__:
     
-    plank = Plank("sample_videos/bilal_footage.mp4", "sample_videos/abdullah_footage.mp4")
+    plank = Plank("sample_videos/bilal_footage.mp4", "sample_videos/abdullahumarig1@gmail.com_2.mp4")
     
     errors = []
     error_times = []

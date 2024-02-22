@@ -8,7 +8,7 @@ import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-import {API_URL} from "@env"
+import {REACT_APP_API_URL} from "@env"
 
 
 
@@ -49,7 +49,7 @@ export default function SignUpDetails2() {
 
         if (role == "user") {
             try {
-                const apiUrl = API_URL + '/user/add_goal';
+                const apiUrl = REACT_APP_API_URL + '/user/add_goal';
                 const requestBody = {
                     height: height,
                     weight: weight,
@@ -59,7 +59,7 @@ export default function SignUpDetails2() {
                 goal_id = response.data.goal_id;
                 
                 try {
-                    const apiUrl = API_URL + '/user/add_user';
+                    const apiUrl = REACT_APP_API_URL + '/user/add_user';
                     const requestBody = {
                         email: email,
                         password: password,
@@ -86,7 +86,7 @@ export default function SignUpDetails2() {
         }
         else{
             try {
-                const apiUrl = API_URL + '/user/add_user';
+                const apiUrl = REACT_APP_API_URL + '/user/add_user';
                 const requestBody = {
                     email: email,
                     password: password,

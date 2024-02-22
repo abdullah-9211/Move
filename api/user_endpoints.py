@@ -6,6 +6,11 @@ import database.users as db
 
 router = APIRouter()
 
+# ===================================================
+#                   User Endpoints
+# ===================================================
+
+
 @router.post("/add_user")
 async def add_user(user_data: dict):
     email = user_data.get("email")
@@ -66,3 +71,12 @@ async def get_goal_with_id(id: int):
 @router.get("/get_user_with_email")
 async def get_user_with_email(email: str):
     return db.get_user_with_email(email)
+
+
+# ===================================================
+#                   Trainer Endpoints
+# ===================================================
+
+@router.get("/get-trainers")
+async def get_all_trainers():
+    return db.get_all_trainers()

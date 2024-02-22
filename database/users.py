@@ -83,3 +83,12 @@ def get_goal_with_id(id):
         return res["data"][0]
     except Exception as e:
         print("\n\nError retrieving goal, Exception Thrown: \n\n", e)
+        
+def get_all_trainers():
+    client = connect()
+    try:
+        res = client.table("Users").select("*").eq("user_type", "trainer").execute()
+        res = dict(res)
+        return res["data"]
+    except Exception as e:
+        print("\n\nError retrieving trainers, Exception Thrown: \n\n", e)

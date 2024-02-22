@@ -7,7 +7,7 @@ import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-import {API_URL} from "@env"
+import {REACT_APP_API_URL} from "@env"
 
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -30,7 +30,7 @@ export default function Login() {
     async function handlePress() {
         setLoading(true);
         try {
-            const apiUrl = API_URL + '/user/login';
+            const apiUrl = REACT_APP_API_URL + '/user/login';
             console.log("test : " + apiUrl);
             const requestBody = {
                 email: email,
