@@ -677,7 +677,7 @@ class Pushup:
     
 if __name__ == "__main__":
     client_url = "./sample_videos/leena_footage.mp4"
-    trainer_url = "./sample_videos/abdullahumarig1@gmail.com_2.mp4"
+    trainer_url = "./sample_videos/abdullahumarig1@gmail.com_1.mp4"
     
     pushup = Pushup(client_url, trainer_url)
 

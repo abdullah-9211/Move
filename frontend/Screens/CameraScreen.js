@@ -55,9 +55,9 @@ export default function CameraScreen() {
   const [exercises, setExercises] = useState(exerciseNames);
   const exerciseText = exercises[counter] || "Exercise";
   
-  const recordingOptions = {
-    quality: Camera.Constants.VideoQuality['720p'],
-  };
+  // const recordingOptions = {
+  //   quality: Camera.Constants.VideoQuality['720p'],
+  // };
 
   useEffect(() => {
     (async () => {
