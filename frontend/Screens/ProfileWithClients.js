@@ -11,8 +11,11 @@ import { useFonts } from 'expo-font';
 
 const { width: screenWidth } = Dimensions.get('window');
 const ProfileWithClients = () => {
+
+	const route = useRoute();
+	const trainer = route.params?.user;
+
 	const navigation = useNavigation();
-    const route = useRoute();
     const [loaded] = useFonts({
         'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
         'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf'),
@@ -92,7 +95,7 @@ const ProfileWithClients = () => {
 						marginBottom: 13,
 						marginHorizontal: 70,
 					}}>
-					<Pressable onPress={() => navigation.navigate('ProfileWithPlans')}>
+					<Pressable onPress={() => navigation.navigate('ProfileWithPlans', {user: trainer})}>
 					<Text 
 						style = {{
 							color: "#898D8F",

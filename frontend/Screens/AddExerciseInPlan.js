@@ -1,19 +1,10 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable} from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import NavBarBotTrainer from '../components/NavBarBotTrainer';
-import NavBar from '../components/NavBar';
-import NavBarTrainer from '../components/NavBarTrainer';
-import NavBarBot from '../components/NavBarBot';
+import { SafeAreaView, ScrollView, View, StyleSheet, Text, Dimensions, Pressable} from 'react-native';
 import { useFonts } from 'expo-font';
-import DropdownMenu from 'react-native-dropdown-menu';
 import { Octicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
-import { Picker } from '@react-native-picker/picker';
-import SelectDropdown from 'react-native-select-dropdown'
-import {Dropdown, MultiSelect} from 'react-native-element-dropdown';
+import {Dropdown} from 'react-native-element-dropdown';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 
@@ -28,15 +19,26 @@ const AddExerciseInPlan = () => {
         {label: 'Squats', value: '4'},
     ];
     const data3 = [
-       {label: 'reps', value: '1'},
-       {label: 'sec', value: '2'},
+       {label1: 'reps', value1: '1'},
+       {label1: 'sec', value1: '2'},
     ];
     const [dropdown, setDropdown] = useState(null);
+    const [dropdown2, setDropdown2] = useState(null);
+    
         const [selected, setSelected] = useState([]);
         const _renderItem = item => {
             return (
             <View style={styles.item}>
                 <Text style={styles.textItem}>{item.label}</Text>
+
+            </View>
+            );
+        };
+
+        const _renderItem2 = item1 => {
+            return (
+            <View style={styles.item}>
+                <Text style={styles.textItem}>{item1.label1}</Text>
 
             </View>
             );
@@ -265,17 +267,17 @@ const AddExerciseInPlan = () => {
                     style={styles.dropdown}
                     
                     data={data3}
-                    labelField="label"
-                    valueField="value"
-                    label="Dropdown"
+                    labelField="label1"
+                    valueField="value1"
+                    label1="Dropdown"
                     
-                    value={dropdown}
+                    value={dropdown2}
                     placeholder="Select"
-                    onChange={item => {
-                    setDropdown(item.value);
-                        console.log('selected', item);
+                    onChange={item1 => {
+                    setDropdown2(item1.value1);
+                        console.log('selected', item1);
                     }}
-                    renderItem={item => _renderItem(item)}
+                    renderItem={item1 => _renderItem2(item1)}
                     textError="Error"
                 />
 

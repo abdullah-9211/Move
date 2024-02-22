@@ -37,7 +37,7 @@ export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="TrainerHomepage"
+          initialRouteName="ProfileWithPlans"
           // initialRouteName="AccountSelect"
           screenOptions={{
             headerShown: false,

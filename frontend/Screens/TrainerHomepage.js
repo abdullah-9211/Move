@@ -7,14 +7,23 @@ import NavBar from '../components/NavBar';
 import NavBarTrainer from '../components/NavBarTrainer';
 import NavBarBot from '../components/NavBarBot';
 import { useFonts } from 'expo-font';
+import { useRoute } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
 const TrainerHomepage = () => {
+
+    const route = useRoute();
+    const trainer = route.params?.user;
+
     const [loaded] = useFonts({
         'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
         'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf'),
         'BakbakOne': require('../assets/fonts/BakbakOne-Regular.ttf'),
       });
+
+      React.useEffect(() => {
+        console.log(trainer);
+        }, []);
     
       if (!loaded) {
         return null;
