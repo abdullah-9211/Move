@@ -131,16 +131,6 @@ const ProfileWithPlans = () => {
 					</Text>
                     </View>
 					<View style={{alignItems:'center', marginHorizontal:15, backgroundColor: 'rgba(137, 141, 143, 0.2)', height: 1, marginBottom: 5}} />
-                    <View style= {styles.container}><Text 
-						style = {{
-							color: "#000000",
-							fontSize: 14,
-                            fontFamily: 'QuickSand',
-                            marginHorizontal:20,
-						}}>
-						{"Lorem ipsum that stuff this stuff, a something normal description what about it, a short bio."}
-					</Text>
-                    </View>
 				</View>
 				<View 
 					style = {{

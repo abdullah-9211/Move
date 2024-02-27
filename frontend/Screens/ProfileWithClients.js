@@ -12,6 +12,33 @@ import { useFonts } from 'expo-font';
 const { width: screenWidth } = Dimensions.get('window');
 const ProfileWithClients = () => {
 
+	const ListItem = ({ item }) => {
+		return(
+			<ImageBackground 
+				source={{uri:item.image}} 
+				resizeMode = {'cover'}
+				imageStyle = {{borderRadius: 90,}}
+				style={{
+					width: screenWidth/2 - 18,
+					paddingTop: 90,
+					paddingBottom: 0,
+					paddingHorizontal: 0,
+				}}
+				>
+				<LinearGradient
+				style={styles.gradientOverlay}
+				colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
+			>
+				<View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
+				<Text style={styles.planName}>{item.name}</Text>
+				
+				
+				</View>
+			</LinearGradient>
+			</ImageBackground>
+		);
+				};
+
 	const route = useRoute();
 	const trainer = route.params?.user;
 
@@ -49,7 +76,7 @@ const ProfileWithClients = () => {
 					}}>
 					
 					<Image
-						source = {{uri:"https://www.mindpumpmedia.com/hubfs/Exercise%20for%20more%20than%20just%20aesthetics.png"}} 
+						source = {{uri:trainer.profile_picture}} 
 						resizeMode = {"cover"}
 						style = {{
 							height: 99,
@@ -62,7 +89,7 @@ const ProfileWithClients = () => {
                     <View style={styles.container}>
 					<Text 
 						style = {styles.TrainerName}>
-						{"Jane Doe"}
+						{trainer.first_name + " " + trainer.last_name}
 					</Text>
                     </View>
 					<View style={styles.container}><Text 
@@ -72,20 +99,11 @@ const ProfileWithClients = () => {
 							marginBottom: 10,
                             fontFamily: 'QuickSand'
 						}}>
-						{"janedoe@email.com"}
+						{trainer.email}
 					</Text>
                     </View>
 					<View style={{alignItems:'center', marginHorizontal:15, backgroundColor: 'rgba(137, 141, 143, 0.2)', height: 1, marginBottom: 5}} />
-                    <View style= {styles.container}><Text 
-						style = {{
-							color: "#000000",
-							fontSize: 14,
-                            fontFamily: 'QuickSand',
-                            marginHorizontal:20,
-						}}>
-						{"Lorem ipsum that stuff this stuff, a something normal description what about it, a short bio."}
-					</Text>
-                    </View>
+                    
 				</View>
 				<View 
 					style = {{
@@ -142,124 +160,15 @@ const ProfileWithClients = () => {
 						}}>
 					</View>
 				</View>
-				<View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 9,
-						marginHorizontal: 16,
-					}}>
-					
-				</View>
-				<View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 10,
-						marginHorizontal: 12,
-					}}>
-                    
-                <ImageBackground 
-                    source={{uri:'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg'}} 
-                    resizeMode="cover"
-                    imageStyle={{ borderRadius: 90 }}
-                    style={{
-                        width: screenWidth/2 - 18,
-                        paddingTop: 90,
-                        paddingBottom:0,
-                        paddingHorizontal: 0,
-                    }}
-                >
-                    <LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-                        <Text style={styles.planName}>Client #1</Text>
-                        
-                    
-                        </View>
-                    </LinearGradient>
-                </ImageBackground>
-            
-					<ImageBackground 
-						source={{uri:'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg'}} 
-						resizeMode = {'cover'}
-						imageStyle = {{borderRadius: 90,}}
-						style={{
-                            width: screenWidth/2 - 18,
-                            paddingTop: 90,
-                            paddingBottom: 0,
-                            paddingHorizontal: 0,
-                        }}
-						>
-                        <LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-                        <Text style={styles.planName}>Client #2</Text>
-                        
-                        
-                        </View>
-                    </LinearGradient>
-					</ImageBackground>
-				</View>
-                <View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 5,
-						marginHorizontal: 12,
-					}}>
-					<ImageBackground 
-						source={{uri:'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg'}} 
-						resizeMode = {'cover'}
-						imageStyle = {{borderRadius: 90,}}
-						style={{
-                            width: screenWidth/2 - 18,
-                            paddingTop: 90,
-                            paddingBottom: 0,
-                            paddingHorizontal: 0,
-                        }}
-						>
-						<LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-                        <Text style={styles.planName}>Client #3</Text>
-                        
-                        
-                        </View>
-                    </LinearGradient>
-					</ImageBackground>
-					<ImageBackground 
-						source={{uri:'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg'}} 
-						resizeMode = {'cover'}
-						imageStyle = {{borderRadius: 90,}}
-						style={{
-                            width: screenWidth/2 - 18,
-                            paddingTop: 90,
-                            paddingBottom: 0,
-                            paddingHorizontal: 0,
-                        }}
-						>
-						<LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-                        <Text style={styles.planName}>Client #4</Text>
-                        
-                        
-                        </View>
-                    </LinearGradient>
-					</ImageBackground>
-				</View>
+				<FlatList
+					contentContainerStyle={{ paddingHorizontal: 10}}
+					data={CLIENTS[0].data}
+					renderItem={({ item }) => <ListItem item={item} />}
+					keyExtractor={(item) => item.id}
+					numColumns={2} // Set the number of columns to 2
+					showsHorizontalScrollIndicator={false}
+					nestedScrollEnabled={true}
+				/>
 				
 			</ScrollView>
             <NavBarBotTrainer color1= "#000000" color2={"#900020"}/>
@@ -315,3 +224,14 @@ export default ProfileWithClients;
 
     
 });
+
+const CLIENTS = [
+	{
+		title: "clients",
+		data: [
+			{id: 1, name: "Client #1", image: "https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg"},
+			{id: 2, name: "Client #2", image: "https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg"},
+			{id: 3, name: "Client #3", image: "https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg"},
+		]
+	},
+]
