@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable } from 'react-native';
+import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable, Modal, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import NavBarBotTrainer from '../components/NavBarBotTrainer';
-import NavBar from '../components/NavBar';
-import NavBarTrainer from '../components/NavBarTrainer';
-import NavBarBot from '../components/NavBarBot';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import axios from 'axios';
+import {REACT_APP_API_URL} from "@env"
 
 const { width: screenWidth } = Dimensions.get('window');
 const ProfileWithPlans = () => {
@@ -15,9 +14,21 @@ const ProfileWithPlans = () => {
 	const route = useRoute();
 	const trainer = route.params?.user;
 
+	const [loading, setLoading] = React.useState(true);
 
 	React.useEffect(() => {
-		console.log(trainer);
+		setLoading(true);
+
+		const apiUrl = REACT_APP_API_URL + '/user/get-trainer-plans/' + trainer.id;
+		axios.get(apiUrl)
+		.then((response) => {
+			// console.log(response.data);
+			PLANS.data = response.data;
+			setLoading(false);
+		})
+		.catch((error) => {
+			console.log(error);
+		})
 	}, []);
 
 	const ListItem = ({ item }) => {
@@ -57,6 +68,18 @@ const ProfileWithPlans = () => {
       if (!loaded) {
         return null;
       }
+
+	  if (loading) {
+		return (
+		  <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'white'}}>
+				<Modal transparent={true} animationType="fade">
+				<View style={styles.modal}>
+					<ActivityIndicator size="large" color="#fff" />
+				</View>
+				</Modal>
+		  </View>
+		);
+	  }
   return (
     <SafeAreaView 
 			style = {{
@@ -184,7 +207,7 @@ const ProfileWithPlans = () => {
 				
 				<FlatList
 					contentContainerStyle={{ paddingHorizontal: 10}}
-					data={PLANS}
+					data={PLANS.data}
 					renderItem={({ item }) => <ListItem item={item} />}
 					keyExtractor={(item) => item.id}
 					numColumns={2} // Set the number of columns to 2
@@ -272,15 +295,21 @@ export default ProfileWithPlans;
 	
 		
 	},
-
+	modal: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+	  },
     
 });
 
 const PLANS = [
-	{id:1, plan_image: 'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg', plan_name: 'Plan name 1'},
-	{id:2, plan_image: 'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg', plan_name: 'Plan name 2'},
-	{id:3, plan_image: 'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg', plan_name: 'Plan name 3'},
-	{id:4, plan_image: 'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg', plan_name: 'Plan name 4'},
-	{id:5, plan_image: 'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg', plan_name: 'Plan name 5'},
+	{
+		title: "plans",
+		data: [
+
+		]
+	},
 ]
 

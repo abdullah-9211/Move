@@ -37,8 +37,8 @@ export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="ProfileWithPlans"
-          // initialRouteName="AccountSelect"
+          // initialRouteName="ProfileWithPlans"
+          initialRouteName="AccountSelect"
           screenOptions={{
             headerShown: false,
           }}
