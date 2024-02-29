@@ -116,3 +116,4 @@ def get_plan_trainer(trainer_id):
         return res["data"]
     except Exception as e:
         print("\nError retrieving workouts. Exception Thrown:\n", e)
+        

@@ -1,21 +1,41 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable } from 'react-native';
+import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable, ActivityIndicator, Modal } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import NavBarBotTrainer from '../components/NavBarBotTrainer';
-import NavBar from '../components/NavBar';
-import NavBarTrainer from '../components/NavBarTrainer';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import NavBarBot from '../components/NavBarBot';
 import { useFonts } from 'expo-font';
+import axios from 'axios';
+import {REACT_APP_API_URL} from "@env"
 
 const { width: screenWidth } = Dimensions.get('window');
 const ProfileWithClients = () => {
 
+	const route = useRoute();
+	const trainer = route.params?.user;
+
+	const [loading, setLoading] = React.useState(true);
+
+	React.useEffect(() => {
+		setLoading(true);
+
+		const apiUrl = REACT_APP_API_URL + '/user/get-subscriptions/' + trainer.id;
+		axios.get(apiUrl)
+		.then((response) => {
+			// console.log(response.data);
+			CLIENTS.data = response.data;
+			setLoading(false);
+		})
+		.catch((error) => {
+			console.log(error);
+		})
+	}, []);
+
+
 	const ListItem = ({ item }) => {
 		return(
 			<ImageBackground 
-				source={{uri:item.image}} 
+				source={{uri:item.profile_picture}} 
 				resizeMode = {'cover'}
 				imageStyle = {{borderRadius: 90,}}
 				style={{
@@ -30,7 +50,7 @@ const ProfileWithClients = () => {
 				colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
 			>
 				<View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-				<Text style={styles.planName}>{item.name}</Text>
+				<Text style={styles.planName}>{item.first_name + " " + item.last_name}</Text>
 				
 				
 				</View>
@@ -38,9 +58,6 @@ const ProfileWithClients = () => {
 			</ImageBackground>
 		);
 				};
-
-	const route = useRoute();
-	const trainer = route.params?.user;
 
 	const navigation = useNavigation();
     const [loaded] = useFonts({
@@ -51,6 +68,20 @@ const ProfileWithClients = () => {
       if (!loaded) {
         return null;
       }
+
+
+	  if (loading) {
+		return (
+		  <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'white'}}>
+				<Modal transparent={true} animationType="fade">
+				<View style={styles.modal}>
+					<ActivityIndicator size="large" color="#fff" />
+				</View>
+				</Modal>
+		  </View>
+		);
+	  }
+
   return (
     <SafeAreaView 
 			style = {{
@@ -162,7 +193,7 @@ const ProfileWithClients = () => {
 				</View>
 				<FlatList
 					contentContainerStyle={{ paddingHorizontal: 10}}
-					data={CLIENTS[0].data}
+					data={CLIENTS.data}
 					renderItem={({ item }) => <ListItem item={item} />}
 					keyExtractor={(item) => item.id}
 					numColumns={2} // Set the number of columns to 2
@@ -220,8 +251,14 @@ export default ProfileWithClients;
         borderBottomLeftRadius: 90,
         borderBottomRightRadius: 90,
         marginBottom:2
-    }
+    },
 
+	modal: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+	  },
     
 });
 
@@ -229,9 +266,6 @@ const CLIENTS = [
 	{
 		title: "clients",
 		data: [
-			{id: 1, name: "Client #1", image: "https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg"},
-			{id: 2, name: "Client #2", image: "https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg"},
-			{id: 3, name: "Client #3", image: "https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg"},
 		]
 	},
 ]

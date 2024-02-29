@@ -196,8 +196,8 @@ export default function CameraScreen() {
     try{
       const apiUrl = REACT_APP_API_URL + '/exercise/finish-workout';
       const requestBody = {
-        plan_id: 2,
-        client_id: 7,
+        plan_id: workout.id,
+        client_id: user.id,
       };
       const response = await axios.post(apiUrl, requestBody);
       console.log(response.data);

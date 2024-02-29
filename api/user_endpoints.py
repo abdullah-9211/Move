@@ -85,3 +85,8 @@ async def get_all_trainers():
 @router.get("/get-trainer-plans/{trainer_id}")
 async def get_trainer_plans(trainer_id: int):
     return db.get_trainer_plans(trainer_id)
+
+
+@router.get("/get-subscriptions/{trainer_id}")
+async def get_subscriptions(trainer_id: int):
+    return db.get_subscribed(trainer_id)

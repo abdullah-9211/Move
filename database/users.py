@@ -109,3 +109,17 @@ def get_trainer_plans(trainer_id):
         return res["data"]
     except Exception as e:
         print("\n\nError retrieving trainers, Exception Thrown: \n\n", e)
+        
+        
+def get_subscribed(trainer_id):
+    client = connect()
+    try:
+        res = client.table("Trainers Subscribed").select("user_id").eq("trainer_id", trainer_id).execute()
+        res = dict(res)
+        users = []
+        for u in res["data"]:
+            user = get_user_with_id(u["user_id"])
+            users.append(user)
+        return users
+    except Exception as e:
+        print("\nError retrieving workouts. Exception Thrown:\n", e)
