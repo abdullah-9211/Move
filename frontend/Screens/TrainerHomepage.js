@@ -15,6 +15,35 @@ const TrainerHomepage = () => {
     const route = useRoute();
     const trainer = route.params?.user;
 
+    const ListItem = ({ item }) => {
+		return(
+			<ImageBackground 
+                    source={{uri:item.profile_picture}} 
+                    resizeMode="cover"
+                    imageStyle={{ borderRadius: 90 }}
+                    style={{
+                        width: screenWidth/2 - 18,
+                        paddingTop: 90,
+                        paddingBottom:0,
+                        paddingHorizontal: 0,
+                    }}
+                >
+                    <LinearGradient
+                        style={styles.gradientOverlay}
+                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
+                    >
+                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
+                        <Text style={styles.planName}>{item.name}</Text>
+                        
+                    
+                        </View>
+                    </LinearGradient>
+                </ImageBackground>
+		);
+				};
+
+
+
     const [loaded] = useFonts({
         'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
         'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf'),
@@ -112,173 +141,16 @@ const TrainerHomepage = () => {
 					<MaterialIcons name="sort" size={24} color={"#000000"}/>
                     </View>
 				</View>
-				<View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 10,
-						marginHorizontal: 12,
-					}}>
-                    
-                <ImageBackground 
-                    source={{uri:'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg'}} 
-                    resizeMode="cover"
-                    imageStyle={{ borderRadius: 90 }}
-                    style={{
-                        width: screenWidth/2 - 18,
-                        paddingTop: 90,
-                        paddingBottom:0,
-                        paddingHorizontal: 0,
-                    }}
-                >
-                    <LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-                        <Text style={styles.planName}>Client #1</Text>
-                        
-                    
-                        </View>
-                    </LinearGradient>
-                </ImageBackground>
-            
-					<ImageBackground 
-						source={{uri:'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg'}} 
-						resizeMode = {'cover'}
-						imageStyle = {{borderRadius: 90,}}
-						style={{
-                            width: screenWidth/2 - 18,
-                            paddingTop: 90,
-                            paddingBottom: 0,
-                            paddingHorizontal: 0,
-                        }}
-						>
-                        <LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-                        <Text style={styles.planName}>Client #2</Text>
-                        
-                        
-                        </View>
-                    </LinearGradient>
-					</ImageBackground>
-				</View>
-                <View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 10,
-						marginHorizontal: 12,
-					}}>
-                    
-                <ImageBackground 
-                    source={{uri:'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg'}} 
-                    resizeMode="cover"
-                    imageStyle={{ borderRadius: 90 }}
-                    style={{
-                        width: screenWidth/2 - 18,
-                        paddingTop: 90,
-                        paddingBottom:0,
-                        paddingHorizontal: 0,
-                    }}
-                >
-                    <LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-                        <Text style={styles.planName}>Client #1</Text>
-                        
-                    
-                        </View>
-                    </LinearGradient>
-                </ImageBackground>
-            
-					<ImageBackground 
-						source={{uri:'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg'}} 
-						resizeMode = {'cover'}
-						imageStyle = {{borderRadius: 90,}}
-						style={{
-                            width: screenWidth/2 - 18,
-                            paddingTop: 90,
-                            paddingBottom: 0,
-                            paddingHorizontal: 0,
-                        }}
-						>
-                        <LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-                        <Text style={styles.planName}>Client #2</Text>
-                        
-                        
-                        </View>
-                    </LinearGradient>
-					</ImageBackground>
-				</View>
-                <View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 10,
-						marginHorizontal: 12,
-					}}>
-                    
-                <ImageBackground 
-                    source={{uri:'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg'}} 
-                    resizeMode="cover"
-                    imageStyle={{ borderRadius: 90 }}
-                    style={{
-                        width: screenWidth/2 - 18,
-                        paddingTop: 90,
-                        paddingBottom:0,
-                        paddingHorizontal: 0,
-                    }}
-                >
-                    <LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-                        <Text style={styles.planName}>Client #1</Text>
-                        
-                    
-                        </View>
-                    </LinearGradient>
-                </ImageBackground>
-            
-					<ImageBackground 
-						source={{uri:'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg'}} 
-						resizeMode = {'cover'}
-						imageStyle = {{borderRadius: 90,}}
-						style={{
-                            width: screenWidth/2 - 18,
-                            paddingTop: 90,
-                            paddingBottom: 0,
-                            paddingHorizontal: 0,
-                        }}
-						>
-                        <LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9, alignItems:'center'}}>
-                        <Text style={styles.planName}>Client #2</Text>
-                        
-                        
-                        </View>
-                    </LinearGradient>
-					</ImageBackground>
-				</View>
-				
-				
+
+                <FlatList
+					contentContainerStyle={{ paddingHorizontal: 10}}
+					data={REPORTS[0].data}
+					renderItem={({ item }) => <ListItem item={item} />}
+					keyExtractor={(item) => item.id}
+					numColumns={2} // Set the number of columns to 2
+					showsHorizontalScrollIndicator={false}
+					nestedScrollEnabled={true}
+				/>
 				
 			</ScrollView>
             <NavBarBotTrainer color1="#900020" color2="#000000"/>
@@ -335,3 +207,14 @@ export default TrainerHomepage;
 
     
 });
+
+const REPORTS = [
+    {
+        title: "reports",
+        data: [
+            {id: "1", name: "Client #1", profile_picture: "https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg"},
+            {id: "2", name: "Client #2", profile_picture: "https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg"},
+            {id: "3", name: "Client #3", profile_picture: "https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg"},
+        ]
+    }
+]
