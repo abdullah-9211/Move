@@ -357,7 +357,7 @@ class Squat:
                     
                     current_time = cap.get(cv2.CAP_PROP_POS_MSEC)
                     current_time /= 1000.0
-                    current_time = round(current_time, 1)
+                    current_time = round(current_time, 0)
                     
                     # For Right side Points Visibility
                     
@@ -427,8 +427,9 @@ class Squat:
                             self.reps += 1
                         elif states_visited.__contains__(1) and states_visited.__contains__(2):
                             states_visited = []
-                            self.errors.append("Hit more depth, full range of motion not performed")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Hit more depth, full range of motion not performed")
+                                self.error_times.append(current_time)
                             # self.error_bool = True
                             self.depth_bool = True
                             self.state = 0
@@ -559,14 +560,16 @@ class Squat:
                         # Hip Angle Matching
                         
                         if hip_angle < (trainer_hip_min - self.leniency):
-                            self.errors.append("Lower Hips, too lifted")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Lower Hips, too lifted")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(hip_angle.round(1))
                             self.trainer_incorrect.append(trainer_hip_min - self.leniency)
                         elif hip_angle > (trainer_hip_max + self.leniency):
-                            self.errors.append("Raise Hips, too low")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Raise Hips, too low")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(hip_angle.round(1))
                             self.trainer_incorrect.append(trainer_hip_max + self.leniency)
@@ -575,14 +578,16 @@ class Squat:
                         # Knee Angle Matching
                         
                         if knee_angle < (trainer_knee_min - self.leniency):
-                            self.errors.append("Knees too bent, straighten them")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Knees too bent, straighten them")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(knee_angle.round(1))
                             self.trainer_incorrect.append(trainer_knee_min - self.leniency)
                         elif knee_angle > (trainer_knee_max + self.leniency):
-                            self.errors.append("Knees too straight, bend them more")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Knees too straight, bend them more")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(knee_angle.round(1))
                             self.trainer_incorrect.append(trainer_knee_max + self.leniency)
@@ -590,14 +595,16 @@ class Squat:
                         # Knee Feet Ratio Matching
                 
                         if user_knee_feet_ratio < (trainer_knee_feet_ratio_min - self.knee_feet_leniency):
-                            self.errors.append("Knees too open")
+                            if current_time not in self.error_times:
+                                self.errors.append("Knees too open")
+                                self.error_times.append(current_time)
                             self.error_bool = True
-                            self.error_times.append(current_time)
                             self.client_incorrect.append(user_knee_feet_ratio)
                             self.trainer_incorrect.append(trainer_knee_feet_ratio_min - self.knee_feet_leniency)
                         elif user_knee_feet_ratio > (trainer_knee_feet_ratio_max + self.knee_feet_leniency):
-                            self.errors.append("Knees too close to one another")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Knees too close to one another")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(user_knee_feet_ratio)
                             self.trainer_incorrect.append(trainer_knee_feet_ratio_max + self.knee_feet_leniency)
@@ -606,14 +613,16 @@ class Squat:
                         # Feet Shoulder Ratio Matching
                         
                         if user_feet_shoulder_ratio < (trainer_feet_shoulder_ratio_min - self.feet_shoulder_leniency):
-                            self.errors.append("Feet too close to one another")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Feet too close to one another")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(user_feet_shoulder_ratio)
                             self.trainer_incorrect.append(trainer_feet_shoulder_ratio_min - self.feet_shoulder_leniency)
                         elif user_feet_shoulder_ratio > (trainer_feet_shoulder_ratio_max + self.feet_shoulder_leniency):
-                            self.errors.append("Feet too open")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Feet too open")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(user_feet_shoulder_ratio)
                             self.trainer_incorrect.append(trainer_feet_shoulder_ratio_max + self.feet_shoulder_leniency)
@@ -699,7 +708,7 @@ class Squat:
     
 if __name__ == "__main__":
     client_url = "./sample_videos/raheel_potrait.mp4"
-    trainer_url = "./sample_videos/abdullah_potrait.mp4"
+    trainer_url = "./sample_videos/shaheer_squat.mp4"
 
     squat = Squat(client_url, trainer_url)
     

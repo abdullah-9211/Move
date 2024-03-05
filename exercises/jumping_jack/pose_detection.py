@@ -343,7 +343,7 @@ class JumpingJack:
                     
                     current_time = cap.get(cv2.CAP_PROP_POS_MSEC)
                     current_time /= 1000.0
-                    current_time = round(current_time, 1)
+                    current_time = round(current_time, 0)
                     
                     # For Right side Points Visibility
                     
@@ -391,8 +391,9 @@ class JumpingJack:
             
                     if abs(right_vis_sum - left_vis_sum) > 1:
                         self.visibility_bool = True
-                        self.errors.append("Visibility of Joints not same")
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.error_times.append(current_time)
+                            self.errors.append("Visibility of Joints not same")
                         self.client_incorrect.append("Make sure all joints are visible, stand facing the camera")
                         self.trainer_incorrect.append("Make sure all joints are visible, stand facing the camera")
                         self.state = 0
@@ -423,8 +424,9 @@ class JumpingJack:
                             print("Reps: ", self.reps)
                         elif states_visited.__contains__(1) and states_visited.__contains__(2):
                             states_visited = []
-                            self.errors.append("State 3 not visited, hit more depth")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("State 3 not visited, hit more depth")
                             self.error_bool = True
                             self.depth_bool = True
                             self.client_incorrect.append("Full range of motion not performed")
@@ -442,41 +444,51 @@ class JumpingJack:
                         states_visited.append(3)
                     
                     elif ((r_shoulder_angle >= state1_angle_threshold[0] and r_shoulder_angle <= state1_angle_threshold[1]) and (l_shoulder_angle >= state3_angle_threshold[0] and l_shoulder_angle <= state3_angle_threshold[1])) or ((r_shoulder_angle >= state3_angle_threshold[0] and r_shoulder_angle <= state3_angle_threshold[1]) and (l_shoulder_angle >= state1_angle_threshold[0] and l_shoulder_angle <= state1_angle_threshold[1])):
-                        self.errors.append("Movement of body not in sync")
+                        
                         self.error_bool = True
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.error_times.append(current_time)
+                            self.errors.append("Movement of body not in sync")
                         self.client_incorrect.append("Move right and left sides of body in sync")
                         self.trainer_incorrect.append("Move right and left sides of body in sync")
                         self.state = 0
                     
                     elif r_shoulder_angle < (state1_angle_threshold[0] - self.leniency):
-                        self.errors.append("Right Shoulder Angle too low")
+                        
                         self.error_bool = True
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.error_times.append(current_time)
+                            self.errors.append("Right Shoulder Angle too low")
                         self.client_incorrect.append(r_shoulder_angle.round(1))
                         self.trainer_incorrect.append(state1_angle_threshold[0] - self.leniency)
                         self.state = 1
                     
                     elif l_shoulder_angle < (state1_angle_threshold[0] - self.leniency):
-                        self.errors.append("Left Shoulder Angle too low")
+                        
                         self.error_bool = True
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.error_times.append(current_time)
+                            self.errors.append("Left Shoulder Angle too low")
                         self.client_incorrect.append(l_shoulder_angle.round(1))
                         self.trainer_incorrect.append(state1_angle_threshold[0] - self.leniency)
                         self.state = 1
                     
                     elif r_shoulder_angle > (state3_angle_threshold[1] + self.leniency):
-                        self.errors.append("Right Shoulder Angle too high")
+                        
                         self.error_bool = True
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.error_times.append(current_time)
+                            self.errors.append("Right Shoulder Angle too high")
                         self.client_incorrect.append(r_shoulder_angle.round(1))
                         self.trainer_incorrect.append(state3_angle_threshold[1] + self.leniency)
                         self.state = 3
                     
                     elif l_shoulder_angle > (state3_angle_threshold[1] + self.leniency):
-                        self.errors.append("Left Shoulder Angle too high")
+                        
                         self.error_bool = True
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.error_times.append(current_time)
+                            self.errors.append("Left Shoulder Angle too high")
                         self.client_incorrect.append(l_shoulder_angle.round(1))
                         self.trainer_incorrect.append(state3_angle_threshold[1] + self.leniency)
                         self.state = 3
@@ -605,29 +617,37 @@ class JumpingJack:
                         # Right Shoulder angle matching
                         
                         if r_shoulder_angle < (trainer_shoulder_min_r - self.leniency):
-                            self.errors.append("Right Shoulder Angle too low")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Right Shoulder Angle too low")
                             self.client_incorrect.append(r_shoulder_angle.round(1))
                             self.trainer_incorrect.append(trainer_shoulder_min_r - self.leniency)
                         elif r_shoulder_angle > (trainer_shoulder_max_r + self.leniency):
-                            self.errors.append("Right Shoulder Angle too high")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Right Shoulder Angle too high")
                             self.client_incorrect.append(r_shoulder_angle.round(1))
                             self.trainer_incorrect.append(trainer_shoulder_max_r + self.leniency)
                             
                         # Left Shoulder angle matching
                         
                         if l_shoulder_angle < (trainer_shoulder_min_l - self.leniency):
-                            self.errors.append("Left Shoulder Angle too low")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Left Shoulder Angle too low")
                             self.client_incorrect.append(l_shoulder_angle.round(1))
                             self.trainer_incorrect.append(trainer_shoulder_min_l - self.leniency)
                         elif l_shoulder_angle > (trainer_shoulder_max_l + self.leniency):
-                            self.errors.append("Left Shoulder Angle too high")
-                            self.error_times.append(current_time)
+                            
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Left Shoulder Angle too high")
                             self.error_bool = True
                             self.client_incorrect.append(l_shoulder_angle.round(1))
                             self.trainer_incorrect.append(trainer_shoulder_max_l + self.leniency)
@@ -636,30 +656,38 @@ class JumpingJack:
                         # Right Hip Angle Matching
                         
                         if r_hip_angle < (trainer_hip_min_r - self.leniency):
-                            self.errors.append("Right Hip Angle too low")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Right Hip Angle too low")
                             self.client_incorrect.append(r_hip_angle.round(1))
                             self.trainer_incorrect.append(trainer_hip_min_r - self.leniency)
                         elif r_hip_angle > (trainer_hip_max_r + self.leniency):
-                            self.errors.append("Right Hip Angle too high")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Right Hip Angle too high")
                             self.client_incorrect.append(r_hip_angle.round(1))
                             self.trainer_incorrect.append(trainer_hip_max_r + self.leniency)
                             
                         # Left Hip Angle Matching
                         
                         if l_hip_angle < (trainer_hip_min_l - self.leniency):
-                            self.errors.append("Left Hip Angle too low")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Left Hip Angle too low")
                             self.client_incorrect.append(l_hip_angle.round(1))
                             self.trainer_incorrect.append(trainer_hip_min_l - self.leniency)
                         elif l_hip_angle > (trainer_hip_max_l + self.leniency):
-                            self.errors.append("Left Hip Angle too high")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Left Hip Angle too high")
                             self.client_incorrect.append(l_hip_angle.round(1))
                             self.trainer_incorrect.append(trainer_hip_max_l + self.leniency)
                             
@@ -667,30 +695,38 @@ class JumpingJack:
                         # Right Knee Angle Matching
                         
                         if r_knee_angle < (trainer_knee_min_r - self.leniency):
-                            self.errors.append("Right Knee Angle too low")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Right Knee Angle too low")
                             self.client_incorrect.append(r_knee_angle.round(1))
                             self.trainer_incorrect.append(trainer_knee_min_r - self.leniency)
                         elif r_knee_angle > (trainer_knee_max_r + self.leniency):
-                            self.errors.append("Right Knee Angle too high")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Right Knee Angle too high")   
                             self.client_incorrect.append(r_knee_angle.round(1))
                             self.trainer_incorrect.append(trainer_knee_max_r + self.leniency)
                             
                         # Left Knee Angle Matching
                         
                         if l_knee_angle < (trainer_knee_min_l - self.leniency):
-                            self.errors.append("Left Knee Angle too low")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Left Knee Angle too low")
                             self.client_incorrect.append(l_knee_angle.round(1))
                             self.trainer_incorrect.append(trainer_knee_min_l - self.leniency)
                         elif l_knee_angle > (trainer_knee_max_l + self.leniency):
-                            self.errors.append("Left Knee Angle too high")
+                            
                             self.error_bool = True
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.error_times.append(current_time)
+                                self.errors.append("Left Knee Angle too high")
                             self.client_incorrect.append(l_knee_angle.round(1))
                             self.trainer_incorrect.append(trainer_knee_max_l + self.leniency)
                         
@@ -788,8 +824,8 @@ class JumpingJack:
     
     
 if __name__ == "__main__":
-    client_url = "./sample_videos/Abdullah_Umar.mp4"
-    trainer_url = "./sample_videos/Abdul_Rehman.mp4"
+    trainer_url = "./sample_videos/Abdullah_Umar.mp4"
+    client_url = "./sample_videos/umar_jack.mp4"
 
     jj = JumpingJack(client_url, trainer_url)
     

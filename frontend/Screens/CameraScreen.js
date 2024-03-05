@@ -203,7 +203,7 @@ export default function CameraScreen() {
       const response = await axios.post(apiUrl, requestBody);
       console.log(response.data);
       setLoading(false);
-      navigation.navigate('Statistics', {user: user, duration: response.data.total_duration, accuracy: response.data.accuracy, workout: response.data.workout});
+      navigation.navigate('Statistics', {user: user, duration: response.data.total_duration, accuracy: response.data.accuracy, workout: response.data.workout, errors: response.data.errors, error_times: response.data.error_times, exercises: response.data.exercises});
     } catch (error) {
       alert('Error finishing workout:', error);
       setLoading(false);

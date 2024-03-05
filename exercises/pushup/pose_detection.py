@@ -347,7 +347,7 @@ class Pushup:
                     
                     current_time = cap.get(cv2.CAP_PROP_POS_MSEC)
                     current_time /= 1000.0
-                    current_time = round(current_time, 1)
+                    current_time = round(current_time, 0)
                     
                     # For Right side Points Visibility
                     
@@ -416,8 +416,9 @@ class Pushup:
                             self.reps += 1
                         elif states_visited.__contains__(1) and states_visited.__contains__(2):
                             states_visited = []
-                            self.errors.append("Hit more depth, full range of motion not performed")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Hit more depth, full range of motion not performed")
+                                self.error_times.append(current_time)
                             # self.error_bool = True
                             self.depth_bool = True
                             self.state = 0
@@ -538,14 +539,16 @@ class Pushup:
                         # Elbow angle matching
                     
                         if elbow_angle < (trainer_elbow_min - self.leniency):
-                            self.errors.append("Bend less, elbow too low")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Bend less, elbow too low")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(elbow_angle.round(1))
                             self.trainer_incorrect.append(trainer_elbow_min - self.leniency)
                         elif elbow_angle > (trainer_elbow_max + self.leniency):
-                            self.errors.append("Bend elbow more, too straight")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Bend elbow more, too straight")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(elbow_angle.round(1))
                             self.trainer_incorrect.append(trainer_elbow_max + self.leniency)
@@ -555,14 +558,16 @@ class Pushup:
                         # Shoulder angle matching
                         
                         if shoulder_angle < (trainer_shoulder_min - self.leniency):
-                            self.errors.append("Elbows too close to body, spread them apart more")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Elbows too close to body, spread them apart more")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(shoulder_angle.round(1))
                             self.trainer_incorrect.append(trainer_shoulder_min - self.leniency)
                         elif shoulder_angle > (trainer_shoulder_max + self.leniency):
-                            self.errors.append("Elbows too far apart, bring closer to body")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Elbows too far apart, bring closer to body")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(shoulder_angle.round(1))
                             self.trainer_incorrect.append(trainer_shoulder_max + self.leniency)
@@ -572,14 +577,16 @@ class Pushup:
                         # Hip Angle Matching
                         
                         if hip_angle < (trainer_hip_min - self.leniency):
-                            self.errors.append("Lower Hips, too lifted")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Lower Hips, too lifted")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(hip_angle.round(1))
                             self.trainer_incorrect.append(trainer_hip_min - self.leniency)
                         elif hip_angle > (trainer_hip_max + self.leniency):
-                            self.errors.append("Raise Hips, too low")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Raise Hips, too low")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(hip_angle.round(1))
                             self.trainer_incorrect.append(trainer_hip_max + self.leniency)
@@ -588,14 +595,16 @@ class Pushup:
                         # Knee Angle Matching
                         
                         if knee_angle < (trainer_knee_min - self.leniency):
-                            self.errors.append("Knees too bent, straighten them")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Knees too bent, straighten them")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(knee_angle.round(1))
                             self.trainer_incorrect.append(trainer_knee_min - self.leniency)
                         elif knee_angle > (trainer_knee_max + self.leniency):
-                            self.errors.append("Knees too straight, bend them more")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Knees too straight, bend them more")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(knee_angle.round(1))
                             self.trainer_incorrect.append(trainer_knee_max + self.leniency)

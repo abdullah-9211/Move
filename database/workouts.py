@@ -117,3 +117,17 @@ def get_plan_trainer(trainer_id):
     except Exception as e:
         print("\nError retrieving workouts. Exception Thrown:\n", e)
         
+
+def add_errors(workout_id, exercise_id, errors, error_times):
+    client = connect()
+    try:
+        response = client.table("Workout Exercise Errors").insert([{
+            "workout_id": workout_id,
+            "exercise_id": exercise_id,
+            "error": errors,
+            "error_time": error_times
+        }]).execute()
+        response = dict(response)
+        return response["data"][0]["workout_id"]
+    except Exception as e:
+        print("\n\nError inserting errors into database: ", e)

@@ -205,7 +205,7 @@ class Plank:
                     
                     current_time = cap.get(cv2.CAP_PROP_POS_MSEC)
                     current_time /= 1000.0
-                    current_time = round(current_time, 1)
+                    current_time = round(current_time, 0)
                     
                     # For Right side Points Visibility
                     
@@ -288,47 +288,55 @@ class Plank:
                     # Elbow angle matching
                     
                     if elbow_angle < (trainer_elbow_min - self.leniency):
-                        self.errors.append("Push forearms away from shoulders, angle too small")
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.errors.append("Push forearms away from shoulders, angle too small")
+                            self.error_times.append(current_time)
                         self.error_bool = True
                     elif elbow_angle > (trainer_elbow_max + self.leniency):
-                        self.errors.append("Bring forearms closer to shoulders, separation too much")
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.errors.append("Bring forearms closer to shoulders, separation too much")
+                            self.error_times.append(current_time)
                         self.error_bool = True
                     
                     
                     # Shoulder angle matching
                     
                     if shoulder_angle < (trainer_shoulder_min - self.leniency):
-                        self.errors.append("Push body backwards, too much forward lean")
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.errors.append("Push body backwards, too much forward lean")
+                            self.error_times.append(current_time)
                         self.error_bool = True
                     elif shoulder_angle > (trainer_shoulder_max + self.leniency):
-                        self.errors.append("Push body forwards, too much backward lean")
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.errors.append("Push body forwards, too much backward lean")
+                            self.error_times.append(current_time)
                         self.error_bool = True
                     
                     
                     # Hip Angle Matching
                     
                     if hip_angle < (trainer_hip_min - self.leniency):
-                        self.errors.append("Bring hips lower")
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.errors.append("Bring hips lower")
+                            self.error_times.append(current_time)
                         self.error_bool = True
                     elif hip_angle > (trainer_hip_max + self.leniency):
-                        self.errors.append("Push hips upwards")
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.errors.append("Push hips upwards")
+                            self.error_times.append(current_time)
                         self.error_bool = True
 
                     # Knee Angle Matching
                     
                     if knee_angle < (trainer_knee_min - self.leniency):
-                        self.errors.append("Straighten legs, too much bend")
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.errors.append("Straighten legs, too much bend")
+                            self.error_times.append(current_time)
                         self.error_bool = True
                     elif knee_angle > (trainer_knee_max + self.leniency):
-                        self.errors.append("Bend legs, too much straightening")
-                        self.error_times.append(current_time)
+                        if current_time not in self.error_times:
+                            self.errors.append("Bend legs, too much straightening")
+                            self.error_times.append(current_time)
                         self.error_bool = True
                     
                 except:
@@ -380,7 +388,7 @@ class Plank:
 
 if "__main__" == __name__:
     
-    plank = Plank("sample_videos/bilal_footage.mp4", "sample_videos/abdullahumarig1@gmail.com_2.mp4")
+    plank = Plank("sample_videos/bilal_footage.mp4", "sample_videos/abdullahumarig1@gmail.com_1.mp4")
     
     errors = []
     error_times = []

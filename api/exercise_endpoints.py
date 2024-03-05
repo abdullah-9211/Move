@@ -17,6 +17,9 @@ router = APIRouter()
 
 # list of exercises 
 completed_exercises = []
+all_errors = {}
+all_error_times = {}
+exercises = {}
 
 # Analyze exercise
 @router.post("/analyze")
@@ -29,24 +32,33 @@ async def analyze_exercise(exercise_data: dict):
 
     # Get exercise id
     exercise_id = db.get_exercise_id(exercise)
+    exercises[exercise] = exercise_id
 
     # Initialize and analyze based on exercise type
     if exercise == "plank":
         plank_instance = Plank(trainer_video, client_video)
-        _, _, accuracy, duration = plank_instance.run_process()
+        errors, error_times, accuracy, duration = plank_instance.run_process()
         exercise_stats = Exercise(0, exercise_id, None, duration, accuracy)
+        all_errors[exercise_id] = errors
+        all_error_times[exercise_id] = error_times
     elif exercise == "pushup":
         pushup_instance = Pushup(client_video, trainer_video)
-        reps, _, _, accruacy, duration = pushup_instance.run_process()
-        exercise_stats = Exercise(0, exercise_id, reps, duration, accruacy)
+        reps, errors, error_times, accuracy, duration = pushup_instance.run_process()
+        exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
+        all_errors[exercise_id] = errors
+        all_error_times[exercise_id] = error_times
     elif exercise == "squat":
         squat_instance = Squat(client_video, trainer_video)
-        reps, _, _, accuracy, duration = squat_instance.run_process()
+        reps, errors, error_times, accuracy, duration = squat_instance.run_process()
         exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
+        all_errors[exercise_id] = errors
+        all_error_times[exercise_id] = error_times
     elif exercise == "jumping jack":
         jj_instance = JumpingJack(client_video, trainer_video)
-        reps, _, _, accuracy, duration = jj_instance.run_process()
+        reps, errors, error_times, accuracy, duration = jj_instance.run_process()
         exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
+        all_errors[exercise_id] = errors
+        all_error_times[exercise_id] = error_times
         
     else:
         raise HTTPException(status_code=404, detail="Exercise not found")
@@ -80,10 +92,6 @@ async def finish_workout(workout_data: dict):
         
     accuracy = total/len(completed_exercises)
 
-
-    # ======================
-    # Testing needed iski  |
-    # ======================
         
     subscribed_ids = user_db.get_subscribed_ids(trainer_id)
     if client_id not in subscribed_ids:
@@ -95,9 +103,12 @@ async def finish_workout(workout_data: dict):
     for exercise in completed_exercises:
         exercise.workout_id = workout_id
         db.add_exercise(exercise)
+        for i in range(len(all_errors[exercise.exercise_id])):
+            db.add_errors(workout_id, exercise.exercise_id, all_errors[exercise.exercise_id][i], all_error_times[exercise.exercise_id][i])
 
     completed_exercises.clear()
-    return {"workout": workout_id, "total_duration": total_duration, "accuracy": round(accuracy, 1)}
+        
+    return {"workout": workout_id, "total_duration": total_duration, "accuracy": round(accuracy, 1), "errors": all_errors, "error_times": all_error_times, "exercises": exercises}
 
 
 # =============================================================================
