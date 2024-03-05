@@ -17,6 +17,11 @@ import {Dropdown, MultiSelect} from 'react-native-element-dropdown';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 
+function addExercise() {
+    navigation.navigate('AddExerciseInPlan');
+    //store data in table above and start storing data again
+}
+
 const { width: screenWidth } = Dimensions.get('window');
 const AddExerciseInPlan = () => {
     const navigation = useNavigation();
@@ -28,10 +33,11 @@ const AddExerciseInPlan = () => {
         {label: 'Squats', value: '4'},
     ];
     const data3 = [
-       {label: 'reps', value: '1'},
-       {label: 'sec', value: '2'},
+       {label1: 'reps', value1: '5'},
+       {label1: 'sec', value1: '6'},
     ];
     const [dropdown, setDropdown] = useState(null);
+    const [dropdown1, setDropdown1] = useState('');
         const [selected, setSelected] = useState([]);
         const _renderItem = item => {
             return (
@@ -41,11 +47,17 @@ const AddExerciseInPlan = () => {
             </View>
             );
         };
+        const _renderItem2 = item1 => {
+            return (
+            <View style={styles.item}>
+                <Text style={styles.textItem}>{item1.label}</Text>
 
-    const data2 = ["Weight Loss", "Toning", "Strength", "Yoga"];
+            </View>
+            );
+        };
     
     // const [selectedValue, setSelectedValue] = React.useState('');
-    const [planname, setplanname] = React.useState('');
+    const [amount, setamount] = useState('');
 
     const [loaded] = useFonts({
         'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -73,6 +85,7 @@ const AddExerciseInPlan = () => {
 
 {/* -------------------------------------addplan top bar-----------------------------------------------------------------------------------------*/}
             <View 
+                
                 style = {{
                     flexDirection: "row",
                     backgroundColor: "#ffffff",
@@ -112,18 +125,7 @@ const AddExerciseInPlan = () => {
 						marginHorizontal: 25,
 					}}>
 					<View 
-						style = {{
-							flexDirection: "row",
-							alignItems: "center",
-							backgroundColor: "#ffffff",
-							borderColor: "#000000",
-							borderTopLeftRadius: 9,
-							borderTopRightRadius: 9,
-							borderWidth: 0.5,
-							paddingVertical: 12,
-							paddingHorizontal: 17,
-							
-						}}>
+						style = {styles.infoOdd}>
 						<Text 
 							style = {{
 								color: "#000000",
@@ -145,17 +147,7 @@ const AddExerciseInPlan = () => {
 						</Text>
 					</View>
 					<View 
-						style = {{
-							flexDirection: "row",
-							alignItems: "center",
-							backgroundColor: "#900020",
-							borderColor: "#000000",
-							borderBottomRightRadius: 9,
-							borderBottomLeftRadius: 9,
-							borderWidth: 0.5,
-							paddingVertical: 12,
-							paddingHorizontal: 18,
-						}}>
+						style = {styles.infoEven}>
 						<Text 
 							style = {{
 								color: "#ffffff",
@@ -179,6 +171,7 @@ const AddExerciseInPlan = () => {
 					</View>
 				</View>
 {/* -------------------------------------drop down-----------------------------------------------------------------------------------------*/}
+            <View style={{flex:1, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start"}}>
             <View 
                 style = {{
                     flexDirection: "row",
@@ -189,11 +182,11 @@ const AddExerciseInPlan = () => {
                     borderWidth: 1,
                     paddingVertical: 20,
                     paddingHorizontal: 17,
+                    width: "62%",
                     marginBottom: 20,
-                    marginHorizontal: 25,
-                }}>
-                
-                
+                    marginLeft: 25,
+
+                }}>           
                 
                     <Dropdown
                     style={styles.dropdown}
@@ -206,13 +199,41 @@ const AddExerciseInPlan = () => {
                     value={dropdown}
                     onChange={item => {
                     setDropdown(item.value);
-                        console.log('selected', item);
+                        // console.log('selected', item);
                     }}
                     renderItem={item => _renderItem(item)}
                     textError="Error"
                 />
 
             </View>
+            
+            
+            
+            <View 
+						style = {{
+							width: 54,
+							alignItems: "center",
+							backgroundColor: "#900020",
+							borderRadius: 9,
+                            width: "20%",
+                            height: "78%",
+                            justifyContent: "center",
+                            marginVertical:0,
+                            alignItems: "center",
+							paddingVertical: 21,
+                            marginRight: 25,
+						}}>
+						<Text 
+							style = {{
+								color: "#ffffff",
+								fontSize: 16,
+								fontWeight: "bold",
+							}}>
+							{"+"}
+						</Text>
+					</View>
+                    </View>
+                    
 {/* -------------------------------------Set plan name-----------------------------------------------------------------------------------------*/}
            <View style={{flexDirection: "row"}}>
            <View 
@@ -236,9 +257,9 @@ const AddExerciseInPlan = () => {
                         fontFamily: "QuickSand"
                     }}
                     placeholder='10'
-                    value={planname}
-                    useNativeDriver={false}
-                    onChangeText={(text) => setplanname(text)}
+                    value={amount}
+                    // useNativeDriver={false}
+                    onChangeText={(text) => setamount(text)}
                     >
                     
                 </TextInput>
@@ -265,17 +286,17 @@ const AddExerciseInPlan = () => {
                     style={styles.dropdown}
                     
                     data={data3}
-                    labelField="label"
-                    valueField="value"
-                    label="Dropdown"
+                    labelField="label1"
+                    valueField="value1"
+                    label1="Dropdown"
                     
-                    value={dropdown}
+                    value1={dropdown1}
                     placeholder="Select"
-                    onChange={item => {
-                    setDropdown(item.value);
-                        console.log('selected', item);
+                    onChange={item1 => {
+                    setDropdown1(item1.value1);
+                        console.log('selected', item1);
                     }}
-                    renderItem={item => _renderItem(item)}
+                    renderItem2={item1 => _renderItem2(item1)}
                     textError="Error"
                 />
 
@@ -310,6 +331,7 @@ const AddExerciseInPlan = () => {
             
         </ScrollView>
         <View style={{marginBottom:15}}>
+        <Pressable onPress={ addExercise }>
             <View 
                 style = {{
                     alignItems: "center",
@@ -333,6 +355,7 @@ const AddExerciseInPlan = () => {
                     {"Add Exercise"}
                 </Text>
             </View>
+            </Pressable>
 
 {/* -------------------------------------Done button-----------------------------------------------------------------------------------------*/}
 
@@ -363,6 +386,30 @@ const AddExerciseInPlan = () => {
 export default AddExerciseInPlan;
 
 const styles = StyleSheet.create({
+
+    infoOdd: {
+        flexDirection: "row",
+		alignItems: "center",
+		backgroundColor: "#ffffff",
+		borderColor: "#000000",
+		borderTopLeftRadius: 9,
+		borderTopRightRadius: 9,
+		borderWidth: 0.5,
+		paddingVertical: 12,
+		paddingHorizontal: 17,
+    },
+
+    infoEven:{
+        flexDirection: "row",
+		alignItems: "center",
+		backgroundColor: "#900020",
+		borderColor: "#000000",
+		borderBottomRightRadius: 9,
+		borderBottomLeftRadius: 9,
+		borderWidth: 0.5,
+		paddingVertical: 12,
+		paddingHorizontal: 18,
+    },
 
     dropdown: {
         backgroundColor: 'white',

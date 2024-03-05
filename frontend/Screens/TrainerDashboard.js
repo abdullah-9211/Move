@@ -53,7 +53,7 @@ export default function TrainerClients() {
 </View>
       <View style={{ marginBottom: 65 }} />
 
-      <NavBarBot />
+      <NavBarBotTrainer />
     </View>
   );
 }

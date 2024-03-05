@@ -31,13 +31,14 @@ import ProfileWithClients from './Screens/ProfileWithClients';
 import TrainerHomepage from './Screens/TrainerHomepage';
 import AddPlan from './Screens/AddPlan';
 import AddExerciseInPlan from './Screens/AddExerciseInPlan';
+import UploadVideo from './Screens/UploadVideo';
 const Stack = createStackNavigator()
 
 export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="TrainerHomepage"
+          initialRouteName="AccountSelect"
           // initialRouteName="AccountSelect"
           screenOptions={{
             headerShown: false,
@@ -72,6 +73,7 @@ export default function App() {
           <Stack.Screen name= "ProfileWithClients" component={ProfileWithClients}/> 
           <Stack.Screen name= "TrainerHomepage" component={TrainerHomepage}/>      
           <Stack.Screen name= "AddExerciseInPlan" component={AddExerciseInPlan}/>
+          <Stack.Screen name= "UploadVideo" component={UploadVideo}/>
 
           
         </Stack.Navigator>
