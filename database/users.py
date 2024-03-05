@@ -123,3 +123,22 @@ def get_subscribed(trainer_id):
         return users
     except Exception as e:
         print("\nError retrieving workouts. Exception Thrown:\n", e)
+        
+def get_subscribed_ids(trainer_id):
+    client = connect()
+    try:
+        res = client.table("Trainers Subscribed").select("user_id").eq("trainer_id", trainer_id).execute()
+        res = dict(res)
+        return res["data"]
+    except Exception as e:
+        print("\nError retrieving workouts. Exception Thrown:\n", e)
+        
+        
+def add_subscription(client_id, trainer_id):
+    client = connect()
+    try:
+        response = client.table("Trainers Subscribed").insert([{"user_id": client_id, "trainer_id": trainer_id}]).execute()
+        response = dict(response)
+        return response["data"][0]["user_id"]
+    except Exception as e:
+        print("\n\nError inserting subscription into database: ", e)

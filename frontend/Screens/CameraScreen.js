@@ -198,6 +198,7 @@ export default function CameraScreen() {
       const requestBody = {
         plan_id: workout.id,
         client_id: user.id,
+        trainer_id: workout.plan_trainer,
       };
       const response = await axios.post(apiUrl, requestBody);
       console.log(response.data);

@@ -90,3 +90,13 @@ async def get_trainer_plans(trainer_id: int):
 @router.get("/get-subscriptions/{trainer_id}")
 async def get_subscriptions(trainer_id: int):
     return db.get_subscribed(trainer_id)
+
+@router.get("/get-subscriptions-ids/{trainer_id}")
+async def get_subscriptions_ids(trainer_id: int):
+    return db.get_subscribed_ids(trainer_id)
+
+@router.post("/add-subscription")
+async def add_subscription(subscription_data: dict):
+    client_id = subscription_data.get("client_id")
+    trainer_id = subscription_data.get("trainer_id")
+    return db.add_subscription(client_id, trainer_id)

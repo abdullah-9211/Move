@@ -6,6 +6,7 @@ from exercises.jumping_jack.pose_detection import JumpingJack
 from models.Exercise import Exercise
 from models.Workout import Workout
 import database.workouts as db
+import database.users as user_db
 
 
 router = APIRouter()
@@ -66,6 +67,7 @@ async def analyze_exercise(exercise_data: dict):
 async def finish_workout(workout_data: dict):
     plan_id = workout_data.get("plan_id")
     client_id = workout_data.get("client_id")
+    trainer_id = workout_data.get("trainer_id")
     total_duration = 0
     total = 0
     
@@ -78,6 +80,14 @@ async def finish_workout(workout_data: dict):
         
     accuracy = total/len(completed_exercises)
 
+
+    # ======================
+    # Testing needed iski  |
+    # ======================
+        
+    subscribed_ids = user_db.get_subscribed_ids(trainer_id)
+    if client_id not in subscribed_ids:
+        user_db.add_subscription(client_id, trainer_id)
 
     workout = Workout(plan_id, client_id, total_duration, accuracy)
     workout_id = db.add_workout(workout)
