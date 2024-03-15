@@ -126,7 +126,18 @@ export default function Login() {
                 Continue
             </Text>
             </Pressable>
+            <Pressable
+        style={({ pressed }) => [
+            styles.SignUp,
+        
+        ]}
+        onPress={() => navigation.navigate('AccountSelect')}>
+        <Text style={styles.SignUpText}>
+            Join Us
+        </Text>
+      </Pressable>
             </View>
+            
           
           
         </View>
@@ -164,7 +175,9 @@ export default function Login() {
     padding: 10,
     color: '#ffffff'
   },
-
+  SignUp: {
+    justifyContent: "flex-start", alignItems: "center", marginBottom: 30,
+  },
   buttonText: {
     fontSize: 16,
     fontFamily: 'QuickSand',
@@ -178,7 +191,7 @@ button: {
     height: 60,
     marginHorizontal:10,
     borderRadius: 9,
-    marginBottom:25,
+    marginBottom:15,
 },
 backgroundImage: {
     flex: 1,
@@ -191,6 +204,12 @@ backgroundImage: {
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
+  SignUpText: {
+    fontSize: 15,
+    fontFamily: 'QuickSand2',
+    textDecorationLine: "underline",
+    color: "#ffffff",
+},
 
     
   });

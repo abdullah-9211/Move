@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, FlatList, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { Image, FlatList, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -10,7 +10,7 @@ const { width: screenWidth } = Dimensions.get('window');
 export default function Goal() {
   const navigation = useNavigation();
   const route = useRoute();
-
+  
   const role = route.params.role;
   const gender = route.params.gender;
   const height = route.params.height;
@@ -21,26 +21,39 @@ export default function Goal() {
   const ListItem = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => setgoal(item.text)}>
+        <ImageBackground
+        source={{
+          uri: item.uri,
+        }}
+        resizeMode="cover"
+        imageStyle={{ borderRadius: 9 }}
+        style={{
+          width: screenWidth*0.85, height: 170, borderRadius: 12, marginVertical:10,
+            paddingBottom: 0,
+            paddingHorizontal: 0,
+        }}>
+
+        
         <LinearGradient
-          colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
+          colors={['transparent', 'rgba(0, 0, 0, 1)']} 
           style={styles.gradient}
         >
-        <Image
-          source={{
-            uri: item.uri,
-          }}
-          style={{width: screenWidth*0.85, height: 170, borderRadius: 12}}
-          resizeMode="cover"
-        />
+          <View style={{alignItems: "flex-start",marginHorizontal:11, paddingBottom:9}}>
+            <Text style={styles.planName}>{goalData.goal}</Text>
+                        
+            
+          </View>
+        
         </LinearGradient>
+        </ImageBackground>
       </TouchableOpacity>
     );
   };
   
 
     const [loaded] = useFonts({
-
-        'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
+      'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
+        'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf')
     })
     if (!loaded) {
       return null;
@@ -53,9 +66,9 @@ export default function Goal() {
         <Text style={styles.textStyle}>Select Your Goal</Text>
       </View>
       
-      <View style={{flex:5, justifyContent: "center", alignItems:"center"}}>
+      <View style={{flex:5, justifyContent: "center", alignItems:"center", marginBottom: 15}}>
         <FlatList
-          contentContainerStyle={{ paddingHorizontal: 10 }}
+          contentContainerStyle={{ paddingHorizontal: 10, marginVertical:10}}
           data={SECTIONS[0].data}
           renderItem={({ item }) => <ListItem item={item} />}
           keyExtractor={(item) => item.key}
@@ -79,7 +92,7 @@ export default function Goal() {
     </View>
   );
 }
-
+const goalData = {goal:"Strength", goal:"Cardio", goal:"Yoga", goal:"Toning", goal:"Stamina"}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -91,6 +104,16 @@ const styles = StyleSheet.create({
     marginHorizontal:10,
     marginVertical: 20,
   },
+  
+planName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandBold",
+    fontSize: 24,
+    marginHorizontal:5,
+    marginBottom:5,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+},
   textStyle:{
     marginTop:50,
     fontFamily: 'QuickSand',
@@ -103,11 +126,11 @@ const styles = StyleSheet.create({
     fontFamily: 'QuickSand',
   },
   gradient: {
-    marginHorizontal:10,
-    marginVertical: 20,
+    justifyContent: "flex-end",
     flex: 1,
     borderRadius: 12,
   },
+  
   buttonText: {
     fontSize: 16,
     fontFamily: 'QuickSand',

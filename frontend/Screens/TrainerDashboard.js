@@ -1,28 +1,68 @@
 import * as React from 'react';
-import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
+import { Image, FlatList, horizontal, View, ImageBackground, TouchableOpacity, StyleSheet, Text, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
-import NavBarBot from '../components/NavBarBotTrainer';
-import { useNavigation } from '@react-navigation/native';
+import NavBarBotTrainer from '../components/NavBarBotTrainer';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import NavBarTrainer from '../components/NavBarTrainer';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const ListItem = ({ item }) => {
+
+  const navigation = useNavigation();
+
+  const route = useRoute();
+  const user = route.params?.user;
+  const workouts = route.params?.workouts;
+
+  const handleWorkoutClick = (item) => () => {
+    setLoading(true);
+
+    const apiUrl = API_URL + '/exercise/get-exercises/' + item.id;
+    axios.get(apiUrl)
+    .then((response) => {
+      console.log(response.data);
+      const exercises_data = response.data;
+      const apiUrl = API_URL + '/exercise/get-plan-trainer/' + item.plan_trainer;
+      axios.get(apiUrl)
+      .then((response) => {
+        console.log(response.data);
+        setLoading(false);
+        navigation.navigate('StartWorkout', {user: user, workout: item, exercises: exercises_data, trainer: response.data[0]});
+      }
+      )
+    })
+    .catch((error) => {
+      console.log(error);
+    })    
+
+  }
   
   return (
+    <TouchableOpacity style={{marginHorizontal:12, marginVertical:10}} onPress={handleWorkoutClick(item)}>
+    <ImageBackground
+    source={{
+      uri: item.uri,
+    }}
+    resizeMode="cover"
+    imageStyle={{ borderRadius: 9 }}
+    style={{
+      width: (screenWidth/2)-35, height: (screenWidth/2)-25, borderRadius: 9, marginBottom:15, marginTop:8,
+        paddingBottom: 0,
+        paddingHorizontal: 0,
+    }}>
     <LinearGradient
-      colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']}
-      style={[styles.gradient, { alignItems: 'center', justifyContent: 'center' }]}
+      colors={['transparent', 'rgba(0, 0, 0, 0.75)']} 
+      style={styles.gradient}
     >
-      <Image
-        source={{
-          uri: item.uri,
-        }}
-        style={{ width: screenWidth / 2 - 40, height: 135, borderRadius: 12 }}
-        resizeMode="cover"
-      />
+    <View style={{marginBottom:10}}>
+          <Text style={styles.planName}>Plan Name</Text>
+          
+        </View>
     </LinearGradient>
+    </ImageBackground>
+  </TouchableOpacity>
   );
 };
 
@@ -82,11 +122,31 @@ const styles = StyleSheet.create({
     fontFamily: 'QuickSand',
   },
   gradient: {
-    marginRight:15,
-    marginLeft:15,
-    marginVertical: 20,
+    marginHorizontal:0,
+    marginVertical: 0,
+    flex: 1,
+    justifyContent: "flex-end",
     borderRadius: 12,
   },
+  
+  trainerName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandMedium",
+    fontSize: 14,
+    marginHorizontal:10,
+    marginBottom:10,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+  },
+  planName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandBold",
+    fontSize: 16,
+    marginHorizontal:10,
+    marginBottom:0,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+},
 });
 
 const SECTIONS = [

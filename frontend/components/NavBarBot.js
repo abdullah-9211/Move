@@ -32,10 +32,7 @@ export default function NavBarBot() {
                     <Text style={basic.text}>Workouts</Text>
             
                 </Pressable> 
-                <View style={basic.columnView}>
-                    <Octicons name="checklist" size={24} color="black" />
-                    <Text style={basic.text}>My Workouts</Text>
-                </View>
+                
                 <Pressable style={basic.columnView} onPress={() => navigation.navigate('UserProfile')}>
                     <Ionicons name="person" size={24} color="black" />
                     <Text style={basic.text}>Profile</Text>

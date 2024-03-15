@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
+import { Image, FlatList, ImageBackground, TouchableOpacity, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
@@ -11,18 +11,33 @@ const { width: screenWidth } = Dimensions.get('window');
 const ListItem = ({ item }) => {
   
   return (
-    <LinearGradient
-      colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']}
-      style={[styles.gradient, { alignItems: 'center', justifyContent: 'center' }]}
-    >
-      <Image
-        source={{
-          uri: item.uri,
-        }}
-        style={{ width: screenWidth / 2 - 40, height: 135, borderRadius: 12 }}
-        resizeMode="cover"
-      />
-    </LinearGradient>
+    <TouchableOpacity style={{marginHorizontal:12, marginVertical:10}}>
+      <ImageBackground
+      source={{
+        uri: item.uri,
+      }}
+      resizeMode="cover"
+      imageStyle={{ borderRadius: 9 }}
+      style={{
+        width: (screenWidth/2)-35, height: (screenWidth/2)-25, borderRadius: 9, marginBottom:15, marginTop:8,
+          paddingBottom: 0,
+          paddingHorizontal: 0,
+      }}>
+      <LinearGradient
+        colors={['transparent', 'rgba(0, 0, 0, 0.75)']} 
+        style={styles.gradient}
+      >
+      <View style={{}}>
+            <Text style={styles.planName}>Plan Name</Text>
+            <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:0}}>
+            <Text style={styles.trainerName}>Trainer name</Text>
+            
+            </View>
+            
+          </View>
+      </LinearGradient>
+      </ImageBackground>
+    </TouchableOpacity>
   );
 };
 
@@ -130,11 +145,31 @@ const styles = StyleSheet.create({
     fontFamily: 'QuickSandBold',
   },
   gradient: {
-    marginRight:15,
-    marginLeft:15,
-    marginVertical: 15,
+    marginHorizontal:0,
+    marginVertical: 0,
+    flex: 1,
+    justifyContent: "flex-end",
     borderRadius: 12,
   },
+  
+  trainerName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandMedium",
+    fontSize: 14,
+    marginHorizontal:10,
+    marginBottom:10,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+  },
+  planName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandBold",
+    fontSize: 16,
+    marginHorizontal:10,
+    marginBottom:0,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+},
 });
 
 const SECTIONS = [

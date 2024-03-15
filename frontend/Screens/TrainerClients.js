@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
-import NavBarBot from '../components/NavBarBotTrainer';
+
 import { useNavigation } from '@react-navigation/native';
 import NavBarTrainer from '../components/NavBarTrainer';
 
@@ -53,7 +53,6 @@ export default function TrainerClients() {
 </View>
       <View style={{ marginBottom: 65 }} />
 
-      <NavBarBot />
     </View>
   );
 }
