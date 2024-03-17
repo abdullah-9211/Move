@@ -121,7 +121,7 @@ export default function StartWorkout() {
                     <Card key={index} cardInfo={info} />
                   ))}
                 </View>
-                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={() => navigation.navigate('CameraScreen', {workouts:totalExercises, user: user, trainer: trainer, exerciseNames: exerciseNames, workout: workout})}>
+                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={() => navigation.navigate('UploadVideo', {workouts:totalExercises, user: user, trainer: trainer, exerciseNames: exerciseNames, workout: workout})}>
                   <View style={styles.button}>
                   
                   <Text style={{color:"#ffffff", fontFamily: "QuickSand", fontSize:16}}>Start Workout</Text>

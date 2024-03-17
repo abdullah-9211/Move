@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Image, FlatList, horizontal, View, StyleSheet, Text, Pressable, Dimensions, ActivityIndicator, Modal } from 'react-native';
+import { Image, FlatList, TouchableOpacity,ImageBackground, horizontal, View, StyleSheet, Text, Pressable, Dimensions } from 'react-native';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
@@ -11,36 +12,97 @@ import {REACT_APP_API_URL} from "@env"
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function TrainerScreen() {
 
-  const ListItem = ({ item }) => {
-    const navigation = useNavigation();
-    return (
-      <LinearGradient
-        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
-        style={styles.gradient}
-      >
-        <Pressable onPress={() => navigation.navigate('TrainerProfile', {user: user, trainer: item})}>
-        <Image
-          source={{
-            uri: item.profile_picture,
-          }}
-          style={{ width: screenWidth / 2 - 40, height: 160, borderRadius: 180 }}
-          resizeMode="cover"
-        />
-        </Pressable>
-      </LinearGradient>
-  
-    );
-  };
+const ListItem = ({ item }) => {
 
+  const navigation = useNavigation();
+
+  const route = useRoute();
+  const user = route.params?.user;
+  const workouts = route.params?.workouts;
+
+  const handleWorkoutClick = (item) => () => {
+    setLoading(true);
+
+    const apiUrl = API_URL + '/exercise/get-exercises/' + item.id;
+    axios.get(apiUrl)
+    .then((response) => {
+      console.log(response.data);
+      const exercises_data = response.data;
+      const apiUrl = API_URL + '/exercise/get-plan-trainer/' + item.plan_trainer;
+      axios.get(apiUrl)
+      .then((response) => {
+        console.log(response.data);
+        setLoading(false);
+        navigation.navigate('StartWorkout', {user: user, workout: item, exercises: exercises_data, trainer: response.data[0]});
+      }
+      )
+    })
+    .catch((error) => {
+      console.log(error);
+    })    
+
+  }
   
+  return (
+    <TouchableOpacity style={{marginHorizontal:12, marginVertical:0}} onPress={handleWorkoutClick(item)}>
+    <ImageBackground
+    source={{
+      uri: item.uri,
+    }}
+    resizeMode="cover"
+    imageStyle={{ borderRadius: 9 }}
+    style={{
+      width: (screenWidth/2)-35, height: (screenWidth/2)-5, borderRadius: 9, marginBottom:15, marginTop:8,
+        paddingBottom: 0,
+        paddingHorizontal: 0,
+    }}>
+    <LinearGradient
+      colors={['transparent', 'rgba(0, 0, 0, 0.75)']} 
+      style={styles.gradient}
+    >
+    <View style={{}}>
+          <Text style={styles.planName}>Trainer Name</Text>
+          <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:0}}>
+          <Text style={styles.trainerName}>Specialization</Text>
+          
+          </View>
+          
+        </View>
+    </LinearGradient>
+    </ImageBackground>
+  </TouchableOpacity>
+  );
+};
+// const ListItem = ({ item }) => {
+//   const navigation = useNavigation();
+//   return (
+//     <LinearGradient
+//       colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
+//       style={styles.gradient}
+//     >
+//       <Pressable onPress={() => navigation.navigate('TrainerProfile')}>
+//       <Image
+//         source={{
+//           uri: item.uri,
+//         }}
+//         style={{ width: screenWidth / 2 - 40, height: 160, borderRadius: 180 }}
+//         resizeMode="cover"
+//       />
+//       </Pressable>
+//     </LinearGradient>
+
+//   );
+// };
+
 
   const navigation = useNavigation();
   const route = useRoute();
   const [loading, setLoading] = React.useState(true);
 
   const user = route.params?.user;
+  const workouts = route.params?.workouts;
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     setLoading(true);
@@ -81,7 +143,7 @@ export default function TrainerScreen() {
   return (
     <View style={styles.container}>
       <NavBar />
-      <View style={{marginTop: 120, flexDirection:"row",justifyContent: "space-between", alignItems: "center", marginRight:25}}>
+      <View style={{marginTop: 120, flexDirection:"row",justifyContent: "space-between", alignItems: "center", marginRight:25, marginBottom:10}}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Text style={styles.headingtext}>FILTER</Text>
         <Image source={require('../assets/images/filter.png')} 
@@ -117,7 +179,7 @@ const styles = StyleSheet.create({
     marginRight:10,
     overflow: 'hidden',
     borderRadius: 12,
-    marginVertical: 20,
+    marginVertical: 0,
   },
   headingtext: {
     marginLeft: 25,
@@ -131,11 +193,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'QuickSand',
   },
+  trainerName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandMedium",
+    fontSize: 14,
+    marginHorizontal:10,
+    marginBottom:10,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+  },
+  planName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandBold",
+    fontSize: 16,
+    marginHorizontal:10,
+    marginBottom:0,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+},
   gradient: {
-    marginHorizontal: 20,
-    marginVertical: 20,
+    marginHorizontal:0,
+    marginVertical: 0,
     flex: 1,
-    borderRadius: 180,
+    justifyContent: "flex-end",
+    borderRadius: 12,
   },
   modal: {
     flex: 1,
@@ -188,6 +269,16 @@ const SECTIONS = [
         key: '6',
         text: 'Item text 6',
         uri: 'https://wallpapercave.com/wp/wp7661163.jpg',
+      },
+      {
+        key: '7',
+        text: 'Item text 2',
+        uri: 'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg',
+      },
+      {
+        key: '8',
+        text: 'Item text 2',
+        uri: 'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg',
       },
     ],
   },

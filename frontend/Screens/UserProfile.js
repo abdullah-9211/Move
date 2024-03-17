@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
+import { Image, FlatList, ImageBackground, TouchableOpacity, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
@@ -11,18 +11,33 @@ const { width: screenWidth } = Dimensions.get('window');
 const ListItem = ({ item }) => {
   
   return (
-    <LinearGradient
-      colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']}
-      style={[styles.gradient, { alignItems: 'center', justifyContent: 'center' }]}
-    >
-      <Image
-        source={{
-          uri: item.uri,
-        }}
-        style={{ width: screenWidth / 2 - 40, height: 135, borderRadius: 12 }}
-        resizeMode="cover"
-      />
-    </LinearGradient>
+    <TouchableOpacity style={{marginHorizontal:12, marginVertical:10}}>
+      <ImageBackground
+      source={{
+        uri: item.uri,
+      }}
+      resizeMode="cover"
+      imageStyle={{ borderRadius: 9 }}
+      style={{
+        width: (screenWidth/2)-35, height: (screenWidth/2)-25, borderRadius: 9, marginBottom:15, marginTop:8,
+          paddingBottom: 0,
+          paddingHorizontal: 0,
+      }}>
+      <LinearGradient
+        colors={['transparent', 'rgba(0, 0, 0, 0.75)']} 
+        style={styles.gradient}
+      >
+      <View style={{}}>
+            <Text style={styles.planName}>Plan Name</Text>
+            <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:0}}>
+            <Text style={styles.trainerName}>Trainer name</Text>
+            
+            </View>
+            
+          </View>
+      </LinearGradient>
+      </ImageBackground>
+    </TouchableOpacity>
   );
 };
 
@@ -30,8 +45,11 @@ export default function UserProfile() {
 const shadowopacity = screenWidth * 0.2 / screenWidth;
   const navigation = useNavigation();
   const [loaded] = useFonts({
-    'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
-    
+    'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
+    'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf'),
+    'QuickSandExtraBold': require('../assets/fonts/Quicksand-Bold.ttf'),
+    'QuickSandLight': require('../assets/fonts/Quicksand-Light.ttf'),
+    'QuickSandMedium': require('../assets/fonts/Quicksand-Medium.ttf'),
   });
 
   if (!loaded) {
@@ -41,7 +59,7 @@ const shadowopacity = screenWidth * 0.2 / screenWidth;
   return (
     <View style={styles.container}>
         <Card style={styles.elevation(shadowopacity)}>
-        <View style={{ marginTop:60, marginLeft:30, flexDirection: "row", alignItems:"center"}}>
+        <View style={{backgroundColor: "#E6E9EB", paddingTop:60, paddingBottom: 15,flexDirection: "column", alignItems:"center"}}>
         <Image
         source={{
           uri: 'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg',
@@ -49,22 +67,32 @@ const shadowopacity = screenWidth * 0.2 / screenWidth;
         style={{ width: screenWidth / 2 - 80, height: 95, borderRadius: 120 }}
         resizeMode="cover"
       />
-      <View style={{flexDirection: "column", alignItems: "flex-start", marginLeft:20}}>
-      <Text style={{fontSize:24, fontFamily: 'QuickSand', fontWeight: "300"}}>
+      <View style={{flexDirection: "column", alignItems: "center"}}>
+      <Text style={{fontSize:24, fontFamily: 'QuickSandExtraBold', fontWeight: "300", color: "#000000"}}>
         John Doe
       </Text>
-      <Text style={{fontSize:18, fontFamily: 'QuickSand', fontWeight: "100"}}>Specialization</Text>
+      <View style ={{flexDirection: "row"}}>
+      <Text style={{fontSize:18, fontFamily: 'QuickSandMedium', color: "#000000", marginRight:15}}>22Yrs</Text>
+      <Text style={{fontSize:18, fontFamily: 'QuickSandMedium', color: "#000000"}}>165cm</Text>
+      <Text style={{fontSize:18, fontFamily: 'QuickSandMedium', color: "#000000", marginLeft: 15}}>68Kg</Text>
+      </View>
       </View>
       
-        </View>
-        <Text style={{marginHorizontal:30, marginTop:18, fontFamily:'QuickSand', fontSize: 18, marginBottom:5}}>About</Text>
-        <View style={{marginHorizontal:25, borderLeftWidth:3, borderLeftColor: "#900020", marginBottom:10}}>
-            
-            <Text style={{marginLeft:2}}>Lorem Ipsum stuff stuff stuff stuff stuff stuff stuff stuff</Text>
-        </View>
-        </Card>
-    
+      </View>
         
+      </Card>
+    
+      <View style={{flexDirection: "row", borderBottomWidth:0.5, borderColor: "#00000020", width:screenWidth, justifyContent: "space-between"}}>
+        <Text style={{marginVertical: 10,marginHorizontal: 20,fontFamily: "QuickSandMedium", fontSize: 16, color: "#000000"}}>Workouts Completed</Text>  
+        <Text style={{marginVertical: 10,marginHorizontal: 20,fontFamily: "QuickSandMedium", fontSize: 16, color: "#000000"}}>4</Text>
+      </View>
+      <View style={{flexDirection: "row", borderBottomWidth:0.5, borderColor: "#00000020", width:screenWidth, justifyContent: "space-between"}}>
+        <Text style={{marginVertical: 10,marginHorizontal: 20,fontFamily: "QuickSandMedium", fontSize: 16, color: "#000000"}}>Trainers followed</Text>  
+        <Text style={{marginVertical: 10,marginHorizontal: 20,fontFamily: "QuickSandMedium", fontSize: 16, color: "#000000"}}>1</Text>
+      </View>    
+      <Text style={{marginLeft:15, marginTop:10, fontFamily: "QuickSand", fontSize: 16}}>
+        Recently completed
+      </Text>
         
       <FlatList
         
@@ -108,20 +136,40 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     fontSize: 16,
     color: '#000000',
-    fontFamily: 'QuickSand',
+    fontFamily: 'QuickSandBold',
   },
   browseText: {
     marginTop: 2,
     marginRight: 20,
     fontSize: 14,
-    fontFamily: 'QuickSand',
+    fontFamily: 'QuickSandBold',
   },
   gradient: {
-    marginRight:15,
-    marginLeft:15,
-    marginVertical: 15,
+    marginHorizontal:0,
+    marginVertical: 0,
+    flex: 1,
+    justifyContent: "flex-end",
     borderRadius: 12,
   },
+  
+  trainerName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandMedium",
+    fontSize: 14,
+    marginHorizontal:10,
+    marginBottom:10,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+  },
+  planName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandBold",
+    fontSize: 16,
+    marginHorizontal:10,
+    marginBottom:0,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+},
 });
 
 const SECTIONS = [

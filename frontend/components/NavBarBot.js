@@ -27,16 +27,14 @@ export default function NavBarBot() {
         
         <Card style={[basic.card, basic.elevation]}>
             <View style={basic.basic2}>
-                <Pressable style={basic.columnView} onPress={() => navigation.navigate('WorkoutScreen', {user: user})}>
-                    <MaterialIcons name="fitness-center" size={24} color="#900020" />
+                <Pressable style={basic.columnView} onPress={() => navigation.navigate('WorkoutScreen')}>
+                    <MaterialIcons name="fitness-center" size={24} color="#000000" />
                     <Text style={basic.text}>Workouts</Text>
             
                 </Pressable> 
-                <View style={basic.columnView}>
-                    <Octicons name="checklist" size={24} color="black" />
-                    <Text style={basic.text}>Your Plan</Text>
-                </View>
-                <Pressable style={basic.columnView} onPress={() => navigation.navigate('UserProfile', {user: user})}>
+                
+                <Pressable style={basic.columnView} onPress={() => navigation.navigate('UserProfile')}>
+
                     <Ionicons name="person" size={24} color="black" />
                     <Text style={basic.text}>Profile</Text>
                 </Pressable>

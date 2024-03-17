@@ -122,7 +122,7 @@ const AddPlan = () => {
                     labelField="label"
                     valueField="value"
                     label="Dropdown"
-                    placeholder="Select item"
+                    placeholder="Select category"
                     value={dropdown}
                     onChange={item => {
                     setDropdown(item.value);

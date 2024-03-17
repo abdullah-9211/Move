@@ -62,7 +62,7 @@ export default function SignUpDetails() {
       style={styles.backgroundImage}
     >
    
-        <View style = {{flex: 1, justifyContent:"flex-start", alignItems:"center", marginBottom:10}}>
+        <View style = {{flex: 1, alignItems:"center", marginBottom:10}}>
             <View style={{ alignItems: "flex-start", justifyContent: "flex-start"}}>
                 <Image 
                 source={require('../assets/images/full_logo.png')}
@@ -74,6 +74,7 @@ export default function SignUpDetails() {
             
             <Text style={styles.textStyle}>First Name</Text>
             <TextInput
+              
                 style={styles.input}
                 placeholder="Name"
                 value={firstName}
@@ -102,7 +103,7 @@ export default function SignUpDetails() {
             />
             <Text style={styles.textStyle}>Age</Text>
             <TextInput
-                style={styles.input}
+                style={[styles.input, {marginBottom:25}]}
                 placeholder="Age"
                 value={age}
                 onChangeText={(text) => setAge(text)}
@@ -145,7 +146,7 @@ export default function SignUpDetails() {
     marginTop: 10,
   },
   input: {
-    width: screenWidth-40,
+    width: screenWidth-60,
     height: 60,
     borderColor: 'gray',
     borderWidth: 1,
@@ -154,6 +155,7 @@ export default function SignUpDetails() {
     marginRight:20,
     marginBottom:15,
     marginTop:5,
+    paddingLeft:10,
     padding: 0,
     color: '#ffffff'
   },
@@ -165,7 +167,7 @@ export default function SignUpDetails() {
 },
 button: {
 
-    width: screenWidth-20,
+    width: screenWidth-40,
     justifyContent: "center",
     alignItems: "center",
     height: 60,

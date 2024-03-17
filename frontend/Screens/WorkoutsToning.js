@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions, Pressable, Modal, ActivityIndicator } from 'react-native';
+import { Image, ImageBackground, TouchableOpacity, FlatList, horizontal, View, StyleSheet, Text, Dimensions, Pressable, Modal, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
@@ -45,20 +45,33 @@ export default function WorkoutsToning() {
     }
     
     return (
+      <TouchableOpacity style={{marginHorizontal:12, marginVertical:10}} onPress={handleWorkoutClick(item)}>
+      <ImageBackground
+      source={{
+        uri: item.plan_image,
+      }}
+      resizeMode="cover"
+      imageStyle={{ borderRadius: 9 }}
+      style={{
+        width: (screenWidth/2)-35, height: (screenWidth/2)-25, borderRadius: 9, marginBottom:15, marginTop:8,
+          paddingBottom: 0,
+          paddingHorizontal: 0,
+      }}>
       <LinearGradient
-        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
+        colors={['transparent', 'rgba(0, 0, 0, 0.75)']} 
         style={styles.gradient}
       >
-      <Pressable onPress={handleWorkoutClick(item)}>
-        <Image
-          source={{
-            uri: item.plan_image,
-          }}
-          style={{ width: screenWidth / 2 - 40, height: 135, borderRadius: 9 }}
-          resizeMode="cover"
-        />
-        </Pressable>
+      <View style={{}}>
+            <Text style={styles.planName}>Plan Name</Text>
+            <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:0}}>
+            <Text style={styles.trainerName}>Trainer name</Text>
+            
+            </View>
+            
+          </View>
       </LinearGradient>
+      </ImageBackground>
+    </TouchableOpacity>
     );
   };
   
@@ -136,10 +149,31 @@ const styles = StyleSheet.create({
     fontFamily: 'QuickSand',
   },
   gradient: {
-    marginHorizontal: 20,
-    marginVertical: 20,
+    marginHorizontal:0,
+    marginVertical: 0,
+    flex: 1,
+    justifyContent: "flex-end",
     borderRadius: 12,
   },
+  
+  trainerName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandMedium",
+    fontSize: 14,
+    marginHorizontal:10,
+    marginBottom:10,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+  },
+  planName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandBold",
+    fontSize: 16,
+    marginHorizontal:10,
+    marginBottom:0,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+},
   modal: {
     flex: 1,
     justifyContent: 'center',
