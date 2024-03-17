@@ -1,19 +1,10 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable} from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import NavBarBotTrainer from '../components/NavBarBotTrainer';
-import NavBar from '../components/NavBar';
-import NavBarTrainer from '../components/NavBarTrainer';
-import NavBarBot from '../components/NavBarBot';
+import { SafeAreaView, ScrollView, View, StyleSheet, Text, Dimensions, Pressable} from 'react-native';
 import { useFonts } from 'expo-font';
-import DropdownMenu from 'react-native-dropdown-menu';
 import { Octicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
-import { Picker } from '@react-native-picker/picker';
-import SelectDropdown from 'react-native-select-dropdown'
-import {Dropdown, MultiSelect} from 'react-native-element-dropdown';
+import {Dropdown} from 'react-native-element-dropdown';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 
@@ -33,11 +24,12 @@ const AddExerciseInPlan = () => {
         {label: 'Squats', value: '4'},
     ];
     const data3 = [
-       {label1: 'reps', value1: '5'},
-       {label1: 'sec', value1: '6'},
+       {label1: 'reps', value1: '1'},
+       {label1: 'sec', value1: '2'},
     ];
     const [dropdown, setDropdown] = useState(null);
-    const [dropdown1, setDropdown1] = useState('');
+    const [dropdown2, setDropdown2] = useState(null);
+
         const [selected, setSelected] = useState([]);
         const _renderItem = item => {
             return (
@@ -52,9 +44,16 @@ const AddExerciseInPlan = () => {
             <View style={styles.item}>
                 <Text style={styles.textItem}>{item1.label}</Text>
 
+        const _renderItem2 = item1 => {
+            return (
+            <View style={styles.item}>
+                <Text style={styles.textItem}>{item1.label1}</Text>
+
             </View>
             );
         };
+
+    const data2 = ["Weight Loss", "Toning", "Strength", "Yoga"];
     
     // const [selectedValue, setSelectedValue] = React.useState('');
     const [amount, setamount] = useState('');
@@ -290,13 +289,13 @@ const AddExerciseInPlan = () => {
                     valueField="value1"
                     label1="Dropdown"
                     
-                    value1={dropdown1}
+                    value={dropdown2}
                     placeholder="Select"
                     onChange={item1 => {
-                    setDropdown1(item1.value1);
+                    setDropdown2(item1.value1);
                         console.log('selected', item1);
                     }}
-                    renderItem2={item1 => _renderItem2(item1)}
+                    renderItem={item1 => _renderItem2(item1)}
                     textError="Error"
                 />
 

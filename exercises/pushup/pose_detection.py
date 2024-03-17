@@ -38,6 +38,7 @@ class Pushup:
         self.client_incorrect = []
         self.trainer_incorrect = []
         self.accuracy = 0
+        self.duration = 0
         
         
     def calculate_angle(self, point1, point2, point3):
@@ -148,6 +149,8 @@ class Pushup:
         self.state2_angle_threshold[0] = state_mid_1
         self.state2_angle_threshold[1] = state_mid_2
         self.state1_angle_threshold[0] = state_mid_2
+        
+        return self.state1_angle_threshold, self.state2_angle_threshold, self.state3_angle_threshold
         
     
     
@@ -308,8 +311,10 @@ class Pushup:
             cap.release()
             cv2.destroyAllWindows()
             
+        return min(self.trainer_elbow_angle_state1), max(self.trainer_elbow_angle_state1), min(self.trainer_elbow_angle_state2), max(self.trainer_elbow_angle_state2), min(self.trainer_elbow_angle_state3), max(self.trainer_elbow_angle_state3), min(self.trainer_shoulder_angle_state1), max(self.trainer_shoulder_angle_state1), min(self.trainer_shoulder_angle_state2), max(self.trainer_shoulder_angle_state2), min(self.trainer_shoulder_angle_state3), max(self.trainer_shoulder_angle_state3), min(self.trainer_hip_angle_state1), max(self.trainer_hip_angle_state1), min(self.trainer_hip_angle_state2), max(self.trainer_hip_angle_state2), min(self.trainer_hip_angle_state3), max(self.trainer_hip_angle_state3), min(self.trainer_knee_angle_state1), max(self.trainer_knee_angle_state1), min(self.trainer_knee_angle_state2), max(self.trainer_knee_angle_state2), min(self.trainer_knee_angle_state3), max(self.trainer_knee_angle_state3)
             
-    def assess_client(self):
+            
+    def assess_client(self, elbow_state1, elbow_state2, elbow_state3, shoulder_state1, shoulder_state2, shoulder_state3, hip_state1, hip_state2, hip_state3, knee_state1, knee_state2, knee_state3, state_1_threshold, state_2_threshold, state_3_threshold):
         correct_frames = 0
         incorrect_frames = 0
         
@@ -342,7 +347,7 @@ class Pushup:
                     
                     current_time = cap.get(cv2.CAP_PROP_POS_MSEC)
                     current_time /= 1000.0
-                    current_time = round(current_time, 1)
+                    current_time = round(current_time, 0)
                     
                     # For Right side Points Visibility
                     
@@ -398,7 +403,7 @@ class Pushup:
                 
                 # State Selection
                 
-                    if elbow_angle >= self.state1_angle_threshold[0] and elbow_angle <= self.state1_angle_threshold[1]:
+                    if elbow_angle >= state_1_threshold[0] and elbow_angle <= state_1_threshold[1]:
                         self.state = 1
                         states_visited.append(1)
                         
@@ -411,8 +416,9 @@ class Pushup:
                             self.reps += 1
                         elif states_visited.__contains__(1) and states_visited.__contains__(2):
                             states_visited = []
-                            self.errors.append("Hit more depth, full range of motion not performed")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Hit more depth, full range of motion not performed")
+                                self.error_times.append(current_time)
                             # self.error_bool = True
                             self.depth_bool = True
                             self.state = 0
@@ -420,11 +426,11 @@ class Pushup:
                             self.trainer_incorrect.append("Full range of motion not performed")
                             self.reps += 1
                         
-                    elif elbow_angle >= self.state2_angle_threshold[0] and elbow_angle <= self.state2_angle_threshold[1]:
+                    elif elbow_angle >= state_2_threshold[0] and elbow_angle <= state_2_threshold[1]:
                         self.state = 2
                         states_visited.append(2)
                         
-                    elif elbow_angle >= self.state3_angle_threshold[0] and elbow_angle <= self.state3_angle_threshold[1]:
+                    elif elbow_angle >= state_3_threshold[0] and elbow_angle <= state_3_threshold[1]:
                         self.state = 3
                         states_visited.append(3)
                     else:
@@ -473,44 +479,44 @@ class Pushup:
                     trainer_knee_max = 0
                     
                     if self.state == 1:
-                        trainer_elbow_min = min(self.trainer_elbow_angle_state1)
-                        trainer_elbow_max = max(self.trainer_elbow_angle_state1)
+                        trainer_elbow_min = elbow_state1[0]
+                        trainer_elbow_max = elbow_state1[1]
                         
-                        trainer_shoulder_min = min(self.trainer_shoulder_angle_state1)
-                        trainer_shoulder_max = max(self.trainer_shoulder_angle_state1)
+                        trainer_shoulder_min = shoulder_state1[0]
+                        trainer_shoulder_max = shoulder_state1[1]
                         
-                        trainer_hip_min = min(self.trainer_hip_angle_state1)
-                        trainer_hip_max = max(self.trainer_hip_angle_state1)
+                        trainer_hip_min = hip_state1[0]
+                        trainer_hip_max = hip_state1[1]
                         
-                        trainer_knee_min = min(self.trainer_knee_angle_state1)
-                        trainer_knee_max = max(self.trainer_knee_angle_state1)
+                        trainer_knee_min = knee_state1[0]
+                        trainer_knee_max = knee_state1[1]
 
                         
                     elif self.state == 2:
-                        trainer_elbow_min = min(self.trainer_elbow_angle_state2)
-                        trainer_elbow_max = max(self.trainer_elbow_angle_state2)
+                        trainer_elbow_min = elbow_state2[0]
+                        trainer_elbow_max = elbow_state2[1]
                         
-                        trainer_shoulder_min = min(self.trainer_shoulder_angle_state2)
-                        trainer_shoulder_max = max(self.trainer_shoulder_angle_state2)
+                        trainer_shoulder_min = shoulder_state2[0]
+                        trainer_shoulder_max = shoulder_state2[1]
                         
-                        trainer_hip_min = min(self.trainer_hip_angle_state2)
-                        trainer_hip_max = max(self.trainer_hip_angle_state2)
+                        trainer_hip_min = hip_state2[0]
+                        trainer_hip_max = hip_state2[1]
                         
-                        trainer_knee_min = min(self.trainer_knee_angle_state2)
-                        trainer_knee_max = max(self.trainer_knee_angle_state2)
+                        trainer_knee_min = knee_state2[0]
+                        trainer_knee_max = knee_state2[1]
                         
                     elif self.state == 3:
-                        trainer_elbow_min = min(self.trainer_elbow_angle_state3)
-                        trainer_elbow_max = max(self.trainer_elbow_angle_state3)
+                        trainer_elbow_min = elbow_state3[0]
+                        trainer_elbow_max = elbow_state3[1]
                         
-                        trainer_shoulder_min = min(self.trainer_shoulder_angle_state3)
-                        trainer_shoulder_max = max(self.trainer_shoulder_angle_state3)
+                        trainer_shoulder_min = shoulder_state3[0]
+                        trainer_shoulder_max = shoulder_state3[1]
                         
-                        trainer_hip_min = min(self.trainer_hip_angle_state3)
-                        trainer_hip_max = max(self.trainer_hip_angle_state3)
+                        trainer_hip_min = hip_state3[0]
+                        trainer_hip_max = hip_state3[1]
                         
-                        trainer_knee_min = min(self.trainer_knee_angle_state3)
-                        trainer_knee_max = max(self.trainer_knee_angle_state3)
+                        trainer_knee_min = knee_state3[0]
+                        trainer_knee_max = knee_state3[1]
                         
                     else:
                         trainer_elbow_min = 0
@@ -533,14 +539,16 @@ class Pushup:
                         # Elbow angle matching
                     
                         if elbow_angle < (trainer_elbow_min - self.leniency):
-                            self.errors.append("Bend less, elbow too low")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Bend less, elbow too low")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(elbow_angle.round(1))
                             self.trainer_incorrect.append(trainer_elbow_min - self.leniency)
                         elif elbow_angle > (trainer_elbow_max + self.leniency):
-                            self.errors.append("Bend elbow more, too straight")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Bend elbow more, too straight")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(elbow_angle.round(1))
                             self.trainer_incorrect.append(trainer_elbow_max + self.leniency)
@@ -550,14 +558,16 @@ class Pushup:
                         # Shoulder angle matching
                         
                         if shoulder_angle < (trainer_shoulder_min - self.leniency):
-                            self.errors.append("Elbows too close to body, spread them apart more")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Elbows too close to body, spread them apart more")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(shoulder_angle.round(1))
                             self.trainer_incorrect.append(trainer_shoulder_min - self.leniency)
                         elif shoulder_angle > (trainer_shoulder_max + self.leniency):
-                            self.errors.append("Elbows too far apart, bring closer to body")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Elbows too far apart, bring closer to body")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(shoulder_angle.round(1))
                             self.trainer_incorrect.append(trainer_shoulder_max + self.leniency)
@@ -567,14 +577,16 @@ class Pushup:
                         # Hip Angle Matching
                         
                         if hip_angle < (trainer_hip_min - self.leniency):
-                            self.errors.append("Lower Hips, too lifted")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Lower Hips, too lifted")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(hip_angle.round(1))
                             self.trainer_incorrect.append(trainer_hip_min - self.leniency)
                         elif hip_angle > (trainer_hip_max + self.leniency):
-                            self.errors.append("Raise Hips, too low")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Raise Hips, too low")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(hip_angle.round(1))
                             self.trainer_incorrect.append(trainer_hip_max + self.leniency)
@@ -583,14 +595,16 @@ class Pushup:
                         # Knee Angle Matching
                         
                         if knee_angle < (trainer_knee_min - self.leniency):
-                            self.errors.append("Knees too bent, straighten them")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Knees too bent, straighten them")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(knee_angle.round(1))
                             self.trainer_incorrect.append(trainer_knee_min - self.leniency)
                         elif knee_angle > (trainer_knee_max + self.leniency):
-                            self.errors.append("Knees too straight, bend them more")
-                            self.error_times.append(current_time)
+                            if current_time not in self.error_times:
+                                self.errors.append("Knees too straight, bend them more")
+                                self.error_times.append(current_time)
                             self.error_bool = True
                             self.client_incorrect.append(knee_angle.round(1))
                             self.trainer_incorrect.append(trainer_knee_max + self.leniency)
@@ -635,32 +649,45 @@ class Pushup:
                 
                 if cv2.waitKey(10) & 0xFF == ord('q'):
                     break
+            
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            totalFrames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+            self.duration = totalFrames/fps
                 
             cap.release()
             cv2.destroyAllWindows()
         
         self.accuracy = round((correct_frames/(correct_frames + incorrect_frames))*100.0, 1)
+        
+        return self.reps, self.errors, self.error_times, self.accuracy, int(round(self.duration, 0))
             
     def run_process(self):
-        self.set_state_thresholds()
-        self.get_trainer_angles()
-        self.assess_client()
+        thresholds = self.set_state_thresholds()
+        angles = self.get_trainer_angles()
         
-        return self.reps, self.errors, self.error_times, self.accuracy
+        elbow_state1 = (angles[0], angles[1])
+        elbow_state2 = (angles[2], angles[3])
+        elbow_state3 = (angles[4], angles[5])
+        
+        shoulder_state1 = (angles[6], angles[7])
+        shoulder_state2 = (angles[8], angles[9])
+        shoulder_state3 = (angles[10], angles[11])
+        
+        hip_state1 = (angles[12], angles[13])
+        hip_state2 = (angles[14], angles[15])
+        hip_state3 = (angles[16], angles[17])
+        
+        knee_state1 = (angles[18], angles[19])
+        knee_state2 = (angles[20], angles[21])
+        knee_state3 = (angles[22], angles[23])
+        
+        return self.assess_client(elbow_state1, elbow_state2, elbow_state3, shoulder_state1, shoulder_state2, shoulder_state3, hip_state1, hip_state2, hip_state3, knee_state1, knee_state2, knee_state3, thresholds[0], thresholds[1], thresholds[2])
+        
     
 if __name__ == "__main__":
     client_url = "./sample_videos/leena_footage.mp4"
-    trainer_url = "./sample_videos/abdullah_footage.mp4"
-    reps = 0
-    errors = []
-    error_timestamps = []
-    accuracy = 0
+    trainer_url = "./sample_videos/abdullahumarig1@gmail.com_1.mp4"
     
     pushup = Pushup(client_url, trainer_url)
-    reps, errors, error_timestamps, accuracy = pushup.run_process()
-    
-    print("\nUser performed " + str(reps) + " reps\n")
-    print("Errors: \n")
-    for i in range(len(errors)):
-        print(str(errors[i]) + " at " + str(error_timestamps[i]) + " seconds")
-    print("\nAccuracy: " + str(accuracy) + "%\n")
+
+    print(pushup.run_process())

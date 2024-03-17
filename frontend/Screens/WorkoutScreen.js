@@ -6,7 +6,7 @@ import NavBarBot from '../components/NavBarBot';
 import NavBar from '../components/NavBar';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-import {API_URL} from "@env"
+import {REACT_APP_API_URL} from "@env"
 
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -24,13 +24,13 @@ export default function Workouts() {
     const handleWorkoutClick = (item) => () => {
       setLoading(true);
   
-      const apiUrl = API_URL + '/exercise/get-exercises/' + item.id;
+      const apiUrl = REACT_APP_API_URL + '/exercise/get-exercises/' + item.id;
       console.log("test : " + apiUrl);
       axios.get(apiUrl)
       .then((response) => {
         console.log(response.data);
         const exercises_data = response.data;
-        const apiUrl = API_URL + '/exercise/get-plan-trainer/' + item.plan_trainer;
+        const apiUrl = REACT_APP_API_URL + '/exercise/get-plan-trainer/' + item.plan_trainer;
         axios.get(apiUrl)
         .then((response) => {
           console.log(response.data);
@@ -91,7 +91,7 @@ export default function Workouts() {
     // fetch workouts from backend using axios and store in arrays
     setLoading(true);
     setScreenWhite(true);
-    const apiUrl = API_URL + '/exercise/get-all-workouts';
+    const apiUrl = REACT_APP_API_URL + '/exercise/get-all-workouts';
     axios.get(apiUrl)
     .then((response) => {
       console.log(response.data);

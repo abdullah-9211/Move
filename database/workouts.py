@@ -111,8 +111,23 @@ def get_plan_exercises(plan_id):
 def get_plan_trainer(trainer_id):
     client = connect()
     try:
-        res = client.table("Users").select("first_name", "last_name").eq("id", trainer_id).execute()
+        res = client.table("Users").select("*").eq("id", trainer_id).execute()
         res = dict(res)
         return res["data"]
     except Exception as e:
         print("\nError retrieving workouts. Exception Thrown:\n", e)
+        
+
+def add_errors(workout_id, exercise_id, errors, error_times):
+    client = connect()
+    try:
+        response = client.table("Workout Exercise Errors").insert([{
+            "workout_id": workout_id,
+            "exercise_id": exercise_id,
+            "error": errors,
+            "error_time": error_times
+        }]).execute()
+        response = dict(response)
+        return response["data"][0]["workout_id"]
+    except Exception as e:
+        print("\n\nError inserting errors into database: ", e)

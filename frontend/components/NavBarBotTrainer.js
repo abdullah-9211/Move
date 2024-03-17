@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function NavBarBotTrainer({ color1, color2 }) {
     const navigation = useNavigation();
     const route = useRoute();
+    const trainer = route.params?.user;
     const [loaded] = useFonts({
 
         'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -25,7 +26,7 @@ export default function NavBarBotTrainer({ color1, color2 }) {
         <Card style={[basic.card, basic.elevation]}>
             <View style={basic.basic2}>
                 <View style={basic.columnView}>
-                <Pressable style={basic.columnView} onPress={() => navigation.navigate('TrainerHomepage')}>
+                <Pressable style={basic.columnView} onPress={() => navigation.navigate('TrainerHomepage', {user: trainer})}>
                     <MaterialIcons name="assignment" size={24} color={color1}/>
                     <Text style={basic.text}>Reports</Text>
                 </Pressable>
@@ -33,7 +34,7 @@ export default function NavBarBotTrainer({ color1, color2 }) {
                 </View> 
                 
                 <View style={basic.columnView}>
-                <Pressable style={basic.columnView} onPress={() => navigation.navigate('ProfileWithPlans')}>
+                <Pressable style={basic.columnView} onPress={() => navigation.navigate('ProfileWithPlans', {user: trainer})}>
                     <Ionicons name="person" size={24} color={color2}/>
                     <Text style={basic.text}>Profile</Text>
                 </Pressable>

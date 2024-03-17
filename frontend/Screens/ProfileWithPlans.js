@@ -1,18 +1,68 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable } from 'react-native';
+import { SafeAreaView, TouchableOpacity, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable, Modal, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import NavBarBotTrainer from '../components/NavBarBotTrainer';
-import NavBar from '../components/NavBar';
-import NavBarTrainer from '../components/NavBarTrainer';
-import NavBarBot from '../components/NavBarBot';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import axios from 'axios';
+import {REACT_APP_API_URL} from "@env"
 
 const { width: screenWidth } = Dimensions.get('window');
 const ProfileWithPlans = () => {
+
+	const route = useRoute();
+	const trainer = route.params?.user;
+
+	const [loading, setLoading] = React.useState(true);
+
+	React.useEffect(() => {
+		setLoading(true);
+
+		const apiUrl = REACT_APP_API_URL + '/user/get-trainer-plans/' + trainer.id;
+		axios.get(apiUrl)
+		.then((response) => {
+			// console.log(response.data);
+			PLANS.data = response.data;
+			setLoading(false);
+		})
+		.catch((error) => {
+			console.log(error);
+		})
+	}, []);
+
+	const ListItem = ({ item }) => {
+		return(
+			<View style={{flex:1, justifyContent:"space-between"}}>
+			<TouchableOpacity style={{marginHorizontal:10, marginVertical:10, borderRadius:12}}>
+			<ImageBackground 
+                    source={{uri:item.plan_image}} 
+                    resizeMode="cover"
+                    imageStyle={{ borderRadius: 12 }}
+                    style={{
+                        width: (screenWidth/2)-26, height: (screenWidth/2)-25, borderRadius: 12, marginBottom:0, marginTop:8,
+          paddingBottom: 0,
+          paddingHorizontal: 0,
+                    }}
+                >
+                    <LinearGradient
+                        style={styles.gradientOverlay}
+                        colors={['transparent', 'rgba(0, 0, 0, 1)']}
+                    >
+                        <View style={{marginHorizontal:2, paddingBottom:9, marginBottom:2, marginLeft: 5}}>
+                        <Text style={styles.planName}>{item.plan_name}</Text>
+                        
+                        {/* <Text style={styles.trainerName}>{trainer.first_name + " " + trainer.last_name}</Text> */}
+                        </View>
+                    </LinearGradient>
+                </ImageBackground>
+				</TouchableOpacity>
+				</View>
+		);
+				};
+
+
 	const navigation = useNavigation();
-    const route = useRoute();
     const [loaded] = useFonts({
         'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
         'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf'),
@@ -21,20 +71,27 @@ const ProfileWithPlans = () => {
       if (!loaded) {
         return null;
       }
+
+	  if (loading) {
+		return (
+		  <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'white'}}>
+				<Modal transparent={true} animationType="fade">
+				<View style={styles.modal}>
+					<ActivityIndicator size="large" color="#fff" />
+				</View>
+				</Modal>
+		  </View>
+		);
+	  }
   return (
     <SafeAreaView 
 			style = {{
 				flex: 1,
 				backgroundColor: "#FFFFFF",
 			}}>
-			<ScrollView  
-				style = {{
-					flex: 1,
-					backgroundColor: "#FFFFFF",
-					borderRadius: 16,
-				}}>
+			
                 <View style ={{backgroundColor: "#E6E9EB", alignItems:'flex-end', justifyContent: "flex-end"}}>
-                    <MaterialIcons name="more-horiz" size={24} color="#000000" style={{paddingTop:50, marginHorizontal:20}}/>
+                    <MaterialIcons name="more-horiz" size={24} color="#000000" style={{paddingTop:50, marginHorizontal:10}}/>
                 </View>
 				<View 
 					style = {{
@@ -45,7 +102,7 @@ const ProfileWithPlans = () => {
 					}}>
 					
 					<Image
-						source = {{uri:"https://www.mindpumpmedia.com/hubfs/Exercise%20for%20more%20than%20just%20aesthetics.png"}} 
+						source = {{uri:trainer.profile_picture}} 
 						resizeMode = {"cover"}
 						style = {{
 							height: 99,
@@ -58,7 +115,7 @@ const ProfileWithPlans = () => {
                     <View style={styles.container}>
 					<Text 
 						style = {styles.TrainerName}>
-						{"Jane Doe"}
+						{trainer.first_name + " " + trainer.last_name}
 					</Text>
                     </View>
 					<View style={styles.container}><Text 
@@ -68,20 +125,10 @@ const ProfileWithPlans = () => {
 							marginBottom: 10,
                             fontFamily: 'QuickSand'
 						}}>
-						{"janedoe@email.com"}
+						{trainer.email}
 					</Text>
                     </View>
 					<View style={{alignItems:'center', marginHorizontal:15, backgroundColor: 'rgba(137, 141, 143, 0.2)', height: 1, marginBottom: 5}} />
-                    <View style= {styles.container}><Text 
-						style = {{
-							color: "#000000",
-							fontSize: 14,
-                            fontFamily: 'QuickSand',
-                            marginHorizontal:20,
-						}}>
-						{"Lorem ipsum that stuff this stuff, a something normal description what about it, a short bio."}
-					</Text>
-                    </View>
 				</View>
 				<View 
 					style = {{
@@ -99,7 +146,7 @@ const ProfileWithPlans = () => {
 						}}>
 						{"Plans"}
 					</Text>
-					<Pressable onPress={() => navigation.navigate('ProfileWithClients')}>
+					<Pressable onPress={() => navigation.navigate('ProfileWithClients', {user: trainer})}>
 					<Text 
 						style = {{
 							color: "#898D8F",
@@ -142,117 +189,19 @@ const ProfileWithPlans = () => {
 						justifyContent: "space-between",
 						alignItems: "center",
 						marginBottom: 9,
-						marginHorizontal: 16,
+						marginHorizontal: 0,
 					}}>
 					
-				</View>
-				<View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 10,
-						marginHorizontal: 12,
-					}}>
-                    
-                <ImageBackground 
-                    source={{uri:'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg'}} 
-                    resizeMode="cover"
-                    imageStyle={{ borderRadius: 9 }}
-                    style={{
-                        width: screenWidth/2 - 18,
-                        paddingTop: 90,
-                        paddingBottom: 0,
-                        paddingHorizontal: 0,
-                    }}
-                >
-                    <LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9}}>
-                        <Text style={styles.planName}>Plan name</Text>
-                        
-                        <Text style={styles.trainerName}>Trainer Name</Text>
-                        </View>
-                    </LinearGradient>
-                </ImageBackground>
-            
-					<ImageBackground 
-						source={{uri:'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg'}} 
-						resizeMode = {'cover'}
-						imageStyle = {{borderRadius: 9,}}
-						style={{
-                            width: screenWidth/2 - 18,
-                            paddingTop: 90,
-                            paddingBottom: 0,
-                            paddingHorizontal: 0,
-                        }}
-						>
-                        <LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9}}>
-                        <Text style={styles.planName}>Plan name</Text>
-                        
-                        <Text style={styles.trainerName}>Trainer Name</Text>
-                        </View>
-                    </LinearGradient>
-					</ImageBackground>
-				</View>
-                <View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 5,
-						marginHorizontal: 12,
-					}}>
-					<ImageBackground 
-						source={{uri:'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg'}} 
-						resizeMode = {'cover'}
-						imageStyle = {{borderRadius: 9,}}
-						style={{
-                            width: screenWidth/2 - 18,
-                            paddingTop: 90,
-                            paddingBottom: 0,
-                            paddingHorizontal: 0,
-                        }}
-						>
-						<LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9}}>
-                        <Text style={styles.planName}>Plan name</Text>
-                        
-                        <Text style={styles.trainerName}>Trainer Name</Text>
-                        </View>
-                    </LinearGradient>
-					</ImageBackground>
-					<ImageBackground 
-						source={{uri:'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg'}} 
-						resizeMode = {'cover'}
-						imageStyle = {{borderRadius: 9,}}
-						style={{
-                            width: screenWidth/2 - 18,
-                            paddingTop: 90,
-                            paddingBottom: 0,
-                            paddingHorizontal: 0,
-                        }}
-						>
-						<LinearGradient
-                        style={styles.gradientOverlay}
-                        colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
-                    >
-                        <View style={{marginHorizontal:11, paddingBottom:9}}>
-                        <Text style={styles.planName}>Plan name</Text>
-                        
-                        <Text style={styles.trainerName}>Trainer Name</Text>
-                        </View>
-                    </LinearGradient>
-					</ImageBackground>
+				
+				<FlatList
+					contentContainerStyle={{ paddingHorizontal: 10}}
+					data={PLANS.data}
+					renderItem={({ item }) => <ListItem item={item} />}
+					keyExtractor={(item) => item.id}
+					numColumns={2} // Set the number of columns to 2
+					showsHorizontalScrollIndicator={false}
+					nestedScrollEnabled={true}
+				/>
 				</View>
 				<View 
 					style = {{
@@ -276,8 +225,8 @@ const ProfileWithPlans = () => {
 					</Pressable>
 				</View>
 				
-			</ScrollView>
-            <NavBarBotTrainer color1= "#000000" color2="#900020"/>
+			
+            {/* <NavBarBotTrainer color1= "#000000" color2="#900020"/> */}
 		</SafeAreaView>
   );
 };
@@ -311,18 +260,24 @@ export default ProfileWithPlans;
         fontFamily: 'QuickSand',
     },
     planName: {
-        color: "#ffffff",
-        fontFamily: "QuickSandBold",
-        fontSize: 18,
-    },
+		color: "#ffffff",
+		fontFamily: "QuickSandBold",
+		fontSize: 14,
+		marginHorizontal:2,
+		marginBottom:0,
+		justifyContent: "flex-end",
+		alignItems: "flex-start"
+	},
     container: {
         width: screenWidth, 
         alignItems:'center'
     },
     gradientOverlay: {
-        paddingTop:20,
-        borderBottomLeftRadius: 9,
-        borderBottomRightRadius: 9,
+		marginHorizontal:0,
+    marginVertical: 0,
+    flex: 1,
+    justifyContent: "flex-end",
+    borderRadius: 12,
     },
 	buttonText: {
 		fontSize: 16,
@@ -333,7 +288,21 @@ export default ProfileWithPlans;
 	
 		
 	},
-
+	modal: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+	  },
     
 });
+
+const PLANS = [
+	{
+		title: "plans",
+		data: [
+
+		]
+	},
+]
 

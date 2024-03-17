@@ -34,6 +34,7 @@ export default function NavBarBot() {
                 </Pressable> 
                 
                 <Pressable style={basic.columnView} onPress={() => navigation.navigate('UserProfile')}>
+
                     <Ionicons name="person" size={24} color="black" />
                     <Text style={basic.text}>Profile</Text>
                 </Pressable>
