@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Image, FlatList, TouchableOpacity, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, ImageBackground } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import { useRoute } from '@react-navigation/native';
@@ -8,34 +8,68 @@ const { width: screenWidth } = Dimensions.get('window');
 
 const ListItem = ({ item }) => {
   return (
+    <TouchableOpacity style={{marginHorizontal:5}}>
+      <ImageBackground
+      source={{
+        uri: item.uri,
+      }}
+      resizeMode="cover"
+      imageStyle={{ borderRadius: 9 }}
+      style={{
+        width: screenWidth*0.9, height: 250, borderRadius: 12, marginVertical:10,
+          paddingBottom: 0,
+          paddingHorizontal: 0,
+      }}>
       <LinearGradient
-        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
+        colors={['transparent', 'rgba(0, 0, 0, 0.75)']} 
         style={styles.gradient}
       >
-      <Image
-        source={{
-          uri: item.uri,
-        }}
-        style={{width: screenWidth*0.85, height: 275, borderRadius: 12}}
-        resizeMode="cover"
-      />
+      <View style={{}}>
+            <Text style={styles.planName}>Plan Name</Text>
+            <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:15}}>
+            <Text style={styles.trainerName}>Trainer name</Text>
+            <View style={{flexDirection: "row"}}>
+              <Text style={styles.trainerName}>Beginner</Text>
+              <Text style={styles.trainerName}> - </Text>
+              <Text style={styles.trainerName}>3 weeks</Text>
+            </View>
+            </View>
+            
+          </View>
       </LinearGradient>
+      </ImageBackground>
+    </TouchableOpacity>
   );
 };
 const ListItemTrainer = ({ item }) => {
   return (
-      <LinearGradient
-        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
-        style={styles.gradient}
-      >
-      <Image
-        source={{
-          uri: item.uri,
-        }}
-        style={{width: screenWidth*0.45, height: 200, borderRadius: 12}}
-        resizeMode="cover"
-      />
-      </LinearGradient>
+    <TouchableOpacity style={{marginHorizontal:5}}>
+    <ImageBackground
+    source={{
+      uri: item.uri,
+    }}
+    resizeMode="cover"
+    imageStyle={{ borderRadius: 9 }}
+    style={{
+      width: screenWidth*0.45, height: 250, borderRadius: 12, marginVertical:10,
+        paddingBottom: 0,
+        paddingHorizontal: 0,
+    }}>
+    <LinearGradient
+      colors={['transparent', 'rgba(0, 0, 0, 0.75)']} 
+      style={styles.gradient}
+    >
+    <View style={{}}>
+          <Text style={styles.TName}>Trainer Name</Text>
+          <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:15}}>
+          <Text style={styles.trainerName}>Speciality</Text>
+          
+          </View>
+          
+        </View>
+    </LinearGradient>
+    </ImageBackground>
+  </TouchableOpacity>
   );
 };
 
@@ -48,7 +82,9 @@ export default function MainScreen() {
 
     const [loaded] = useFonts({
 
-        'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
+      'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
+      'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf'),
+      'QuickSandMedium': require('../assets/fonts/Quicksand-Medium.ttf')
     })
     if (!loaded) {
       return null;
@@ -87,7 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     paddingTop: 0, // Adjust this value as needed to position the content below your header
-    marginTop:30
+    marginTop:20
   },
   card: {
     overflow: 'hidden',
@@ -97,15 +133,44 @@ const styles = StyleSheet.create({
   },
   headingtext:{
     marginLeft:17,
+    marginTop:0,
     fontSize: 16,
-    fontFamily: 'QuickSand',
+    fontFamily: 'QuickSandMedium',
   },
   gradient: {
-    marginHorizontal:10,
-    marginVertical: 20,
+    marginHorizontal:0,
+    marginVertical: 0,
     flex: 1,
+    justifyContent: "flex-end",
     borderRadius: 12,
   },
+  planName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandBold",
+    fontSize: 24,
+    marginHorizontal:15,
+    marginBottom:0,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+},
+TName: {
+  color: "#ffffff",
+  fontFamily: "QuickSand",
+  fontSize: 18,
+  marginHorizontal:10,
+  marginBottom:0,
+  justifyContent: "center",
+  alignItems: "center"
+},
+trainerName: {
+  color: "#ffffff",
+  fontFamily: "QuickSandMedium",
+  fontSize: 14,
+  marginHorizontal:0,
+  marginBottom:10,
+  justifyContent: "flex-end",
+  alignItems: "flex-start"
+},
 
 });
 

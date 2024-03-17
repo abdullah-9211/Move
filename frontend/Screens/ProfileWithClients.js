@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable, ActivityIndicator, Modal } from 'react-native';
+import { SafeAreaView, ScrollView, TouchableOpacity, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable, ActivityIndicator, Modal } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import NavBarBotTrainer from '../components/NavBarBotTrainer';
@@ -34,18 +34,19 @@ const ProfileWithClients = () => {
 
 	const ListItem = ({ item }) => {
 		return(
+			<View style={{flex:1, justifyContent:"space-between"}}>
+			<TouchableOpacity style={{marginHorizontal:10, marginVertical:10, borderRadius:12}}>
 			<ImageBackground 
-				source={{uri:item.profile_picture}} 
-				resizeMode = {'cover'}
-				imageStyle = {{borderRadius: 90,}}
-				style={{
-					width: screenWidth/2 - 18,
-					paddingTop: 90,
-					paddingBottom: 0,
-					paddingHorizontal: 0,
-				}}
-				>
-				<LinearGradient
+                    source={{uri:item.profile_picture}} 
+                    resizeMode="cover"
+                    imageStyle={{ borderRadius: 12 }}
+                    style={{
+                        width: (screenWidth/2)-26, height: (screenWidth/2)-25, borderRadius: 12, marginBottom:0, marginTop:8,
+          paddingBottom: 0,
+          paddingHorizontal: 0,
+                    }}
+                >
+                    <LinearGradient
 				style={styles.gradientOverlay}
 				colors={['transparent', 'rgba(0, 0, 0, 1)']} // Adjust the opacity as needed
 			>
@@ -55,7 +56,9 @@ const ProfileWithClients = () => {
 				
 				</View>
 			</LinearGradient>
-			</ImageBackground>
+                </ImageBackground>
+				</TouchableOpacity>
+				</View>
 		);
 				};
 
@@ -88,13 +91,7 @@ const ProfileWithClients = () => {
 				flex: 1,
 				backgroundColor: "#FFFFFF",
 			}}>
-			<ScrollView  
-				style = {{
-					flex: 1,
-					backgroundColor: "#FFFFFF",
-					borderRadius: 16,
-                    marginBottom:75
-				}}>
+			
                 <View style ={{backgroundColor: "#E6E9EB", alignItems:'flex-end', justifyContent: "flex-end"}}>
                     <MaterialIcons name="more-horiz" size={24} color="#000000" style={{paddingTop:50, marginHorizontal:20}}/>
                 </View>
@@ -191,6 +188,16 @@ const ProfileWithClients = () => {
 						}}>
 					</View>
 				</View>
+				<View 
+					style = {{
+						flexDirection: "row",
+						justifyContent: "space-between",
+						alignItems: "center",
+						marginBottom: 9,
+						marginHorizontal: 0,
+					}}>
+					
+				
 				<FlatList
 					contentContainerStyle={{ paddingHorizontal: 10}}
 					data={CLIENTS.data}
@@ -200,9 +207,10 @@ const ProfileWithClients = () => {
 					showsHorizontalScrollIndicator={false}
 					nestedScrollEnabled={true}
 				/>
+				</View>
 				
-			</ScrollView>
-            <NavBarBotTrainer color1= "#000000" color2={"#900020"}/>
+{/* 			
+            <NavBarBotTrainer color1= "#000000" color2={"#900020"}/> */}
 		</SafeAreaView>
   );
 };
@@ -239,18 +247,22 @@ export default ProfileWithClients;
         color: "#ffffff",
         fontFamily: "QuickSandBold",
         fontSize: 18,
-        marginBottom:2,
+        marginBottom:25,
+
+		justifyContent: "flex-end",
+		alignItems: "flex-start"
     },
     container: {
         width: screenWidth, 
         alignItems:'center'
     },
     gradientOverlay: {
-        paddingTop:20,
-        paddingBottom:20,
-        borderBottomLeftRadius: 90,
-        borderBottomRightRadius: 90,
-        marginBottom:2
+        marginHorizontal:0,
+    	marginVertical: 0,
+		paddingTop:0,
+    	flex: 1,
+		justifyContent: "flex-end",
+    	borderRadius: 75,
     },
 
 	modal: {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable, Modal, ActivityIndicator } from 'react-native';
+import { SafeAreaView, TouchableOpacity, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable, Modal, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import NavBarBotTrainer from '../components/NavBarBotTrainer';
@@ -33,28 +33,31 @@ const ProfileWithPlans = () => {
 
 	const ListItem = ({ item }) => {
 		return(
+			<View style={{flex:1, justifyContent:"space-between"}}>
+			<TouchableOpacity style={{marginHorizontal:10, marginVertical:10, borderRadius:12}}>
 			<ImageBackground 
                     source={{uri:item.plan_image}} 
                     resizeMode="cover"
-                    imageStyle={{ width: screenWidth/2 - 18, borderRadius: 9 }}
+                    imageStyle={{ borderRadius: 12 }}
                     style={{
-                        width: screenWidth/2 - 18,
-                        paddingTop: 90,
-                        paddingBottom: 0,
-                        paddingHorizontal: 0,
+                        width: (screenWidth/2)-26, height: (screenWidth/2)-25, borderRadius: 12, marginBottom:0, marginTop:8,
+          paddingBottom: 0,
+          paddingHorizontal: 0,
                     }}
                 >
                     <LinearGradient
                         style={styles.gradientOverlay}
                         colors={['transparent', 'rgba(0, 0, 0, 1)']}
                     >
-                        <View style={{marginHorizontal:11, paddingBottom:9}}>
+                        <View style={{marginHorizontal:2, paddingBottom:9, marginBottom:2, marginLeft: 5}}>
                         <Text style={styles.planName}>{item.plan_name}</Text>
                         
-                        <Text style={styles.trainerName}>{trainer.first_name + " " + trainer.last_name}</Text>
+                        {/* <Text style={styles.trainerName}>{trainer.first_name + " " + trainer.last_name}</Text> */}
                         </View>
                     </LinearGradient>
                 </ImageBackground>
+				</TouchableOpacity>
+				</View>
 		);
 				};
 
@@ -86,14 +89,9 @@ const ProfileWithPlans = () => {
 				flex: 1,
 				backgroundColor: "#FFFFFF",
 			}}>
-			<ScrollView  
-				style = {{
-					flex: 1,
-					backgroundColor: "#FFFFFF",
-					borderRadius: 16,
-				}}>
+			
                 <View style ={{backgroundColor: "#E6E9EB", alignItems:'flex-end', justifyContent: "flex-end"}}>
-                    <MaterialIcons name="more-horiz" size={24} color="#000000" style={{paddingTop:50, marginHorizontal:20}}/>
+                    <MaterialIcons name="more-horiz" size={24} color="#000000" style={{paddingTop:50, marginHorizontal:10}}/>
                 </View>
 				<View 
 					style = {{
@@ -191,7 +189,7 @@ const ProfileWithPlans = () => {
 						justifyContent: "space-between",
 						alignItems: "center",
 						marginBottom: 9,
-						marginHorizontal: 8,
+						marginHorizontal: 0,
 					}}>
 					
 				
@@ -227,8 +225,8 @@ const ProfileWithPlans = () => {
 					</Pressable>
 				</View>
 				
-			</ScrollView>
-            <NavBarBotTrainer color1= "#000000" color2="#900020"/>
+			
+            {/* <NavBarBotTrainer color1= "#000000" color2="#900020"/> */}
 		</SafeAreaView>
   );
 };
@@ -262,19 +260,24 @@ export default ProfileWithPlans;
         fontFamily: 'QuickSand',
     },
     planName: {
-        color: "#ffffff",
-        fontFamily: "QuickSandBold",
-        fontSize: 18,
-    },
+		color: "#ffffff",
+		fontFamily: "QuickSandBold",
+		fontSize: 14,
+		marginHorizontal:2,
+		marginBottom:0,
+		justifyContent: "flex-end",
+		alignItems: "flex-start"
+	},
     container: {
         width: screenWidth, 
         alignItems:'center'
     },
     gradientOverlay: {
-		width: screenWidth/2 - 18,
-        paddingTop:20,
-        borderBottomLeftRadius: 9,
-        borderBottomRightRadius: 9,
+		marginHorizontal:0,
+    marginVertical: 0,
+    flex: 1,
+    justifyContent: "flex-end",
+    borderRadius: 12,
     },
 	buttonText: {
 		fontSize: 16,

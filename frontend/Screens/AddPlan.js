@@ -115,6 +115,7 @@ const AddPlan = () => {
                     valueField="value"
                     label="Dropdown"
                     placeholder="Select Plan Type"
+
                     value={dropdown}
                     onChange={item => {
                     setDropdown(item.value);
