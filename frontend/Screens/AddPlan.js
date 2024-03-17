@@ -1,18 +1,9 @@
 import * as React from 'react';
 import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable} from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import NavBarBotTrainer from '../components/NavBarBotTrainer';
-import NavBar from '../components/NavBar';
-import NavBarTrainer from '../components/NavBarTrainer';
-import NavBarBot from '../components/NavBarBot';
 import { useFonts } from 'expo-font';
-import DropdownMenu from 'react-native-dropdown-menu';
 import { Octicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
-import { Picker } from '@react-native-picker/picker';
-import SelectDropdown from 'react-native-select-dropdown'
 import {Dropdown, MultiSelect} from 'react-native-element-dropdown';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -28,6 +19,7 @@ const AddPlan = () => {
         {label: 'Weight Loss', value: '4'},
         {label: 'Endurance', value: '5'},
     ];
+    var planType = ' ';
     const [dropdown, setDropdown] = useState(null);
         const [selected, setSelected] = useState([]);
         const _renderItem = item => {
@@ -122,11 +114,12 @@ const AddPlan = () => {
                     labelField="label"
                     valueField="value"
                     label="Dropdown"
-                    placeholder="Select item"
+                    placeholder="Select Plan Type"
                     value={dropdown}
                     onChange={item => {
                     setDropdown(item.value);
-                        console.log('selected', item);
+                        planType = item;
+                        console.log('selected', planType);
                     }}
                     renderItem={item => _renderItem(item)}
                     textError="Error"
@@ -154,7 +147,10 @@ const AddPlan = () => {
                     placeholder='Plan name'
                     value={planname}
                     useNativeDriver={false}
-                    onChangeText={(text) => setplanname(text)}
+                    onChangeText={(text) => {
+                        setplanname(text);
+                        console.log(planname);
+                    }}
                     >
                     
                 </TextInput>
@@ -173,7 +169,7 @@ const AddPlan = () => {
                     marginBottom: 209,
                     marginHorizontal: 25,
                 }}>
-                <Pressable onPress={() => navigation.navigate('AddExerciseInPlan')}>
+                <Pressable onPress={() => navigation.navigate('AddExerciseInPlan', {planName: planname, planType: planType})}>
                 <Text 
                     style = {{
                         color: "#000000",
