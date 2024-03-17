@@ -19,7 +19,9 @@ router = APIRouter()
 completed_exercises = []
 all_errors = {}
 all_error_times = {}
-exercises = {}
+exercises = []
+accuracies = []
+exercise_translator = {}
 
 # Analyze exercise
 @router.post("/analyze")
@@ -32,7 +34,8 @@ async def analyze_exercise(exercise_data: dict):
 
     # Get exercise id
     exercise_id = db.get_exercise_id(exercise)
-    exercises[exercise] = exercise_id
+    exercises.append(exercise)
+    exercise_translator[exercise] = exercise_id
 
     # Initialize and analyze based on exercise type
     if exercise == "plank":
@@ -65,6 +68,7 @@ async def analyze_exercise(exercise_data: dict):
 
     # Add exercise stats
     completed_exercises.append(exercise_stats)
+    accuracies.append(exercise_stats.accuracy)
     
     # print completed_exercises
     for exercise in completed_exercises:
@@ -84,7 +88,7 @@ async def finish_workout(workout_data: dict):
     total = 0
     
     if len(completed_exercises) == 0:
-        return {"workout": 0, "total_duration": 0, "accuracy": 0}
+        return {"workout": 0, "total_duration": 0, "accuracy": 0, "errors": {}, "error_times": {}, "exercises": [], "exerciseNum": len(exercises), "exercise_translator": {}, "accuracies": []}
 
     for exercise in completed_exercises: 
         total_duration += exercise.duration
@@ -108,7 +112,7 @@ async def finish_workout(workout_data: dict):
 
     completed_exercises.clear()
         
-    return {"workout": workout_id, "total_duration": total_duration, "accuracy": round(accuracy, 1), "errors": all_errors, "error_times": all_error_times, "exercises": exercises}
+    return {"workout": workout_id, "total_duration": total_duration, "accuracy": round(accuracy, 1), "errors": all_errors, "error_times": all_error_times, "exercises": exercises, "exerciseNum": len(exercises), "exercise_translator": exercise_translator, "accuracies": accuracies}
 
 
 # =============================================================================

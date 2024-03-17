@@ -39,10 +39,6 @@ const AddExerciseInPlan = () => {
             </View>
             );
         };
-        const _renderItem2 = item1 => {
-            return (
-            <View style={styles.item}>
-                <Text style={styles.textItem}>{item1.label}</Text>
 
         const _renderItem2 = item1 => {
             return (
@@ -381,6 +377,7 @@ const AddExerciseInPlan = () => {
             </View>
     </SafeAreaView>);
 };
+
 
 export default AddExerciseInPlan;
 

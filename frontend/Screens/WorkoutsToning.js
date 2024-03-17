@@ -62,9 +62,8 @@ export default function WorkoutsToning() {
         style={styles.gradient}
       >
       <View style={{}}>
-            <Text style={styles.planName}>Plan Name</Text>
             <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:0}}>
-            <Text style={styles.trainerName}>Trainer name</Text>
+            <Text style={styles.trainerName}>Plan name</Text>
             
             </View>
             
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
   trainerName: {
     color: "#ffffff",
     fontFamily: "QuickSandMedium",
-    fontSize: 14,
+    fontSize: 16,
     marginHorizontal:10,
     marginBottom:10,
     justifyContent: "flex-end",

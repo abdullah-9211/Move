@@ -100,10 +100,16 @@ export default function Report() {
 //   const toggleExpand = () => {
 //     setExpanded(!expanded);
 //   };
-//   // const user = route.params?.user;
-  // const workout = route.params?.workout;
-  // const duration = route.params?.duration;
-  // const accuracy = route.params?.accuracy;
+  const user = route.params?.user;
+  const workout = route.params?.workout;
+  const duration = route.params?.duration;
+  const accuracy = route.params?.accuracy;
+  const exercises = route.params?.exercises;
+  const numExercises = route.params?.numExercises;
+  const errors = route.params?.errors;
+  const error_times = route.params?.error_times;
+  const exercise_translator = route.params?.exercise_translator;
+  const accuracies = route.params?.accuracies;
 
   // const [Accuracy, setAccuracy] = React.useState(0);
 
@@ -191,7 +197,7 @@ export default function Report() {
 								marginLeft: 20,
                 marginBottom: 20,
 							}}>
-							{"57.9%"}
+							{accuracy + "%"}
 						</Text>
 					</View>
           <View style={{ marginVertical: 10}}>
@@ -248,7 +254,7 @@ export default function Report() {
 								
                 
 							}}>
-							{"4"}
+							{numExercises}
 						</Text>
 						<Text 
 							style = {{
@@ -299,7 +305,7 @@ export default function Report() {
                 marginTop: 8,
                 
 							}}>
-							{"9m 37s"}
+							{duration + "s"}
 						</Text>
             <Text 
 							style = {{

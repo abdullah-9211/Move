@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, FlatList, TouchableOpacity,ImageBackground, horizontal, View, StyleSheet, Text, Pressable, Dimensions } from 'react-native';
+import { Image, FlatList, TouchableOpacity,ImageBackground, horizontal, View, StyleSheet, Text, Pressable, Modal, ActivityIndicator, Dimensions } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
@@ -13,6 +13,8 @@ import {REACT_APP_API_URL} from "@env"
 const { width: screenWidth } = Dimensions.get('window');
 
 
+export default function TrainerScreen() {
+
 const ListItem = ({ item }) => {
 
   const navigation = useNavigation();
@@ -24,12 +26,12 @@ const ListItem = ({ item }) => {
   const handleWorkoutClick = (item) => () => {
     setLoading(true);
 
-    const apiUrl = API_URL + '/exercise/get-exercises/' + item.id;
+    const apiUrl = REACT_APP_API_URL + '/exercise/get-exercises/' + item.id;
     axios.get(apiUrl)
     .then((response) => {
       console.log(response.data);
       const exercises_data = response.data;
-      const apiUrl = API_URL + '/exercise/get-plan-trainer/' + item.plan_trainer;
+      const apiUrl = REACT_APP_API_URL + '/exercise/get-plan-trainer/' + item.plan_trainer;
       axios.get(apiUrl)
       .then((response) => {
         console.log(response.data);
@@ -98,7 +100,6 @@ const ListItem = ({ item }) => {
 
   const navigation = useNavigation();
   const route = useRoute();
-  const [loading, setLoading] = React.useState(true);
 
   const user = route.params?.user;
   const workouts = route.params?.workouts;
