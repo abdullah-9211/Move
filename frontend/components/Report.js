@@ -67,7 +67,7 @@ const ExpandableListItem = ({ item }) => {
 								fontSize: 14,
 								fontFamily: "QuickSand",
 								marginRight: 4,}}> 
-                    	{item.error[1]}
+                    	{"00:" + item.error_time[0]}
 
 					</Text>
 				</View>
@@ -87,7 +87,7 @@ const ExpandableList = ({ data }) => {
 			marginHorizontal: 25,
 			marginTop:0,
 			width: screenWidth*0.9,}}
-            data={data} 
+            data={data[0].info} 
             renderItem={renderItem} 
             keyExtractor={(item) => item.id.toString()} 
         /> 
@@ -111,34 +111,58 @@ export default function Report() {
   const exercise_translator = route.params?.exercise_translator;
   const accuracies = route.params?.accuracies;
 
-  // const [Accuracy, setAccuracy] = React.useState(0);
 
-  // React.useEffect(() => {
-  //   setAccuracy(Math.round(accuracy));
-  //   console.log(Accuracy, duration);
-  // }, []);
+  React.useEffect(() => {
+
+	for (let i = 0; i < exercises.length; i++) {
+		let exercise = exercises[i];
+		let exerciseAccuracy = accuracies[i];
+		let exerciseErrors = errors[exercise_translator[exercise]];
+		let exerciseErrorTimes = error_times[exercise_translator[exercise]];
+		
+		let object = {
+			id: i+1,
+			exercise: exercise,
+			accuracy: exerciseAccuracy,
+			error: exerciseErrors,
+			error_time: exerciseErrorTimes
+		};
+
+		data[0].info.push(object);
+		console.log(data[0].info);
+
+	}
+
+  }, []);
   const data = [ 
 	{ 
-		id: 1, 
-		exercise: "Pushups", 
-		accuracy: "85%",
-		error: [`Elbow angle too low`, '00:32'] 
+		title: "Errors",
+		info: [
+			{
+				id: 1, 
+				exercise: "Pushups", 
+				accuracy: "85%",
+				error: [`Elbow angle too low`],
+				error_time: ['32'] 
+			},
+			{
+				id: 2, 
+				exercise: "Plank", 
+				accuracy: "55%",
+				error: [`Elbow angle too low`],
+				error_time: ['32'] 
+			},
+			{
+				id: 3, 
+				exercise: "Squat", 
+				accuracy: "15%",
+				error: [`Elbow angle too low`],
+				error_time: ['32'] 
+			},
+		]
 			
 	}, 
-	{ 
-		id: 2, 
-		exercise: "Plank", 
-		accuracy: "75%",
-		error: [`Elbow angle too low`, '00:32'] 
-	}, 
-	{ 
-		id: 2, 
-		exercise: "Jumping Jacks", 
-		accuracy: "89%",
-		error: [`Elbow angle too low`, '00:32'] 
-	}, 
-	// ...more items 
-]; 
+ ]; 
   const [loaded] = useFonts({
     'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
     'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf'),

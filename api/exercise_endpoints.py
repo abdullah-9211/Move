@@ -27,6 +27,13 @@ exercise_translator = {}
 @router.post("/analyze")
 async def analyze_exercise(exercise_data: dict):
     
+    if len(completed_exercises) == 0:
+        all_errors.clear()
+        all_error_times.clear()
+        exercises.clear()
+        accuracies.clear()
+        exercise_translator.clear()
+    
     # Extract data
     exercise = exercise_data.get("exercise")
     client_video = exercise_data.get("client_video")

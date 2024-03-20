@@ -39,7 +39,7 @@ export default function Goal() {
           style={styles.gradient}
         >
           <View style={{alignItems: "flex-start",marginHorizontal:11, paddingBottom:9}}>
-            <Text style={styles.planName}>{goalData.goal}</Text>
+            <Text style={styles.planName}>{item.text}</Text>
                         
             
           </View>
@@ -82,7 +82,16 @@ export default function Goal() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('SignUpDetails', {role: role, gender: gender, weight: weight, height: height, goal: goal})}>
+            onPress={() => {
+              if (goal == '') {
+                alert("Please select a goal");
+                return;
+              }
+              else{
+                navigation.navigate('SignUpDetails', {role: role, gender: gender, weight: weight, height: height, goal: goal});
+              }
+
+            }}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>
@@ -92,7 +101,6 @@ export default function Goal() {
     </View>
   );
 }
-const goalData = {goal:"Strength", goal:"Cardio", goal:"Yoga", goal:"Toning", goal:"Stamina"}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
