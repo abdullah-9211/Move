@@ -33,9 +33,10 @@ def login(email: str, password: str):
         user = res["data"][0]
         if user["password"] == password:
             # client.auth.sign_in_with_password({"email": email, "password": password})
-            res = client.table("Goals").select("*").eq("id", user["goal_id"]).execute()
-            res = dict(res)
-            user["goal"] = res["data"][0]
+            if user["user_type"] == 'user':
+                res = client.table("Goals").select("*").eq("id", user["goal_id"]).execute()
+                res = dict(res)
+                user["goal"] = res["data"][0]
             
             return user
         else:
@@ -161,5 +162,42 @@ def get_user_profile_info(user_id):
         res = dict(res)
         return_dict["Number of Subscribed"] = len(res["data"])
         return return_dict
+    except Exception as e:
+        print("\n\nError retrieving user profile info, Exception Thrown: \n\n", e)
+        
+def get_workout_stats(workout_id):
+    client = connect()
+    try:
+        return_dict = {}
+        all_errors = {}
+        all_error_times = {}
+        exercises = []
+        accuracies = []
+        exercise_translator = {}
+        res = client.table("Workout Exercises Stats").select("exercise_id", "duration", "accuracy", "Exercise(exercise_name)").eq("workout_id", workout_id).execute()
+        res = dict(res)
+        
+
+        for exercise in res["data"]:
+            exercises.append(exercise["Exercise"]["exercise_name"])
+            accuracies.append(exercise["accuracy"])
+            exercise_translator[exercise["Exercise"]["exercise_name"]] = exercise["exercise_id"]
+            exercise_errors = client.table("Workout Exercise Errors").select("error_time", "error").eq("workout_id", workout_id).eq("exercise_id", exercise["exercise_id"]).execute()
+            all_errors[exercise["exercise_id"]] = []
+            all_error_times[exercise["exercise_id"]] = []
+            exercise_errors = dict(exercise_errors)
+            for error in exercise_errors["data"]:
+                all_errors[exercise["exercise_id"]].append(error["error"])
+                all_error_times[exercise["exercise_id"]].append(error["error_time"])
+                
+        return_dict["errors"] = all_errors
+        return_dict["error_times"] = all_error_times
+        return_dict["exercises"] = exercises
+        return_dict["exerciseNum"] = len(exercises)
+        return_dict["exercise_translator"] = exercise_translator
+        return_dict["accuracies"] = accuracies
+        return return_dict
+
+        
     except Exception as e:
         print("\n\nError retrieving user profile info, Exception Thrown: \n\n", e)

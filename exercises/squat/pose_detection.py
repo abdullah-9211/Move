@@ -332,9 +332,12 @@ class Squat:
 
         self.state = 0
         states_visited = []
+        i = 0
 
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
             while cap.isOpened():
+                cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+                i += 8
                 ret, frame = cap.read()
                 
                 if not ret:

@@ -16,8 +16,27 @@ export default function UserProfile() {
 
   const ListItem = ({ item }) => {
   
+    const handleWorkoutClick = (item) => () => {    
+      
+      setLoading(true);
+      
+      const apiUrl = REACT_APP_API_URL + '/user/get-workout-stats/' + item.workout_id;
+      console.log("test : " + apiUrl);
+      axios.get(apiUrl)
+      .then((response) => {
+        console.log(response.data);
+        setLoading(false);
+        navigation.navigate('Statistics', {user: user, duration: item.duration, accuracy: item.accuracy, workout: item.workout_id, exercises: response.data.exercises, numExercises: response.data.exerciseNum, errors: response.data.errors, error_times: response.data.error_times, exercise_translator: response.data.exercise_translator, accuracies: response.data.accuracies})
+      })
+      .catch((error) => {
+        console.log(error);
+      })    
+  
+    }
+
+
     return (
-      <TouchableOpacity style={{marginHorizontal:12, marginVertical:10}}>
+      <TouchableOpacity style={{marginHorizontal:12, marginVertical:10}} onPress={handleWorkoutClick(item)}> 
         <ImageBackground
         source={{
           uri: item["Workout Plan"]["plan_image"],
@@ -51,6 +70,7 @@ export default function UserProfile() {
   React.useEffect(
     () => {
       setLoading(true);
+      setWhiteScreen(true);
 
       const apiUrl = REACT_APP_API_URL + '/user/get-profile-info/' + user.id;
       axios.get(apiUrl)
@@ -60,6 +80,7 @@ export default function UserProfile() {
         setWorkoutsPerformed(response.data["Number of Workouts"])
         console.log(WORKOUTS[0].data)
         setLoading(false);
+        setWhiteScreen(false);
       })
       .catch((error) => {
         console.log(error);
@@ -73,6 +94,7 @@ const shadowopacity = screenWidth * 0.2 / screenWidth;
 
   const user = route.params?.user;
   const [loading, setLoading] = React.useState(false);
+  const [whiteScreen, setWhiteScreen] = React.useState(false);
   const [numSubscribed, setNumSubscribed] = React.useState(0);
   const [workoutsPerformed, setWorkoutsPerformed] = React.useState(0);
 
@@ -88,7 +110,7 @@ const shadowopacity = screenWidth * 0.2 / screenWidth;
     return null;
   }
 
-  if (loading) {
+  if (loading && whiteScreen) {
     return (
       <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'white'}}>
             <Modal transparent={true} animationType="fade">
@@ -138,13 +160,21 @@ const shadowopacity = screenWidth * 0.2 / screenWidth;
       <Text style={{marginLeft:15, marginTop:10, fontFamily: "QuickSand", fontSize: 16}}>
         Recently completed
       </Text>
-        
+
+      {loading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+      )}
+
       <FlatList
         
         contentContainerStyle={{ paddingHorizontal: 10 }}
         data={WORKOUTS[0].data}
         renderItem={({ item }) => <ListItem item={item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.workou_id}
         numColumns={2} 
         showsHorizontalScrollIndicator={false}
       />

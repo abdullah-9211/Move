@@ -38,10 +38,14 @@ class Plank:
     
     def get_trainer_angles(self):
         cap = cv2.VideoCapture(self.trainer_video_url)
+        i = 0
 
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-            while cap.isOpened():
+            while cap.isOpened() or i < 150:
+                # cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+                i += 10
                 ret, frame = cap.read()
+                
                 
                 if not ret:
                     break
@@ -180,9 +184,11 @@ class Plank:
         
         
         cap = cv2.VideoCapture(self.client_video_url)
-
+        i = 0
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
             while cap.isOpened():
+                cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+                i += 8
                 ret, frame = cap.read()
                 
                 if not ret:
@@ -388,16 +394,18 @@ class Plank:
 
 if "__main__" == __name__:
     
-    plank = Plank("sample_videos/bilal_footage.mp4", "sample_videos/abdullahumarig1@gmail.com_1.mp4")
+    plank = Plank("sample_videos/bilal_footage.mp4", "sample_videos/aizaaz_footage.mp4")
+
+    print(plank.run_process())
     
-    errors = []
-    error_times = []
-    accuracy = 0
+    # errors = []
+    # error_times = []
+    # accuracy = 0
     
-    errors, error_times, accuracy = plank.run_process()
+    # errors, error_times, accuracy = plank.run_process()
     
-    print("\nErrors:-\n")
-    for i in range(len(errors)):
-        print(errors[i], "at", error_times[i], "seconds")
+    # print("\nErrors:-\n")
+    # for i in range(len(errors)):
+    #     print(errors[i], "at", error_times[i], "seconds")
         
-    print("\nAccuracy of user:-", accuracy, "%\n")
+    # print("\nAccuracy of user:-", accuracy, "%\n")

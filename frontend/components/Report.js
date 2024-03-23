@@ -114,6 +114,8 @@ export default function Report() {
 
   React.useEffect(() => {
 
+	let error_data = [];
+
 	for (let i = 0; i < exercises.length; i++) {
 		let exercise = exercises[i];
 		let exerciseAccuracy = accuracies[i];
@@ -128,10 +130,12 @@ export default function Report() {
 			error_time: exerciseErrorTimes
 		};
 
-		data[0].info.push(object);
+		error_data.push(object);
 		console.log(data[0].info);
 
 	}
+
+	data[0].info = error_data;
 
   }, []);
   const data = [ 

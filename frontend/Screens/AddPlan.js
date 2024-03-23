@@ -19,7 +19,6 @@ const AddPlan = () => {
         {label: 'Weight Loss', value: '4'},
         {label: 'Endurance', value: '5'},
     ];
-    var planType = ' ';
     const [dropdown, setDropdown] = useState(null);
         const [selected, setSelected] = useState([]);
         const _renderItem = item => {
@@ -34,6 +33,7 @@ const AddPlan = () => {
     
     // const [selectedValue, setSelectedValue] = React.useState('');
     const [planname, setplanname] = React.useState('');
+    const [planType, setplanType] = React.useState('');
 
     const [loaded] = useFonts({
         'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -119,7 +119,7 @@ const AddPlan = () => {
                     value={dropdown}
                     onChange={item => {
                     setDropdown(item.value);
-                        planType = item;
+                        setplanType(item);
                         console.log('selected', planType);
                     }}
                     renderItem={item => _renderItem(item)}
@@ -158,32 +158,7 @@ const AddPlan = () => {
             </View>
 
 
-{/* -------------------------------------Add Exercise Button-----------------------------------------------------------------------------------------*/}
-            <View 
-                style = {{
-                    alignItems: "center",
-                    backgroundColor: "#ffffff",
-                    borderColor: "#900020",
-                    borderRadius: 9,
-                    borderWidth: 1,
-                    paddingVertical: 19,
-                    marginBottom: 209,
-                    marginHorizontal: 25,
-                }}>
-                <Pressable onPress={() => navigation.navigate('AddExerciseInPlan', {planName: planname, planType: planType})}>
-                <Text 
-                    style = {{
-                        color: "#000000",
-                        fontSize: 16,
-                      
-                        fontFamily: "QuickSandBold"
-                    }}>
-                    {"Add Exercise"}
-                </Text>
-                </Pressable>
-            </View>
-
-{/* -------------------------------------Done button-----------------------------------------------------------------------------------------*/}
+{/* -------------------------------------Add Exercise button-----------------------------------------------------------------------------------------*/}
 
             <View 
                 style = {{
@@ -192,16 +167,20 @@ const AddPlan = () => {
                     borderRadius: 9,
                     paddingVertical: 19,
                     marginBottom: 0,
+                    marginTop: 250,
                     marginHorizontal: 25,
                 }}>
+                <Pressable onPress={() => navigation.navigate('AddExerciseInPlan', {planName: planname, planType: planType.label})}>
                 <Text 
                     style = {{
-                        color: "#ffffff",
+                        color: "#fff",
                         fontSize: 16,
+                      
                         fontFamily: "QuickSandBold"
                     }}>
-                    {"Done"}
+                    {"Add Exercise"}
                 </Text>
+                </Pressable>
             </View>
             
         </ScrollView>

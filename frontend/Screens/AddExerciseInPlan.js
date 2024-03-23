@@ -15,8 +15,25 @@ function addExercise() {
 
 const { width: screenWidth } = Dimensions.get('window');
 const AddExerciseInPlan = () => {
+
+    function addExercise() {
+        navigation.navigate('AddExerciseInPlan');
+        //store data in table above and start storing data again
+    }
+
     const navigation = useNavigation();
     const route = useRoute();
+
+    const planName = route.params?.planName;
+    const planType = route.params?.planType;
+
+    React.useEffect(() => {
+        console.log('Plan Name: ', planName);
+        console.log('Plan Type: ', planType);
+    }, []);
+        
+
+
     const data = [
         {label: 'Push Ups', value: '1'},
         {label: 'Plank', value: '2'},
@@ -29,6 +46,7 @@ const AddExerciseInPlan = () => {
     ];
     const [dropdown, setDropdown] = useState(null);
     const [dropdown2, setDropdown2] = useState(null);
+
 
         const [selected, setSelected] = useState([]);
         const _renderItem = item => {
@@ -53,6 +71,8 @@ const AddExerciseInPlan = () => {
     
     // const [selectedValue, setSelectedValue] = React.useState('');
     const [amount, setamount] = useState('');
+    const [exerciseName, setExerciseName] = useState('');
+    const [secOrReps, setSecOrReps] = useState('');
 
     const [loaded] = useFonts({
         'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -138,7 +158,7 @@ const AddExerciseInPlan = () => {
 								fontFamily: "QuickSand"
 
 							}}>
-							{"Beginner plan"}
+							{planName}
 						</Text>
 					</View>
 					<View 
@@ -161,7 +181,7 @@ const AddExerciseInPlan = () => {
 							
                                 fontFamily: "QuickSand"
 							}}>
-							{"Strength"}
+							{planType}
 						</Text>
 					</View>
 				</View>
@@ -194,7 +214,8 @@ const AddExerciseInPlan = () => {
                     value={dropdown}
                     onChange={item => {
                     setDropdown(item.value);
-                        // console.log('selected', item);
+                    setExerciseName(item.label);
+                        console.log('selected', exerciseName);
                     }}
                     renderItem={item => _renderItem(item)}
                     textError="Error"
@@ -254,7 +275,12 @@ const AddExerciseInPlan = () => {
                     placeholder='10'
                     value={amount}
                     // useNativeDriver={false}
-                    onChangeText={(text) => setamount(text)}
+                    onChangeText={
+                        (text) => {
+                            setamount(text);
+                            console.log(amount);
+                        }
+                    }
                     >
                     
                 </TextInput>
@@ -289,7 +315,8 @@ const AddExerciseInPlan = () => {
                     placeholder="Select"
                     onChange={item1 => {
                     setDropdown2(item1.value1);
-                        console.log('selected', item1);
+                    setSecOrReps(item1.label1);
+                        console.log('selected', secOrReps);
                     }}
                     renderItem={item1 => _renderItem2(item1)}
                     textError="Error"
