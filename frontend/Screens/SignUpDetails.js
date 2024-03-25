@@ -1,8 +1,9 @@
 //Sign up screen
 
 import * as React from 'react';
-import { Image, Pressable, ImageBackground,TextInput, TimePickerAndroid, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Image, Pressable, TouchableOpacity, ImageBackground,TextInput, TimePickerAndroid, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as ImagePicker from 'expo-image-picker';
 import { useFonts } from 'expo-font';
 import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
@@ -16,7 +17,7 @@ const { width: screenWidth } = Dimensions.get('window');
 export default function SignUpDetails() {
     const navigation = useNavigation();
     const route = useRoute();
-
+    const [image, setImage] = useState(null);
     const role = route.params.role;
     const gender = route.params.gender;
     const height = route.params.height;
@@ -56,21 +57,81 @@ export default function SignUpDetails() {
     if (!loaded) {
       return null;
     }
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+  
+      if (!result.cancelled) {
+        setImage(result.uri);
+      }
+    };
+
+    const uploadImage = async () => {
+      if (image) {
+        const response = await fetch(image);
+        const blob = await response.blob();
+        const formData = new FormData();
+        formData.append('file', blob);
+  
+        try {
+          const uploadResponse = await fetch('YOUR_UPLOAD_URL', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              // Add any necessary headers for authentication or other requirements
+            },
+          });
+  
+          if (uploadResponse.ok) {
+            // Assuming the server responds with the URL of the uploaded image
+            const imageUrl = await uploadResponse.text();
+            // Now you can update the user's profile with the imageUrl
+            console.log('Image uploaded successfully:', imageUrl);
+          } else {
+            console.error('Failed to upload image');
+          }
+        } catch (error) {
+          console.error('Error uploading image:', error);
+        }
+      } else {
+        console.warn('No image selected');
+      }
+    };
+
+
     return (
         <ImageBackground
       source={require('../assets/images/red2.jpg')} // Replace with the path to your image
       style={styles.backgroundImage}
     >
    
-        <View style = {{flex: 1, alignItems:"center", marginBottom:10}}>
-            <View style={{ alignItems: "flex-start", justifyContent: "flex-start"}}>
+        <View style = {{flex: 1, alignItems:"center", marginBottom:0}}>
+            
+            <View style = {{flex: 1, alignItems: "flex-start", width: screenWidth-20,justifyContent:"flex-start"}}> 
+            <ScrollView>
+            <View style={{ alignItems: "center", justifyContent: "center"}}>
                 <Image 
                 source={require('../assets/images/full_logo.png')}
                 style={styles.image}
                 resizeMode="contain"/>
             </View>
-            <View style = {{flex: 1, alignItems: "flex-start", width: screenWidth-20,justifyContent:"flex-start"}}> 
-            <ScrollView>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 30 }}>
+              <TouchableOpacity style={{backgroundColor: "#000000", width: 135, height: 135, borderRadius: 75, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "#ffffff"}}onPress={pickImage}>
+              {image && <Image source={{ uri: image }} style={{ width: 135, height: 135, marginBottom: 0 }}> 
+              
+              </Image>}
+              <Text style={{color: "#ffffff", textAlign:"center", fontFamily: "QuickSand"}}> Upload Profile Picture</Text>
+              </TouchableOpacity>
+              {/* <TouchableOpacity onPress={uploadImage}>
+                <Text style={{ color: 'blue', marginTop: 10 }}>Upload Image</Text>
+              </TouchableOpacity>  */}
+      {/* make the continue button do the work of uploadImage as well */}
+    </View>
             
             <Text style={styles.textStyle}>First Name</Text>
             <TextInput
@@ -140,10 +201,11 @@ export default function SignUpDetails() {
     color: "#FFFFFF",
    },
    image: {
+    
     width: 250,
-    height: 250, 
+    height: 140, 
     marginHorizontal:20,
-    marginTop: 10,
+    marginTop: 50,
   },
   input: {
     width: screenWidth-60,
