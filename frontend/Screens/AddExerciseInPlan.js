@@ -1,31 +1,56 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, View, StyleSheet, Text, Dimensions, Pressable} from 'react-native';
+import { SafeAreaView, ScrollView, View, StyleSheet, Text, Dimensions, Pressable, Modal, ActivityIndicator} from 'react-native';
 import { useFonts } from 'expo-font';
 import { Octicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import {Dropdown} from 'react-native-element-dropdown';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
+import {REACT_APP_API_URL} from "@env"
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import * as firebase from "firebase/app";
+import { getStorage } from "firebase/storage";
+import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyBJQ8eu5gLYOgooLU4VKxxDIVYzK1XBjxE",
+    authDomain: "move-1699869988043.firebaseapp.com",
+    projectId: "move-1699869988043",
+    storageBucket: "move-1699869988043.appspot.com",
+    messagingSenderId: "630043626016",
+    appId: "1:630043626016:web:889775012715c7b7b58a45",
+    measurementId: "G-QYD1SXS4VT"
+  };
+  
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const { width: screenWidth } = Dimensions.get('window');
+  firebase.initializeApp(firebaseConfig);
+  
 
 
-function addExercise() {
-    navigation.navigate('AddExerciseInPlan');
-    //store data in table above and start storing data again
-}
-
-const { width: screenWidth } = Dimensions.get('window');
 const AddExerciseInPlan = () => {
-
-    function addExercise() {
-        navigation.navigate('AddExerciseInPlan');
-        //store data in table above and start storing data again
-    }
 
     const navigation = useNavigation();
     const route = useRoute();
 
     const planName = route.params?.planName;
     const planType = route.params?.planType;
+    const trainer = route.params?.user;
+
+    const [counter, setCounter] = useState(0); // Initialize counter here
+    const [loading, setLoading] = useState(false);
 
     React.useEffect(() => {
         console.log('Plan Name: ', planName);
@@ -33,12 +58,93 @@ const AddExerciseInPlan = () => {
     }, []);
         
 
+    async function addExercise() {
+
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permissionResult.granted) {
+          Alert.alert('Permissions required', 'Permission to access media library is required to select a video.');
+          return;
+        }
+    
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+          allowsEditing: true,
+          quality: 1,
+        });
+    
+        if (!result.canceled) {
+          console.log('Video picked:', result.assets[0].uri);
+          // timestamp as video name
+          const exercise_name = exerciseName;
+        //   const video_name = user.email + "_" + workout.id + ".mp4";    // NAMING CONVENTION: email_workoutID.mp4
+          uploadFile(result, result.assets[0].uri, exercise_name);
+        }
+      };
+
+
+      async function uploadFile(file, uri, exercise_name) {
+
+        if (counter == 0) {
+            // create workout and push to database
+            const workout_plan = {
+              plan_name: planName,
+              workout_type: planType,
+              plan_trainer: trainer["id"],
+            };
+            setLoading(true);
+
+            try {
+                const apiUrl = REACT_APP_API_URL + '/exercise/add_plan';
+                const response = await axios.post(apiUrl, workout_plan);
+                console.log(response.data);
+                setCounter((prevCounter) => prevCounter + 1);
+                setLoading(false);     
+            } catch (error) {
+                alert('Error analyzing video:', error);
+                setLoading(false);
+            }
+        }
+
+        // const response = await fetch(uri);
+        // const blob = await response.blob();
+    
+        // var storageRef = ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + name);
+        // const uploadTask = uploadBytesResumable(storageRef, blob);
+    
+        // setLoading(true);
+    
+        // // Listen for state changes, errors, and completion of the upload.
+        // uploadTask.on('state_changed',
+        //   (snapshot) => {
+        //     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        //     console.log('Upload is ' + progress + '% done');
+        //   },
+        // )
+    
+        // // NAMING CONVENTION: email_workoutID.mp4
+    
+        // await uploadTask.then(() => {
+        //   console.log('Uploaded a blob or file!');
+        //   setUploaded(true);
+        //   getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/user/" + name)).then((url1) => {
+        //     console.log("Client Video URL: ", url1);
+        //     getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + trainer["email"] + "_" + workout["id"] + ".mp4")).then((url2) => {
+        //       console.log("Trainer Video URL: ", url2);
+        //       analyzeFootage(exercise_name, url1, url2);
+        //     });
+        //   });
+        // });
+    
+      }
+    
+
+
 
     const data = [
-        {label: 'Push Ups', value: '1'},
-        {label: 'Plank', value: '2'},
-        {label: 'Jumping Jacks', value: '3'},
-        {label: 'Squats', value: '4'},
+        {label: 'pushup', value: '1'},
+        {label: 'plank', value: '2'},
+        {label: 'jumping jack', value: '3'},
+        {label: 'squat', value: '4'},
     ];
     const data3 = [
        {label1: 'reps', value1: '1'},
@@ -70,9 +176,9 @@ const AddExerciseInPlan = () => {
     const data2 = ["Weight Loss", "Toning", "Strength", "Yoga"];
     
     // const [selectedValue, setSelectedValue] = React.useState('');
-    const [amount, setamount] = useState('');
-    const [exerciseName, setExerciseName] = useState('');
-    const [secOrReps, setSecOrReps] = useState('');
+    const [amount, setamount] = useState('10');
+    const [exerciseName, setExerciseName] = useState('plank');
+    const [secOrReps, setSecOrReps] = useState('reps');
 
     const [loaded] = useFonts({
         'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -249,6 +355,13 @@ const AddExerciseInPlan = () => {
 						</Text>
 					</View>
                     </View>
+    {loading && (
+        <Modal transparent={true} animationType="fade">
+            <View style={styles.modal}>
+                <ActivityIndicator size="large" color="#fff" />
+            </View>
+       </Modal>
+      )}
                     
 {/* -------------------------------------Set plan name-----------------------------------------------------------------------------------------*/}
            <View style={{flexDirection: "row"}}>
@@ -326,6 +439,7 @@ const AddExerciseInPlan = () => {
             </View>
 {/* -------------------------------------------upload video button -------------------------------------------------------------- */}
 
+<Pressable onPress={ addExercise }>
 <View 
                 style = {{
                     alignItems: "center",
@@ -347,13 +461,13 @@ const AddExerciseInPlan = () => {
                     {"Upload Video"}
                 </Text>
             </View>
+    </Pressable>
 
 {/* -------------------------------------Add Exercise Button-----------------------------------------------------------------------------------------*/}
            
             
         </ScrollView>
         <View style={{marginBottom:15}}>
-        <Pressable onPress={ addExercise }>
             <View 
                 style = {{
                     alignItems: "center",
@@ -377,7 +491,6 @@ const AddExerciseInPlan = () => {
                     {"Add Exercise"}
                 </Text>
             </View>
-            </Pressable>
 
 {/* -------------------------------------Done button-----------------------------------------------------------------------------------------*/}
 
@@ -463,5 +576,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     backgroundColor: "#fff",
-    }
+    },
+    modal: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+      },
     });

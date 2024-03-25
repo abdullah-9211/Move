@@ -1,18 +1,9 @@
 import * as React from 'react';
 import { SafeAreaView, ScrollView, ImageBackground, Image, FlatList, View, StyleSheet, Icon, Text, Dimensions, Pressable} from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import NavBarBotTrainer from '../components/NavBarBotTrainer';
-import NavBar from '../components/NavBar';
-import NavBarTrainer from '../components/NavBarTrainer';
-import NavBarBot from '../components/NavBarBot';
 import { useFonts } from 'expo-font';
-import DropdownMenu from 'react-native-dropdown-menu';
 import { Octicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
-import { Picker } from '@react-native-picker/picker';
-import SelectDropdown from 'react-native-select-dropdown'
 import {Dropdown, MultiSelect} from 'react-native-element-dropdown';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -21,6 +12,9 @@ const { width: screenWidth } = Dimensions.get('window');
 const AddPlan = () => {
     const navigation = useNavigation();
     const route = useRoute();
+
+    const trainer = route.params?.user;
+
     const data = [
         {label: 'Strength', value: '1'},
         {label: 'Toning', value: '2'},
@@ -42,6 +36,7 @@ const AddPlan = () => {
     
     // const [selectedValue, setSelectedValue] = React.useState('');
     const [planname, setplanname] = React.useState('');
+    const [planType, setplanType] = React.useState('');
 
     const [loaded] = useFonts({
         'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -122,11 +117,13 @@ const AddPlan = () => {
                     labelField="label"
                     valueField="value"
                     label="Dropdown"
-                    placeholder="Select category"
+                    placeholder="Select Plan Type"
+
                     value={dropdown}
                     onChange={item => {
                     setDropdown(item.value);
-                        console.log('selected', item);
+                        setplanType(item);
+                        console.log('selected', planType);
                     }}
                     renderItem={item => _renderItem(item)}
                     textError="Error"
@@ -154,39 +151,17 @@ const AddPlan = () => {
                     placeholder='Plan name'
                     value={planname}
                     useNativeDriver={false}
-                    onChangeText={(text) => setplanname(text)}
+                    onChangeText={(text) => {
+                        setplanname(text);
+                        console.log(planname);
+                    }}
                     >
                     
                 </TextInput>
             </View>
 
 
-{/* -------------------------------------Add Exercise Button-----------------------------------------------------------------------------------------*/}
-            <View 
-                style = {{
-                    alignItems: "center",
-                    backgroundColor: "#ffffff",
-                    borderColor: "#900020",
-                    borderRadius: 9,
-                    borderWidth: 1,
-                    paddingVertical: 19,
-                    marginBottom: 209,
-                    marginHorizontal: 25,
-                }}>
-                <Pressable onPress={() => navigation.navigate('AddExerciseInPlan')}>
-                <Text 
-                    style = {{
-                        color: "#000000",
-                        fontSize: 16,
-                      
-                        fontFamily: "QuickSandBold"
-                    }}>
-                    {"Add Exercise"}
-                </Text>
-                </Pressable>
-            </View>
-
-{/* -------------------------------------Done button-----------------------------------------------------------------------------------------*/}
+{/* -------------------------------------Add Exercise button-----------------------------------------------------------------------------------------*/}
 
             <View 
                 style = {{
@@ -195,16 +170,20 @@ const AddPlan = () => {
                     borderRadius: 9,
                     paddingVertical: 19,
                     marginBottom: 0,
+                    marginTop: 250,
                     marginHorizontal: 25,
                 }}>
+                <Pressable onPress={() => navigation.navigate('AddExerciseInPlan', {planName: planname, planType: planType.label, user: trainer})}>
                 <Text 
                     style = {{
-                        color: "#ffffff",
+                        color: "#fff",
                         fontSize: 16,
+                      
                         fontFamily: "QuickSandBold"
                     }}>
-                    {"Done"}
+                    {"Add Exercise"}
                 </Text>
+                </Pressable>
             </View>
             
         </ScrollView>

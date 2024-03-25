@@ -67,12 +67,21 @@ const ExpandableListItem = ({ item }) => {
 					</View>
             </TouchableOpacity> 
             {expanded && ( 
-                <FlatList
-				data={item.error}
-				renderItem={({ item }) => <ListItem item={item.error} />}
-				keyExtractor={(item) => item.toString()} 
-				showsHorizontalScrollIndicator={false}
-					/>
+                <View style={[styles.info,{paddingTop: 12,justifyContent:"space-between", borderTopWidth:0,borderBottomWidth:0, borderLeftWidth:1,borderRightWidth: 1,borderColor: "#900020"}]}>
+					<Text style={{color: "#900020",
+								fontSize: 14,
+								fontFamily: "QuickSand",
+								marginRight: 4,}}> 
+                    	{item.error[0]} 
+                	</Text>
+					<Text style={{color: "#900020",
+								fontSize: 14,
+								fontFamily: "QuickSand",
+								marginRight: 4,}}> 
+                    	{"00:" + item.error_time[0]}
+
+					</Text>
+				</View>
             )} 
         </View> 
     ); 
@@ -89,7 +98,7 @@ const ExpandableList = ({ data }) => {
 			marginHorizontal: 25,
 			marginTop:0,
 			width: screenWidth*0.9,}}
-            data={data} 
+            data={data[0].info} 
             renderItem={renderItem} 
             keyExtractor={(item) => item.id.toString()} 
         /> 
@@ -102,57 +111,73 @@ export default function Report() {
 //   const toggleExpand = () => {
 //     setExpanded(!expanded);
 //   };
-//   // const user = route.params?.user;
-  // const workout = route.params?.workout;
-  // const duration = route.params?.duration;
-  // const accuracy = route.params?.accuracy;
+  const user = route.params?.user;
+  const workout = route.params?.workout;
+  const duration = route.params?.duration;
+  const accuracy = route.params?.accuracy;
+  const exercises = route.params?.exercises;
+  const numExercises = route.params?.numExercises;
+  const errors = route.params?.errors;
+  const error_times = route.params?.error_times;
+  const exercise_translator = route.params?.exercise_translator;
+  const accuracies = route.params?.accuracies;
 
-  // const [Accuracy, setAccuracy] = React.useState(0);
 
-  // React.useEffect(() => {
-  //   setAccuracy(Math.round(accuracy));
-  //   console.log(Accuracy, duration);
-  // }, []);
+  React.useEffect(() => {
 
-//   const ListItem = ({item}) => {
-// 	return(<View style={[styles.info,{paddingTop: 12,justifyContent:"space-between", borderTopWidth:0,borderBottomWidth:0, borderLeftWidth:1,borderRightWidth: 1,borderColor: "#900020"}]}>
-// 	<Text style={{color: "#900020",
-// 				fontSize: 14,
-// 				fontFamily: "QuickSand",
-// 				marginRight: 4,}}> 
-// 		{item.error[0]} 
-// 	</Text>
-// 	<Text style={{color: "#900020",
-// 				fontSize: 14,
-// 				fontFamily: "QuickSand",
-// 				marginRight: 4,}}> 
-// 		{item.error[1]}
+	let error_data = [];
 
-// 	</Text>
-// </View>);
-// }
+	for (let i = 0; i < exercises.length; i++) {
+		let exercise = exercises[i];
+		let exerciseAccuracy = accuracies[i];
+		let exerciseErrors = errors[exercise_translator[exercise]];
+		let exerciseErrorTimes = error_times[exercise_translator[exercise]];
+		
+		let object = {
+			id: i+1,
+			exercise: exercise,
+			accuracy: exerciseAccuracy,
+			error: exerciseErrors,
+			error_time: exerciseErrorTimes
+		};
+
+		error_data.push(object);
+		console.log(data[0].info);
+
+	}
+
+	data[0].info = error_data;
+
+  }, []);
   const data = [ 
 	{ 
-		id: 1, 
-		exercise: "Pushups", 
-		accuracy: "85%",
-		error: [[`Elbow angle too low`, '00:32']] 
+		title: "Errors",
+		info: [
+			{
+				id: 1, 
+				exercise: "Pushups", 
+				accuracy: "85%",
+				error: [`Elbow angle too low`],
+				error_time: ['32'] 
+			},
+			{
+				id: 2, 
+				exercise: "Plank", 
+				accuracy: "55%",
+				error: [`Elbow angle too low`],
+				error_time: ['32'] 
+			},
+			{
+				id: 3, 
+				exercise: "Squat", 
+				accuracy: "15%",
+				error: [`Elbow angle too low`],
+				error_time: ['32'] 
+			},
+		]
 			
 	}, 
-	{ 
-		id: 2, 
-		exercise: "Plank", 
-		accuracy: "75%",
-		error: [[`Elbow angle too low`, '00:32']] 
-	}, 
-	{ 
-		id: 3, 
-		exercise: "Jumping Jacks", 
-		accuracy: "89%",
-		error: [[`Elbow angle too low`, '00:32']] 
-	}, 
-	// ...more items 
-]; 
+ ]; 
   const [loaded] = useFonts({
     'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
     'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf'),
@@ -211,7 +236,7 @@ export default function Report() {
 								marginLeft: 20,
                 marginBottom: 20,
 							}}>
-							{"57.9%"}
+							{accuracy + "%"}
 						</Text>
 					</View>
           <View style={{ marginVertical: 10}}>
@@ -268,7 +293,7 @@ export default function Report() {
 								
                 
 							}}>
-							{"4"}
+							{numExercises}
 						</Text>
 						<Text 
 							style = {{
@@ -319,7 +344,7 @@ export default function Report() {
                 marginTop: 8,
                 
 							}}>
-							{"9m 37s"}
+							{duration + "s"}
 						</Text>
             <Text 
 							style = {{

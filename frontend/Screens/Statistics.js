@@ -1,23 +1,23 @@
 import * as React from 'react';
-import { StyleSheet, Image, Text, View, Dimensions, TouchableOpacity, FlatList, } from 'react-native';
+import { StyleSheet, Image, Text, View, Dimensions, TouchableOpacity, FlatList, Pressable, } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useState } from 'react';
 import NavBarBot from '../components/NavBarBot';
 import Report from '../components/Report';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 const { width: screenWidth } = Dimensions.get('window');
 
 
 
 export default function WorkoutCompleted() {
-  console.log('called');
   const route = useRoute();
+  const navigation = useNavigation();
 
-  // const user = route.params?.user;
-  // const workout = route.params?.workout;
-  // const duration = route.params?.duration;
-  // const accuracy = route.params?.accuracy;
+  const user = route.params?.user;
+  const workout = route.params?.workout;
+  const duration = route.params?.duration;
+  const accuracy = route.params?.accuracy;
 
   const [loaded] = useFonts({
     'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),

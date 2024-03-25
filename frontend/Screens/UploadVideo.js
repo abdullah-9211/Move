@@ -37,7 +37,7 @@ const { width: screenWidth } = Dimensions.get('window');
 firebase.initializeApp(firebaseConfig);
 
 
-export default function uploadVideo() {
+export default function UploadVideo() {
   
   const navigation = useNavigation();
   const route = useRoute();
@@ -48,7 +48,8 @@ export default function uploadVideo() {
   const workout = route.params?.workout;
   const [hasPermission, setHasPermission] = useState(null);
   const [counter, setCounter] = useState(0); // Initialize counter here
-  const [isLoading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
   const [exercises, setExercises] = useState(exerciseNames);
   const exerciseText = exercises[counter] || "Exercise";
   
@@ -91,7 +92,7 @@ export default function uploadVideo() {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       console.log('Video picked:', result.assets[0].uri);
       // timestamp as video name
       const exercise_name = exercises[counter];
@@ -124,18 +125,6 @@ export default function uploadVideo() {
 
   async function uploadFile(file, uri, name, exercise_name) {
 
-    /* const { data, error } = await supabase.storage
-      .from('videos')
-      .upload(plank/user_video/${name}, uri, {
-        contentType: 'video/mp4',
-      });
-
-    if (error) {
-      console.error('Upload error:', error);
-      return;
-    }
-    console.log('Upload successful:', data); */
-
     const response = await fetch(uri);
     const blob = await response.blob();
 
@@ -156,6 +145,7 @@ export default function uploadVideo() {
 
     await uploadTask.then(() => {
       console.log('Uploaded a blob or file!');
+      setUploaded(true);
       getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/user/" + name)).then((url1) => {
         console.log("Client Video URL: ", url1);
         getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + trainer["email"] + "_" + workout["id"] + ".mp4")).then((url2) => {
@@ -168,7 +158,7 @@ export default function uploadVideo() {
   }
 
   const handleNext = () => {
-    navigation.push('uploadVideo', { exerciseName: nextExercise });
+    navigation.push('UploadVideo', { exerciseName: nextExercise });
   };
 
   const finishWorkout = async () => {
@@ -176,13 +166,14 @@ export default function uploadVideo() {
     try{
       const apiUrl = REACT_APP_API_URL + '/exercise/finish-workout';
       const requestBody = {
-        plan_id: 2,
-        client_id: 7,
+        plan_id: workout.id,
+        client_id: user.id,
+        trainer_id: workout.plan_trainer,
       };
       const response = await axios.post(apiUrl, requestBody);
       console.log(response.data);
       setLoading(false);
-      navigation.navigate('Statistics', {user: user, duration: response.data.total_duration, accuracy: response.data.accuracy, workout: response.data.workout});
+      navigation.navigate('Statistics', {user: user, duration: response.data.total_duration, accuracy: response.data.accuracy, workout: response.data.workout, exercises: response.data.exercises, numExercises: response.data.exerciseNum, errors: response.data.errors, error_times: response.data.error_times, exercise_translator: response.data.exercise_translator, accuracies: response.data.accuracies});
     } catch (error) {
       alert('Error finishing workout:', error);
       setLoading(false);
@@ -194,7 +185,8 @@ export default function uploadVideo() {
     console.log("Counter: " + counter + " -- Workouts: " + workouts);
 
     if (counter < workouts - 1) {
-      navigation.navigate('uploadVideo', { workouts:workouts, user: user, trainer: trainer, exerciseNames: exerciseNames, workout: workout});
+      setUploaded(false);
+      navigation.navigate('UploadVideo', { workouts:workouts, user: user, trainer: trainer, exerciseNames: exerciseNames, workout: workout});
     } else {
       finishWorkout();
     }
@@ -225,16 +217,16 @@ export default function uploadVideo() {
       >
         <View style={{ flex: 1, justifyContent: "flex-start", backgroundColor: "transparent" }}>
           <View>
-            {/* Main image or any other components you want to overlay */}
+
           </View>
           <View style={{ flex: 1, alignItems: "flex-start", justifyContent: "flex-end" }}>
             
           </View>
-          {/* ... (rest of your content) */}
+
         </View>
         <View style={{ flex: 1, alignItems: "flex-start", justifyContent: "flex-end" }}>
             <Text style={styles.headingtext}>
-              Push Ups
+              {exerciseText}
             </Text>
     </View>
       </LinearGradient>
@@ -286,10 +278,24 @@ export default function uploadVideo() {
 							alignSelf: "stretch",
 						}}>
 					</View>
-					<Octicons name="check-circle" size={24} color={"#D9D9D9"} style = {{
+          {uploaded &&
+            (<Octicons name="check-circle" size={24} color={"#900020"} style = {{
                   marginRight:5,
-                    }}/>
+                    }}/>)
+          }
+          {!uploaded &&
+            (<Octicons name="check-circle" size={24} color={"#D9D9D9"} style = {{
+                  marginRight:5,
+                    }}/>)
+          }
 				</View>
+        {loading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+      )}
                 <View style={{marginLeft:5}}>
                 <Text 
 					style = {{
@@ -316,7 +322,7 @@ export default function uploadVideo() {
             <View style={{margin:0}}>
             
                 
-                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={() => navigation.navigate('Statistics')}>
+                <Pressable style={{flex:1, justifyContent: "flex-end"}} onPress={handleFinish}>
                   <View style={styles.button}>
                   
                   <Text style={{color:"#ffffff", fontFamily: "QuickSand", fontSize:16}}>Next</Text>
@@ -350,7 +356,12 @@ export default function uploadVideo() {
       width: screenWidth,
       
     },
-
+    modal: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    },
     button:{
       alignItems: "center",
       backgroundColor: "#900020",
