@@ -44,6 +44,7 @@ const ListItem = ({ item }) => (
                     <Octicons name="plus" size={24} color={"#000000"} style={{width: 18, height: 20, marginTop: 0, marginBottom: 2, marginLeft: 15}} />
                 </View>
             </TouchableOpacity> 
+			<View style= {{flexDirection: "column"}}>
             {expanded && ( 
 				<ExpandableListItem2 item={item} data={data} />
                 // <View style={[styles.info, {paddingTop: 12, justifyContent: "space-between", borderTopWidth: 0, borderBottomWidth: 0, borderLeftWidth: 1, borderRightWidth: 1, borderColor: "#900020"}]}>
@@ -55,6 +56,7 @@ const ListItem = ({ item }) => (
                 //     </Text>
                 // </View>
             )} 
+			</View>
         </View> 
     ); 
 };
@@ -67,24 +69,20 @@ const ExpandableListItem2 = ({ item, data }) => {
   
     return ( 
         <View style={{marginBottom: 0}}> 
-            <View style={[styles.info, {paddingTop: 12, justifyContent: "space-between", borderTopWidth: 0, borderBottomWidth: 0, borderLeftWidth: 1, borderRightWidth: 1, borderColor: "#900020"}]}>
-                    <Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4}}> 
-                        {item.error} 
-                    </Text>
-                    <Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4}}> 
-                        {"00:" + item.error_time}
-                    </Text>
+            <TouchableOpacity onPress={toggleExpand}>
+                <View style={[styles.info, {paddingVertical: 10, paddingHorizontal: 17, flexDirection: "column", backgroundColor: "#ffffff", borderColor: "#900020", borderTopWidth:0, borderBottomWidth:0, borderLeftWidth: 1, borderRightWidth: 1}]}>
+                    {item.error.map((error, index) => (
+                        <View key={index} style={{flexDirection: "row", justifyContent: "space-between"}}>
+                            <Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4, marginVertical: 2}}>
+                                {error}
+                            </Text>
+                            <Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4}}>
+                                {"00:" + item.error_time[index]}
+                            </Text>
+                        </View>
+                    ))}
                 </View>
-            {/* {expanded && ( 
-                <View style={[styles.info, {paddingTop: 12, justifyContent: "space-between", borderTopWidth: 0, borderBottomWidth: 0, borderLeftWidth: 1, borderRightWidth: 1, borderColor: "#900020"}]}>
-                    <Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4}}> 
-                        {item.error[0]} 
-                    </Text>
-                    <Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4}}> 
-                        {"00:" + item.error_time[0]}
-                    </Text>
-                </View>
-            )}  */}
+            </TouchableOpacity>
         </View> 
     ); 
 };
@@ -158,22 +156,22 @@ export default function Report() {
 				id: 1, 
 				exercise: "Pushups", 
 				accuracy: "85%",
-				error: [`Elbow angle too low`],
-				error_time: ['32'] 
+				error: [`Elbow angle too low`, 'Elbow angle too high'],
+				error_time: ['32', '35'] 
 			},
 			{
 				id: 2, 
 				exercise: "Plank", 
 				accuracy: "55%",
-				error: [`Elbow angle too low`],
-				error_time: ['32'] 
+				error: [`Elbow angle too high`],
+				error_time: ['34'] 
 			},
 			{
 				id: 3, 
 				exercise: "Squat", 
 				accuracy: "15%",
 				error: [`Elbow angle too low`],
-				error_time: ['32'] 
+				error_time: ['35'] 
 			},
 		]
 			
