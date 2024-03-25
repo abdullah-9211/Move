@@ -68,9 +68,10 @@ def add_plan(plan):
             "plan_trainer": plan["plan_trainer"],
             "workout_type": plan["workout_type"],
             "plan_name": plan["plan_name"],
+            "plan_image": "https://wallpapercave.com/wp/wp7661163.jpg",
         }]).execute()
         response = dict(response)
-        return response["data"][0]["id"]
+        return {"plan_id": response["data"][0]["id"]}
     except Exception as e:
         print("\nError inserting workout plan into database:", e)
 

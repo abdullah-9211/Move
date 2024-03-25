@@ -51,6 +51,9 @@ const AddExerciseInPlan = () => {
 
     const [counter, setCounter] = useState(0); // Initialize counter here
     const [loading, setLoading] = useState(false);
+    const planID = React.useRef(0);
+    const [numVideos, setNumVideos] = useState(0);
+    const [exerciseURL, setExerciseURL] = useState(''); // Initialize exerciseURL here
 
     React.useEffect(() => {
         console.log('Plan Name: ', planName);
@@ -66,23 +69,27 @@ const AddExerciseInPlan = () => {
           return;
         }
     
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-          allowsEditing: true,
-          quality: 1,
-        });
-    
-        if (!result.canceled) {
-          console.log('Video picked:', result.assets[0].uri);
-          // timestamp as video name
-          const exercise_name = exerciseName;
-        //   const video_name = user.email + "_" + workout.id + ".mp4";    // NAMING CONVENTION: email_workoutID.mp4
-          uploadFile(result, result.assets[0].uri, exercise_name);
+        if (numVideos == 0)
+        {
+            let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+            allowsEditing: true,
+            quality: 1,
+            });
+        
+            if (!result.canceled) {
+            console.log('Video picked:', result.assets[0].uri);
+            // timestamp as video name
+            const exercise_name = exerciseName;
+            //   const video_name = user.email + "_" + workout.id + ".mp4";    // NAMING CONVENTION: email_workoutID.mp4
+            uploadFile(result, result.assets[0].uri, exercise_name);
+            }
         }
       };
 
 
       async function uploadFile(file, uri, exercise_name) {
+
 
         if (counter == 0) {
             // create workout and push to database
@@ -93,47 +100,51 @@ const AddExerciseInPlan = () => {
             };
             setLoading(true);
 
+            const apiUrl = REACT_APP_API_URL + '/exercise/add_plan';
             try {
-                const apiUrl = REACT_APP_API_URL + '/exercise/add_plan';
                 const response = await axios.post(apiUrl, workout_plan);
-                console.log(response.data);
-                setCounter((prevCounter) => prevCounter + 1);
-                setLoading(false);     
+                planID.current = response.data.plan_id;
+                console.log("Response: ", response.data.plan_id);
+                console.log('Plan ID: ', planID.current);
+                setCounter(prevCounter => prevCounter + 1);
             } catch (error) {
-                alert('Error analyzing video:', error);
+                console.log(error);
                 setLoading(false);
             }
+            
         }
 
-        // const response = await fetch(uri);
-        // const blob = await response.blob();
+
+        const response = await fetch(uri);
+        const blob = await response.blob();
     
-        // var storageRef = ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + name);
-        // const uploadTask = uploadBytesResumable(storageRef, blob);
+        const name = trainer["email"] + "_" + planID.current + ".mp4";
+
+        var storageRef = ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + name);
+        const uploadTask = uploadBytesResumable(storageRef, blob);
     
-        // setLoading(true);
+        setLoading(true);
     
-        // // Listen for state changes, errors, and completion of the upload.
-        // uploadTask.on('state_changed',
-        //   (snapshot) => {
-        //     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        //     console.log('Upload is ' + progress + '% done');
-        //   },
-        // )
+        // Listen for state changes, errors, and completion of the upload.
+        uploadTask.on('state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+          },
+        )
     
         // // NAMING CONVENTION: email_workoutID.mp4
     
-        // await uploadTask.then(() => {
-        //   console.log('Uploaded a blob or file!');
-        //   setUploaded(true);
-        //   getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/user/" + name)).then((url1) => {
-        //     console.log("Client Video URL: ", url1);
-        //     getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + trainer["email"] + "_" + workout["id"] + ".mp4")).then((url2) => {
-        //       console.log("Trainer Video URL: ", url2);
-        //       analyzeFootage(exercise_name, url1, url2);
-        //     });
-        //   });
-        // });
+        await uploadTask.then(() => {
+          console.log('Uploaded a blob or file!');
+          setNumVideos((prevNumVideos) => prevNumVideos + 1);
+          setLoading(false);
+
+          getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + name)).then((url1) => {
+            console.log("Uploaded Video URL: ", url1);
+            setExerciseURL(url1);
+          });
+        });
     
       }
     
