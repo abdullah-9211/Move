@@ -10,6 +10,17 @@ import { Octicons } from '@expo/vector-icons';
 
 const { width: screenWidth } = Dimensions.get('window');
 
+const ListItem = ({ item }) => (
+	<View style={[styles.info, { paddingTop: 12, justifyContent: "space-between", borderTopWidth: 0, borderBottomWidth: 0, borderLeftWidth: 1, borderRightWidth: 1, borderColor: "#900020" }]}>
+	  <Text style={{ color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4 }}>
+		{item[0]}
+	  </Text>
+	  <Text style={{ color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4 }}>
+		{item[1]}
+	  </Text>
+	</View>
+  );
+
 const ExpandableListItem = ({ item }) => { 
     const [expanded, setExpanded] = useState(false); 
   
@@ -56,21 +67,12 @@ const ExpandableListItem = ({ item }) => {
 					</View>
             </TouchableOpacity> 
             {expanded && ( 
-                <View style={[styles.info,{paddingTop: 12,justifyContent:"space-between", borderTopWidth:0,borderBottomWidth:0, borderLeftWidth:1,borderRightWidth: 1,borderColor: "#900020"}]}>
-					<Text style={{color: "#900020",
-								fontSize: 14,
-								fontFamily: "QuickSand",
-								marginRight: 4,}}> 
-                    	{item.error[0]} 
-                	</Text>
-					<Text style={{color: "#900020",
-								fontSize: 14,
-								fontFamily: "QuickSand",
-								marginRight: 4,}}> 
-                    	{item.error[1]}
-
-					</Text>
-				</View>
+                <FlatList
+				data={item.error}
+				renderItem={({ item }) => <ListItem item={item.error} />}
+				keyExtractor={(item) => item.toString()} 
+				showsHorizontalScrollIndicator={false}
+					/>
             )} 
         </View> 
     ); 
@@ -111,25 +113,43 @@ export default function Report() {
   //   setAccuracy(Math.round(accuracy));
   //   console.log(Accuracy, duration);
   // }, []);
+
+//   const ListItem = ({item}) => {
+// 	return(<View style={[styles.info,{paddingTop: 12,justifyContent:"space-between", borderTopWidth:0,borderBottomWidth:0, borderLeftWidth:1,borderRightWidth: 1,borderColor: "#900020"}]}>
+// 	<Text style={{color: "#900020",
+// 				fontSize: 14,
+// 				fontFamily: "QuickSand",
+// 				marginRight: 4,}}> 
+// 		{item.error[0]} 
+// 	</Text>
+// 	<Text style={{color: "#900020",
+// 				fontSize: 14,
+// 				fontFamily: "QuickSand",
+// 				marginRight: 4,}}> 
+// 		{item.error[1]}
+
+// 	</Text>
+// </View>);
+// }
   const data = [ 
 	{ 
 		id: 1, 
 		exercise: "Pushups", 
 		accuracy: "85%",
-		error: [`Elbow angle too low`, '00:32'] 
+		error: [[`Elbow angle too low`, '00:32']] 
 			
 	}, 
 	{ 
 		id: 2, 
 		exercise: "Plank", 
 		accuracy: "75%",
-		error: [`Elbow angle too low`, '00:32'] 
+		error: [[`Elbow angle too low`, '00:32']] 
 	}, 
 	{ 
-		id: 2, 
+		id: 3, 
 		exercise: "Jumping Jacks", 
 		accuracy: "89%",
-		error: [`Elbow angle too low`, '00:32'] 
+		error: [[`Elbow angle too low`, '00:32']] 
 	}, 
 	// ...more items 
 ]; 

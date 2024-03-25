@@ -34,7 +34,7 @@ const ProfileWithPlans = () => {
 	const ListItem = ({ item }) => {
 		return(
 			<View style={{flex:1, justifyContent:"space-between"}}>
-			<TouchableOpacity style={{marginHorizontal:10, marginVertical:10, borderRadius:12}}>
+			<TouchableOpacity style={{marginHorizontal:10, marginVertical:10, borderRadius:12}} onPress={() => navigation.navigate('PlanDescription')}>
 			<ImageBackground 
                     source={{uri:item.plan_image}} 
                     resizeMode="cover"
