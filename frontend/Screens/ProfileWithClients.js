@@ -35,7 +35,7 @@ const ProfileWithClients = () => {
 	const ListItem = ({ item }) => {
 		return(
 			<View style={{flex:1, justifyContent:"space-between"}}>
-			<TouchableOpacity style={{marginHorizontal:10, marginVertical:10, borderRadius:12}}>
+			<TouchableOpacity style={{marginHorizontal:10, marginVertical:10, borderRadius:12}} onPress={() => navigation.navigate('UserProfileTrainerSide')}>
 			<ImageBackground 
                     source={{uri:item.profile_picture}} 
                     resizeMode="cover"

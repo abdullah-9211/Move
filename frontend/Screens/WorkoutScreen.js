@@ -54,7 +54,7 @@ export default function Workouts() {
       resizeMode="cover"
       imageStyle={{ borderRadius: 9 }}
       style={{
-        width: 135, height: 135, borderRadius: 9, marginBottom:15, marginTop:8,
+        width: 150, height: 150, borderRadius: 9, marginBottom:15, marginTop:8,
           paddingBottom: 0,
           paddingHorizontal: 0,
       }}>

@@ -10,6 +10,17 @@ import { Octicons } from '@expo/vector-icons';
 
 const { width: screenWidth } = Dimensions.get('window');
 
+const ListItem = ({ item }) => (
+	<View style={[styles.info, { paddingTop: 12, justifyContent: "space-between", borderTopWidth: 0, borderBottomWidth: 0, borderLeftWidth: 1, borderRightWidth: 1, borderColor: "#900020" }]}>
+	  <Text style={{ color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4 }}>
+		{item[0]}
+	  </Text>
+	  <Text style={{ color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4 }}>
+		{item[1]}
+	  </Text>
+	</View>
+  );
+
 const ExpandableListItem = ({ item }) => { 
     const [expanded, setExpanded] = useState(false); 
   
