@@ -264,14 +264,8 @@ const styles = StyleSheet.create({
   trainerName: {
     color: "#ffffff",
     fontFamily: "QuickSandMedium",
-<<<<<<< Updated upstream
     fontSize: 14,
     marginHorizontal:10,
-=======
-    fontSize: 15,
-    marginHorizontal:7,
-    
->>>>>>> Stashed changes
     marginBottom:10,
     justifyContent: "flex-end",
     alignItems: "flex-start"
