@@ -12,6 +12,9 @@ const { width: screenWidth } = Dimensions.get('window');
 const AddPlan = () => {
     const navigation = useNavigation();
     const route = useRoute();
+
+    const trainer = route.params?.user;
+
     const data = [
         {label: 'Strength', value: '1'},
         {label: 'Toning', value: '2'},
@@ -170,7 +173,7 @@ const AddPlan = () => {
                     marginTop: 250,
                     marginHorizontal: 25,
                 }}>
-                <Pressable onPress={() => navigation.navigate('AddExerciseInPlan', {planName: planname, planType: planType.label})}>
+                <Pressable onPress={() => navigation.navigate('AddExerciseInPlan', {planName: planname, planType: planType.label, user: trainer})}>
                 <Text 
                     style = {{
                         color: "#fff",

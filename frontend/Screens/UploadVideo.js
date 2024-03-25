@@ -92,7 +92,7 @@ export default function UploadVideo() {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       console.log('Video picked:', result.assets[0].uri);
       // timestamp as video name
       const exercise_name = exercises[counter];
@@ -124,18 +124,6 @@ export default function UploadVideo() {
 
 
   async function uploadFile(file, uri, name, exercise_name) {
-
-    /* const { data, error } = await supabase.storage
-      .from('videos')
-      .upload(plank/user_video/${name}, uri, {
-        contentType: 'video/mp4',
-      });
-
-    if (error) {
-      console.error('Upload error:', error);
-      return;
-    }
-    console.log('Upload successful:', data); */
 
     const response = await fetch(uri);
     const blob = await response.blob();

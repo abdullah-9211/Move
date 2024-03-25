@@ -213,7 +213,7 @@ const ProfileWithPlans = () => {
 						marginHorizontal:10,
                         marginVertical:10
 					}}>
-					<Pressable onPress={() => navigation.navigate('AddPlan')}>
+					<Pressable onPress={() => navigation.navigate('AddPlan', {user: trainer})}>
 					<Text 
 						style = {{
 							color: "#FFFFFF",
