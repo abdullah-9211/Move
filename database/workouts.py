@@ -76,6 +76,29 @@ def add_plan(plan):
         print("\nError inserting workout plan into database:", e)
 
 
+def add_plan_exercises(exercise_data):
+    client = connect()
+    try:
+        for exercise in exercise_data["exercise_data"]:
+            if exercise["exercise_type"] == 'reps':
+                response = client.table("Workout Plan Exercises").insert([{
+                    "plan_id": exercise["plan_id"],
+                    "exercise_id": get_exercise_id(exercise["exercise_name"]),
+                    "reps": exercise["exercise_amount"],
+                }]).execute()
+            else:
+                response = client.table("Workout Plan Exercises").insert([{
+                    "plan_id": exercise["plan_id"],
+                    "exercise_id": get_exercise_id(exercise["exercise_name"]),
+                    "duration": exercise["exercise_amount"],
+                }]).execute()
+            response = dict(response)
+            
+        return response["data"][0]["plan_id"]
+        
+    except Exception as e:
+        print("\nError inserting workout plan exercises into database:", e)
+
 # Get workout plans of a trainer
 """
 PARAMS - trainer_id: int

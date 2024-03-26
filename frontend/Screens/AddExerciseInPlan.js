@@ -54,10 +54,22 @@ const AddExerciseInPlan = () => {
     const planID = React.useRef(0);
     const [numVideos, setNumVideos] = useState(0);
     const [exerciseURL, setExerciseURL] = useState(''); // Initialize exerciseURL here
+    const [uploaded, setUploaded] = useState(false); // Initialize uploaded here
+    const [exercisesInfo, setExercisesInfo] = useState([]); // Initialize exercisesInfo here
 
     React.useEffect(() => {
         console.log('Plan Name: ', planName);
         console.log('Plan Type: ', planType);
+        console.log('Plan ID: ', planID.current);
+        console.log(exercisesInfo);
+
+        setDropdown(null);
+        setDropdown2(null);
+        setamount('10');
+        setExerciseName('plank');
+        setSecOrReps('reps');
+        setUploaded(false);
+        setNumVideos(0);
     }, []);
         
 
@@ -139,16 +151,37 @@ const AddExerciseInPlan = () => {
           console.log('Uploaded a blob or file!');
           setNumVideos((prevNumVideos) => prevNumVideos + 1);
           setLoading(false);
-
+          setUploaded(true);
           getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + name)).then((url1) => {
             console.log("Uploaded Video URL: ", url1);
             setExerciseURL(url1);
+            let exercise = {
+                plan_id: planID.current,
+                exercise_name: exercise_name,
+                exercise_video: url1,
+                exercise_amount: amount,
+                exercise_type: secOrReps,
+            };
+            setExercisesInfo((prevExercisesInfo) => [...prevExercisesInfo, exercise]);
           });
         });
     
       }
     
+      const nextVideo = () => {
+        setUploaded(false);
+        setNumVideos(0);
+        setDropdown(null);
+        setDropdown2(null);
+        console.log(exercisesInfo);
+        navigation.navigate('AddExerciseInPlan', {planName: planName, planType: planType, user: trainer});
+      };
 
+
+    async function saveExercises() {
+        setLoading(true);
+    
+    }
 
 
     const data = [
@@ -474,11 +507,18 @@ const AddExerciseInPlan = () => {
             </View>
     </Pressable>
 
+    {uploaded && (
+        <Text style={{color: 'grey', textAlign: 'center', marginBottom: 20}}>
+            Video uploaded successfully!
+        </Text>
+    )}
+
 {/* -------------------------------------Add Exercise Button-----------------------------------------------------------------------------------------*/}
            
             
         </ScrollView>
         <View style={{marginBottom:15}}>
+        <Pressable onPress={nextVideo}>
             <View 
                 style = {{
                     alignItems: "center",
@@ -502,10 +542,11 @@ const AddExerciseInPlan = () => {
                     {"Add Exercise"}
                 </Text>
             </View>
+            </Pressable>
 
 {/* -------------------------------------Done button-----------------------------------------------------------------------------------------*/}
 
-<Pressable onPress={() => navigation.navigate('ProfileWithPlans')}>
+<Pressable onPress={saveExercises}>
             <View 
                 style = {{
                     alignItems: "center",
