@@ -13,7 +13,12 @@ const { width: screenWidth } = Dimensions.get('window');
 const TrainerHomepage = () => {
 
     const route = useRoute();
+    const navigation = useNavigation();
     const trainer = route.params?.user;
+
+    React.useEffect(() => {
+      navigation.navigate('ProfileWithPlans', {user: trainer});
+    }, []);
 
     const ListItem = ({ item }) => {
 
