@@ -206,7 +206,7 @@ backgroundImage: {
   },
   SignUpText: {
     fontSize: 15,
-    fontFamily: 'QuickSand2',
+    fontFamily: 'QuickSand',
     textDecorationLine: "underline",
     color: "#ffffff",
 },
