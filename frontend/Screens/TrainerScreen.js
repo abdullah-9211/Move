@@ -23,31 +23,9 @@ const ListItem = ({ item }) => {
   const user = route.params?.user;
   const workouts = route.params?.workouts;
 
-  // const handleWorkoutClick = (item) => () => {
-  //   setLoading(true);
-
-  //   const apiUrl = REACT_APP_API_URL + '/exercise/get-exercises/' + item.id;
-  //   axios.get(apiUrl)
-  //   .then((response) => {
-  //     console.log(response.data);
-  //     const exercises_data = response.data;
-  //     const apiUrl = REACT_APP_API_URL + '/exercise/get-plan-trainer/' + item.plan_trainer;
-  //     axios.get(apiUrl)
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       setLoading(false);
-  //       navigation.navigate('StartWorkout', {user: user, workout: item, exercises: exercises_data, trainer: response.data[0]});
-  //     }
-  //     )
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   })    
-
-  // }
   
   return (
-    <TouchableOpacity style={{marginHorizontal:12, marginVertical:0}} onPress={() => navigation.navigate('TrainerProfileUserSide', {user: user})}>
+    <TouchableOpacity style={{marginHorizontal:12, marginVertical:0}} onPress={() => navigation.navigate('TrainerProfileUserSide', {user: user, trainer: item})}>
     <ImageBackground
     source={{
       uri: item.profile_picture,
@@ -66,8 +44,8 @@ const ListItem = ({ item }) => {
     <View style={{}}>
           <Text style={styles.planName}>{item.first_name + " " + item.last_name}</Text>
           <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:0}}>
-          <Text style={styles.trainerName}>{specializations[Math.floor(Math.random() * 5)]}</Text>
-          
+          {/* <Text style={styles.trainerName}>{specializations[Math.floor(Math.random() * 5)]}</Text>
+           */}
           </View>
           
         </View>
@@ -208,7 +186,7 @@ const styles = StyleSheet.create({
     fontFamily: "QuickSandBold",
     fontSize: 16,
     marginHorizontal:10,
-    marginBottom:0,
+    marginBottom:15,
     justifyContent: "flex-end",
     alignItems: "flex-start"
 },

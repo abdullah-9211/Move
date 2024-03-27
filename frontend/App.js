@@ -42,7 +42,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator
           // initialRouteName="ProfileWithPlans"
-          initialRouteName="HomePage"
+          initialRouteName="Login"
           screenOptions={{
             headerShown: false,
           }}

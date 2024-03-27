@@ -13,7 +13,8 @@ const { width: screenWidth } = Dimensions.get('window');
 const TrainerProfileUserSide = () => {
 
 	const route = useRoute();
-	const trainer = route.params?.user;
+	const user = route.params?.user;
+	const trainer = route.params?.trainer;
 
 	const [loading, setLoading] = React.useState(true);
 
@@ -91,7 +92,7 @@ const TrainerProfileUserSide = () => {
 				backgroundColor: "#FFFFFF",
 			}}>
                 <View style ={{flexDirection: "row", backgroundColor: "#E6E9EB", alignItems:'space-between', justifyContent: "space-between"}}>
-                    <Pressable onPress={() => navigation.navigate('TrainerScreen')}>
+                    <Pressable onPress={() => navigation.navigate('TrainerScreen', {user: user})}>
                         <MaterialIcons name="navigate-before" size={36} color="#000000" style={{paddingTop:50}}/>
                     </Pressable>
                     <MaterialIcons name="more-horiz" size={24} color="#000000" style={{paddingTop:50, marginHorizontal:10}}/>
