@@ -85,6 +85,11 @@ const ProfileWithClients = () => {
 		);
 	  }
 
+	  const logout = () => {
+		navigation.navigate('Login');
+	  }
+	
+
   return (
     <SafeAreaView 
 			style = {{
@@ -93,7 +98,7 @@ const ProfileWithClients = () => {
 			}}>
 			
                 <View style ={{backgroundColor: "#E6E9EB", alignItems:'flex-end', justifyContent: "flex-end"}}>
-                    <MaterialIcons name="more-horiz" size={24} color="#000000" style={{paddingTop:50, marginHorizontal:20}}/>
+					<Text style={{ fontFamily: 'QuickSand', fontSize: 16, color: '#898D8F', marginTop:20, marginRight: 30}} onPress={logout}>Logout</Text>
                 </View>
 				<View 
 					style = {{
