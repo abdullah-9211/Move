@@ -47,7 +47,7 @@ const ListItem = ({ item }) => {
   // }
   
   return (
-    <TouchableOpacity style={{marginHorizontal:12, marginVertical:0}} onPress={console.log(item.first_name)}>
+    <TouchableOpacity style={{marginHorizontal:12, marginVertical:0}} onPress={() => navigation.navigate('TrainerProfileUserSide', {user: user})}>
     <ImageBackground
     source={{
       uri: item.profile_picture,

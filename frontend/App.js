@@ -34,6 +34,7 @@ import AddExerciseInPlan from './Screens/AddExerciseInPlan';
 import UploadVideo from './Screens/UploadVideo';
 import PlanDescription from './Screens/PlanDescription';
 import UserProfileTrainerSide from './Screens/UserProfileTrainerSide';
+import TrainerProfileUserSide from './Screens/TrainerProfileUserSide';
 const Stack = createStackNavigator()
 
 export default function App() {
@@ -41,7 +42,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator
           // initialRouteName="ProfileWithPlans"
-          initialRouteName="Login"
+          initialRouteName="HomePage"
           screenOptions={{
             headerShown: false,
           }}
@@ -78,6 +79,7 @@ export default function App() {
           <Stack.Screen name= "UploadVideo" component={UploadVideo}/>
           <Stack.Screen name= "PlanDescription" component={PlanDescription}/>
           <Stack.Screen name= "UserProfileTrainerSide" component={UserProfileTrainerSide}/>
+          <Stack.Screen name= "TrainerProfileUserSide" component={TrainerProfileUserSide}/>
 
           
         </Stack.Navigator>

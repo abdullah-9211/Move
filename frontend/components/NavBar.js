@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 import { Card } from 'react-native-shadow-cards';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-export default function NavBar() {
+export default function NavBar({color1, color2, color3}) {
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -47,7 +47,48 @@ export default function NavBar() {
             <Text style={basic.text}>Trainers</Text>
           </Pressable>
         </View>
+        
       </View>
+      <View style={{flexDirection:"row"}}>
+      <View 
+						style = {{
+							
+							height: 1,
+							backgroundColor: {color1} ,
+							borderRadius: 1,
+              width:screenWidth/3,
+              elevation:1,
+              marginTop:0,
+						}}>
+					</View>
+          <View 
+						style = {{
+							
+							
+							height: 1,
+							backgroundColor: {color2} ,
+              
+							borderRadius: 1,
+              width:screenWidth/3,
+              elevation:1,
+              marginTop:0,
+						}}>
+            </View>
+              <View 
+						style = {{
+							
+							height: 1,
+							backgroundColor: {color3} ,
+							borderRadius: 1,
+              
+              width:screenWidth/3,
+              elevation:1,
+              
+						}}>
+					</View>
+					
+          
+        </View>
     </Card>
   );
 }

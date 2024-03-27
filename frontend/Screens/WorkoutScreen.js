@@ -131,7 +131,22 @@ export default function Workouts() {
     <View style={styles.container}>
     
       <NavBar />
-      <ScrollView style={{marginTop:120}}>
+
+      <ScrollView style={{marginTop:90}}>
+      <View 
+						style = {{
+							position: "absolute",
+							right: -screenWidth/2,
+							width: screenWidth/2,
+							height: 1,
+							backgroundColor: "#900020",
+							borderRadius: 2,
+              
+              marginTop:0,
+						}}>
+
+              
+					</View>
       {loading && (
                 <Modal transparent={true} animationType="fade">
                 <View style={styles.modal}>
@@ -139,7 +154,7 @@ export default function Workouts() {
                 </View>
                 </Modal>
       )}
-      <View style={{flex:1, flexDirection: "row"}}>
+      <View style={{flex:1, flexDirection: "row", marginTop:20}}>
       <Text style={styles.headingtext}>STRENGTH</Text>
       <View style={{flex:1, alignItems:"flex-end"}}>
       <Pressable onPress={() => navigation.navigate('WorkoutsStrength', {user: user, workouts: WORKOUTS[0].data})}>
