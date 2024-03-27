@@ -97,7 +97,7 @@ const ProfileWithPlans = () => {
 			}}>
 			
                 <View style ={{backgroundColor: "#E6E9EB", alignItems:'flex-end', justifyContent: "flex-end"}}>
-					<Text style={{ fontFamily: 'QuickSand', fontSize: 16, color: '#898D8F', marginTop:20, marginRight: 30}} onPress={logout}>Logout</Text>
+					<Text style={{ fontFamily: 'QuickSand', fontSize: 16, color: '#898D8F', marginTop:50, marginRight: 30}} onPress={logout}>Logout</Text>
                 </View>
 				<View 
 					style = {{
@@ -205,13 +205,15 @@ const ProfileWithPlans = () => {
 {/* --------------------------------------------add new button---------------------------------------------------- */}
 
 				<View style={{justifyContent: "flex-start", backgroundColor: 'rgba(255, 255, 255, 0.5)'}}>
+				<Pressable onPress={() => navigation.navigate('AddPlan', {user: trainer})}>
+
     				<View style={{alignItems: "center", backgroundColor: "#900020", borderRadius: 9, paddingVertical: 18, marginBottom: 20, bottom: 0, marginHorizontal: 10, marginVertical: 0}}>
-        				<Pressable onPress={() => navigation.navigate('AddPlan', {user: trainer})}>
            					<Text style={{color: "#FFFFFF", fontSize: 16, fontFamily: 'QuickSandBold'}}>
                 				{"Add new"}
             				</Text>
-        				</Pressable>
     				</View>
+				</Pressable>
+
 				</View>
 				
 			

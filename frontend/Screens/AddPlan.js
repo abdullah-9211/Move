@@ -47,6 +47,20 @@ const AddPlan = () => {
       if (!loaded) {
         return null;
       }
+
+    const addExercise = () => {
+        if (planname == '') {
+            alert('Please enter a plan name');
+            return;
+        }
+        else if (planType == '') {
+            alert('Please select a plan type');
+            return;
+        }
+        else{
+            navigation.navigate('AddExerciseInPlan', {user: trainer, planName: planname, planType: planType.label});
+        }
+    }
       
       return (
         <SafeAreaView 
@@ -162,6 +176,7 @@ const AddPlan = () => {
 
 
 {/* -------------------------------------Add Exercise button-----------------------------------------------------------------------------------------*/}
+<Pressable onPress={addExercise}>
 
             <View 
                 style = {{
@@ -173,7 +188,6 @@ const AddPlan = () => {
                     marginTop: 250,
                     marginHorizontal: 25,
                 }}>
-                <Pressable onPress={() => navigation.navigate('AddExerciseInPlan', {planName: planname, planType: planType.label, user: trainer})}>
                 <Text 
                     style = {{
                         color: "#fff",
@@ -183,9 +197,9 @@ const AddPlan = () => {
                     }}>
                     {"Add Exercise"}
                 </Text>
-                </Pressable>
             </View>
-            
+            </Pressable>
+
         </ScrollView>
     </SafeAreaView>);
 };

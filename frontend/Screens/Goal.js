@@ -20,7 +20,10 @@ export default function Goal() {
 
   const ListItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => setgoal(item.text)}>
+      <TouchableOpacity onPress={() => {
+        setgoal(item.text);
+        alert("Goal selected: " + item.text);
+      }}>
         <ImageBackground
         source={{
           uri: item.uri,

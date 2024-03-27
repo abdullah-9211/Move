@@ -1,3 +1,4 @@
+import random
 from database.connection import connect
 from models import Workout, Exercise
 
@@ -64,11 +65,20 @@ def add_workout(workout: Workout):
 def add_plan(plan):
     client = connect()
     try:
+        
+        plan_images = [
+            'https://www.mindpumpmedia.com/hubfs/Exercise%20for%20more%20than%20just%20aesthetics.png',
+            'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg',
+            'https://media.istockphoto.com/id/1151770135/photo/athletic-woman-exercising-push-ups-in-a-health-club.jpg?s=612x612&w=0&k=20&c=c28WRyEbYfWmf0BGG6fyWo1Hwe0JxRIswfsywAsZhKI=',
+            'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg',
+            'https://wallpapercave.com/wp/wp7661163.jpg'
+        ]
+        
         response = client.table("Workout Plan").insert([{
             "plan_trainer": plan["plan_trainer"],
             "workout_type": plan["workout_type"],
             "plan_name": plan["plan_name"],
-            "plan_image": "https://wallpapercave.com/wp/wp7661163.jpg",
+            "plan_image": plan_images[random.randint(0, len(plan_images) - 1)],
         }]).execute()
         response = dict(response)
         return {"plan_id": response["data"][0]["id"]}
