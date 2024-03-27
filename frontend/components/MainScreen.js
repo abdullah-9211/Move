@@ -8,6 +8,7 @@ const { width: screenWidth } = Dimensions.get('window');
 
 const ListItem = ({ item }) => {
   return (
+
     <TouchableOpacity style={{marginHorizontal:5}}>
       <ImageBackground
       source={{
@@ -90,7 +91,9 @@ export default function MainScreen() {
       return null;
     }
   return (
+    
     <View style={styles.container}>
+      
       <Text style={styles.headingtext}>Suggested Plans For You</Text>
       <View>
         <FlatList

@@ -8,7 +8,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function NavBarBot() {
+export default function NavBarBot({color1, color2}) {
     const navigation = useNavigation();
     const route = useRoute();
 
@@ -27,15 +27,15 @@ export default function NavBarBot() {
         
         <Card style={[basic.card, basic.elevation]}>
             <View style={basic.basic2}>
-                <Pressable style={basic.columnView} onPress={() => navigation.navigate('WorkoutScreen', {user: user})}>
-                    <MaterialIcons name="fitness-center" size={24} color="#000000" />
-                    <Text style={basic.text}>Workouts</Text>
+                <Pressable style={basic.columnView} onPress={() => navigation.navigate('HomePage', {user: user})}>
+                    <MaterialIcons name="home" size={24} color={color1} />
+                    <Text style={basic.text}>Home</Text>
             
                 </Pressable> 
                 
                 <Pressable style={basic.columnView} onPress={() => navigation.navigate('UserProfile', {user: user})}>
 
-                    <Ionicons name="person" size={24} color="black" />
+                    <Ionicons name="person" size={24} color={color2} />
                     <Text style={basic.text}>Profile</Text>
                 </Pressable>
             </View>

@@ -47,7 +47,7 @@ const ListItem = ({ item }) => {
   // }
   
   return (
-    <TouchableOpacity style={{marginHorizontal:12, marginVertical:0}} onPress={console.log(item.first_name)}>
+    <TouchableOpacity style={{marginHorizontal:12, marginVertical:0}} onPress={() => navigation.navigate('TrainerProfileUserSide', {user: user})}>
     <ImageBackground
     source={{
       uri: item.profile_picture,
@@ -165,7 +165,7 @@ const ListItem = ({ item }) => {
 
       <View style={{ marginBottom: 65 }} />
 
-      <NavBarBot />
+      <NavBarBot color1= "#900020" color2="#000000"/>
     </View>
   );
 }
