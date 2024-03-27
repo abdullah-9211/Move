@@ -98,7 +98,7 @@ const ProfileWithClients = () => {
 			}}>
 			
                 <View style ={{backgroundColor: "#E6E9EB", alignItems:'flex-end', justifyContent: "flex-end"}}>
-					<Text style={{ fontFamily: 'QuickSand', fontSize: 16, color: '#898D8F', marginTop:20, marginRight: 30}} onPress={logout}>Logout</Text>
+					<Text style={{ fontFamily: 'QuickSand', fontSize: 16, color: '#898D8F', marginTop:50, marginRight: 30}} onPress={logout}>Logout</Text>
                 </View>
 				<View 
 					style = {{

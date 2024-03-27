@@ -122,7 +122,7 @@ const ListItem = ({ item }) => {
   return (
     <View style={styles.container}>
       <NavBar />
-      <View style={{marginTop:100}}>
+      <View style={{marginTop:91, marginBottom: 70}}>
 
       <FlatList
         contentContainerStyle={{ paddingHorizontal: 10 }}
@@ -134,7 +134,6 @@ const ListItem = ({ item }) => {
       />
       </View>
 
-      <View style={{ marginBottom: 65 }} />
 
       <NavBarBot color1= "#900020" color2="#000000"/>
     </View>

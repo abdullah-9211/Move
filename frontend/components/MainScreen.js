@@ -63,7 +63,7 @@ const ListItemTrainer = ({ item }) => {
     <View style={{}}>
           <Text style={styles.TName}>Trainer Name</Text>
           <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:15}}>
-          <Text style={styles.trainerName}>Speciality</Text>
+          
           
           </View>
           
@@ -161,7 +161,7 @@ TName: {
   fontFamily: "QuickSand",
   fontSize: 18,
   marginHorizontal:10,
-  marginBottom:0,
+  marginBottom:15,
   justifyContent: "center",
   alignItems: "center"
 },
