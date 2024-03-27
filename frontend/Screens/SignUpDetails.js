@@ -32,11 +32,11 @@ export default function SignUpDetails() {
     const navigation = useNavigation();
     const route = useRoute();
     const [image, setImage] = useState(null);
-    const role = route.params.role;
-    const gender = route.params.gender;
-    const height = route.params.height;
-    const weight = route.params.weight;
-    const goal = route.params.goal;
+    const role = route.params?.role;
+    const gender = route.params?.gender;
+    const height = route.params?.height;
+    const weight = route.params?.weight;
+    const goal = route.params?.goal;
 
     const [date, setDate] = useState(new Date(1598051730000));
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -79,7 +79,7 @@ export default function SignUpDetails() {
         quality: 1,
       });
   
-      if (!result.cancelled) {
+      if (!result.canceled) {
         setImage(result.assets[0].uri);
         console.log(image);
       }
@@ -146,10 +146,10 @@ export default function SignUpDetails() {
             </View>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 30 }}>
               <TouchableOpacity style={{backgroundColor: "#000000", width: 135, height: 135, borderRadius: 75, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "#ffffff"}}onPress={pickImage}>
-              {image && <Image source={{ uri: image }} style={{ width: 135, height: 135, marginBottom: 0 }}> 
+              {image && <Image source={{ uri: image }} style={{ width: 135, height: 135, marginBottom: 0, borderRadius:60 }}> 
               
               </Image>}
-              <Text style={{color: "#ffffff", textAlign:"center", fontFamily: "QuickSand"}}> Upload Profile Picture</Text>
+              {!image &&  <Text style={{color: "#ffffff", textAlign:"center", fontFamily: "QuickSand"}}> Upload Profile Picture</Text>}
               </TouchableOpacity>
               {/* <TouchableOpacity onPress={uploadImage}>
                 <Text style={{ color: 'blue', marginTop: 10 }}>Upload Image</Text>

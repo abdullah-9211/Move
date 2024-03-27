@@ -105,11 +105,11 @@ const ProfileWithPlans = () => {
 						source = {{uri:trainer.profile_picture}} 
 						resizeMode = {"cover"}
 						style = {{
-							height: 99,
-                            width: 102,
+							height: 135,
+                            width: 140,
 							marginBottom: 10,
 							marginHorizontal: 0,
-                            borderRadius:70
+                            borderRadius:120
 						}}
 					/>
                     <View style={styles.container}>

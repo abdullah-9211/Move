@@ -131,7 +131,7 @@ const shadowopacity = screenWidth * 0.2 / screenWidth;
         source={{
           uri: user.profile_picture,
         }}
-        style={{ width: screenWidth / 2 - 80, height: 95, borderRadius: 120 }}
+        style={{ width: screenWidth / 2 - 60, height: 125, borderRadius: 150 }}
         resizeMode="cover"
       />
       <View style={{flexDirection: "column", alignItems: "center"}}>
