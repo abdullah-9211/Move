@@ -21,7 +21,7 @@ export default function HomePage() {
         <ScrollView style={{marginTop:160}}> 
         <MainScreen />
         </ScrollView>
-        <NavBarBot />
+        <NavBarBot color1= "#900020" color2="#000000"/>
   
         
         

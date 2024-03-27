@@ -181,7 +181,7 @@ const shadowopacity = screenWidth * 0.2 / screenWidth;
 
       <View style={{ marginBottom: 65 }} />
 
-      <NavBarBot />
+      <NavBarBot color1= "#000000" color2="#900020"/>
     </View>
   );
 }

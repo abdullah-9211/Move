@@ -165,7 +165,7 @@ const ListItem = ({ item }) => {
 
       <View style={{ marginBottom: 65 }} />
 
-      <NavBarBot />
+      <NavBarBot color1= "#900020" color2="#000000"/>
     </View>
   );
 }

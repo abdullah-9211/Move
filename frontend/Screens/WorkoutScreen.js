@@ -232,7 +232,7 @@ export default function Workouts() {
       </View>
       <View style={{marginBottom: 65}}/>
       </ScrollView>
-      <NavBarBot />
+      <NavBarBot color1= "#900020" color2="#000000"/>
     </View>
   );
 }
