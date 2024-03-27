@@ -30,12 +30,15 @@ export default function PlanDescription() {
 
   const [loading, setLoading] = React.useState(false);
   const total_duration = React.useRef(0);
+  const [exercisesData, setExercisesData] = React.useState([]);
 
 
   React.useEffect(() => {
     console.log(workout);
     console.log(trainer);
 
+
+    var data = [];
     setLoading(true);
 
     const apiUrl = REACT_APP_API_URL + '/exercise/get-exercises/' + workout["id"];
@@ -43,12 +46,22 @@ export default function PlanDescription() {
       .then((res) => {
         console.log(res.data);
         total_duration.current = res.data[0]["total_duration"];
+        for (var i = 0; i < res.data.length; i++) {
+          if (res.data[i]["duration"] == null) {
+            data.push({title: res.data[i]["Exercise"]["exercise_name"].charAt(0).toUpperCase() + res.data[i]["Exercise"]["exercise_name"].slice(1), description: res.data[i]["reps"] + " reps"});
+          }
+          else{
+            data.push({title: res.data[i]["Exercise"]["exercise_name"].charAt(0).toUpperCase() + res.data[i]["Exercise"]["exercise_name"].slice(1), description: res.data[i]["duration"] + " seconds"});
+          }
+        }
         setLoading(false);
       })
       .catch((error) => {
         console.error(`Error fetching data: ${error}`);
         setLoading(false);
       });
+
+    setExercisesData(data);
     
 
 
@@ -119,9 +132,9 @@ export default function PlanDescription() {
                 </Text>
                 </View>
                 <View style={styles.container}>
-                  {/* {exercisesData.map((info, index) => (
+                  {exercisesData.map((info, index) => (
                     <Card key={index} cardInfo={info} />
-                  ))} */}
+                  ))}
                 </View>
                 
             </View>
@@ -172,9 +185,9 @@ export default function PlanDescription() {
       fontFamily: 'QuickSand',
     },
     container: {
-      marginTop:20,
+      marginTop:50,
       flex: 1,
-      justifyContent: 'center',
+      // justifyContent: 'center',
       alignItems: 'center',
     },
     card: {
