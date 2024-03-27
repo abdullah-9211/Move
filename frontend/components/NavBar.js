@@ -20,6 +20,10 @@ export default function NavBar({color1, color2, color3}) {
     return null;
   }
 
+  const logout = () => {
+    navigation.navigate('Login');
+  }
+
   const shadowopacity = screenWidth * 0.1 / screenWidth;
 
   return (
@@ -30,6 +34,7 @@ export default function NavBar({color1, color2, color3}) {
             style={{ width: 30, height: 30 }} />
         </View>
         <Text style={{ fontFamily: 'BakbakOne', fontSize: 36, color: '#900020' }}>Explore</Text>
+        <Text style={{ fontFamily: 'QuickSand', fontSize: 15, color: '#898D8F', marginTop:20, marginLeft: 114 }} onPress={logout}>Logout</Text>
       </View>
       <View style={basic.basic2}>
         <View style={basic.basic2}>
