@@ -126,13 +126,12 @@ const TrainerProfileUserSide = () => {
 						style = {{
 							color: "#898D8F",
 							fontSize: 14,
-							marginBottom: 10,
+							marginBottom: 0,
                             fontFamily: 'QuickSand'
 						}}>
 						{trainer.email}
 					</Text>
                     </View>
-					<View style={{alignItems:'center', marginHorizontal:15, backgroundColor: 'rgba(137, 141, 143, 0.2)', height: 1, marginBottom: 5}} />
 				</View>
 				<View 
 					style = {{
@@ -156,7 +155,7 @@ const TrainerProfileUserSide = () => {
 					style = {{
 						width: screenWidth/2,
 						height: 1,
-						marginBottom: 16,
+						marginBottom: 0,
 					}}>
 					<View 
 						style = {{
@@ -168,50 +167,17 @@ const TrainerProfileUserSide = () => {
 					</View>
 					
 				</View>
-				<View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 9,
-						marginHorizontal: 0,
-					}}>
-					
-				
-				<FlatList
-					contentContainerStyle={{ paddingHorizontal: 10}}
-					data={PLANS.data}
-					renderItem={({ item }) => <ListItem item={item} />}
-					keyExtractor={(item) => item.id}
-					numColumns={2} // Set the number of columns to 2
-					showsHorizontalScrollIndicator={false}
-					nestedScrollEnabled={true}
-				/>
-				</View>
-                {/* <View style={{flex:1, justifyContent: "flex-end"}}>
-				<View 
-					style = {{
-						alignItems: "center",
-						backgroundColor: "#900020",
-						borderRadius: 9,
-						paddingVertical: 18,
-						marginBottom: 20,
-                        bottom:0,
-						marginHorizontal:10,
-                        marginVertical:10
-					}}>
-					<Pressable onPress={() => navigation.navigate('AddPlan', {user: trainer})}>
-					<Text 
-						style = {{
-							color: "#FFFFFF",
-							fontSize: 16,
-                            fontFamily: 'QuickSandBold'
-						}}>
-						{"Add new"}
-					</Text>
-					</Pressable>
-				</View>
-                </View> */}
+				<View style={{ flex: 1, justifyContent: "flex-start", marginBottom:85}}>
+    <FlatList
+        contentContainerStyle={{ paddingHorizontal: 10 }}
+        data={PLANS.data}
+        renderItem={({ item }) => <ListItem item={item} />}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+    />
+</View>
+                
 				
 			
             <NavBarBot color1= "#000000" color2="#000000"/>
