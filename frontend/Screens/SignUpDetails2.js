@@ -18,16 +18,17 @@ export default function SignUpDetails2() {
     const navigation = useNavigation();
     const route = useRoute();
 
-    const role = route.params.role;
-    const gender = route.params.gender;
-    const height = route.params.height;
-    const weight = route.params.weight;
-    const goal = route.params.goal;
-    const firstName = route.params.firstName;
-    const lastName = route.params.lastName;
-    const email = route.params.email;
-    const phone = route.params.phone;
-    const age = route.params.age;
+    const role = route.params?.role;
+    const gender = route.params?.gender;
+    const height = route.params?.height;
+    const weight = route.params?.weight;
+    const goal = route.params?.goal;
+    const firstName = route.params?.firstName;
+    const lastName = route.params?.lastName;
+    const email = route.params?.email;
+    const phone = route.params?.phone;
+    const age = route.params?.age;
+    const profilePic = route.params?.profilePicture;
     var goal_id = " ";
 
     
@@ -69,7 +70,8 @@ export default function SignUpDetails2() {
                         phone_number: phone,
                         gender: gender,
                         user_type: role,
-                        goal_id: goal_id
+                        goal_id: goal_id,
+                        profile_picture: profilePic
                     };
                     const response = await axios.post(apiUrl, requestBody);
                     user_id = response.data.user_id;
@@ -96,7 +98,8 @@ export default function SignUpDetails2() {
                     phone_number: phone,
                     gender: gender,
                     user_type: role,
-                    goal_id: "None"
+                    goal_id: "None",
+                    profile_picture: profilePic
                 };
                 const response = await axios.post(apiUrl, requestBody);
                 user_id = response.data.user_id;
@@ -113,6 +116,8 @@ export default function SignUpDetails2() {
 
 
     function handlePress() {
+        
+
         if (password != confirmPassword) {
             alert("Passwords do not match");
         }

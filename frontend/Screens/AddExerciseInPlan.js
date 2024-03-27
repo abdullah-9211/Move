@@ -169,12 +169,14 @@ const AddExerciseInPlan = () => {
       }
     
       const nextVideo = () => {
-        setUploaded(false);
-        setNumVideos(0);
-        setDropdown(null);
-        setDropdown2(null);
-        console.log(exercisesInfo);
-        navigation.navigate('AddExerciseInPlan', {planName: planName, planType: planType, user: trainer});
+        if (uploaded) {
+            setUploaded(false);
+            setNumVideos(0);
+            setDropdown(null);
+            setDropdown2(null);
+            console.log(exercisesInfo);
+            navigation.navigate('AddExerciseInPlan', {planName: planName, planType: planType, user: trainer});
+        }
       };
 
 

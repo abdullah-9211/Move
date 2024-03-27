@@ -1,28 +1,42 @@
 //Sign up screen
 
 import * as React from 'react';
-import { Image, Pressable, TouchableOpacity, ImageBackground,TextInput, TimePickerAndroid, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Image, Pressable, TouchableOpacity, ImageBackground,TextInput, TimePickerAndroid, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, Modal, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useFonts } from 'expo-font';
-import NavBar from '../components/NavBar';
-import MainScreen from '../components/MainScreen';
-import NavBarBot from '../components/NavBarBot'
+
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
-
+import * as firebase from 'firebase/app';
+import { initializeApp } from "firebase/app";
+import { getStorage } from "firebase/storage";
+import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 
 const { width: screenWidth } = Dimensions.get('window');
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBJQ8eu5gLYOgooLU4VKxxDIVYzK1XBjxE",
+  authDomain: "move-1699869988043.firebaseapp.com",
+  projectId: "move-1699869988043",
+  storageBucket: "move-1699869988043.appspot.com",
+  messagingSenderId: "630043626016",
+  appId: "1:630043626016:web:889775012715c7b7b58a45",
+  measurementId: "G-QYD1SXS4VT"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
 export default function SignUpDetails() {
     const navigation = useNavigation();
     const route = useRoute();
     const [image, setImage] = useState(null);
-    const role = route.params.role;
-    const gender = route.params.gender;
-    const height = route.params.height;
-    const weight = route.params.weight;
-    const goal = route.params.goal;
+    const role = route.params?.role;
+    const gender = route.params?.gender;
+    const height = route.params?.height;
+    const weight = route.params?.weight;
+    const goal = route.params?.goal;
 
     const [date, setDate] = useState(new Date(1598051730000));
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -49,6 +63,7 @@ export default function SignUpDetails() {
     const [email, setEmail] = React.useState('');
     const [phone, setPhone] = React.useState('');
     const [age, setAge] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
 
     const [loaded] = useFonts({
 
@@ -65,42 +80,56 @@ export default function SignUpDetails() {
         quality: 1,
       });
   
-      if (!result.cancelled) {
-        setImage(result.uri);
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+        console.log(image);
       }
+
     };
 
     const uploadImage = async () => {
       if (image) {
-        const response = await fetch(image);
-        const blob = await response.blob();
-        const formData = new FormData();
-        formData.append('file', blob);
-  
         try {
-          const uploadResponse = await fetch('YOUR_UPLOAD_URL', {
-            method: 'POST',
-            body: formData,
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              // Add any necessary headers for authentication or other requirements
-            },
+          setLoading(true);
+
+          const response = await fetch(image);
+          const blob = await response.blob();
+          
+          // Upload image to Firebase Storage
+          const storage = getStorage(app);
+          const storageRef = ref(storage, 'Images/Profile/' + email + '.jpg');
+          const uploadTaskSnapshot = await uploadBytesResumable(storageRef, blob);
+        
+          // Get download URL
+          const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
+        
+          console.log('File available at', downloadURL);
+        
+          setLoading(false);
+        
+          // Navigate to next screen with download URL
+          navigation.navigate('SignUpDetails2', {
+            role: role, 
+            gender: gender, 
+            height: height, 
+            weight: weight, 
+            goal: goal, 
+            firstName: firstName, 
+            lastName: lastName,
+            email: email,
+            phone: phone, 
+            age: age,
+            profilePicture: downloadURL
           });
-  
-          if (uploadResponse.ok) {
-            // Assuming the server responds with the URL of the uploaded image
-            const imageUrl = await uploadResponse.text();
-            // Now you can update the user's profile with the imageUrl
-            console.log('Image uploaded successfully:', imageUrl);
-          } else {
-            console.error('Failed to upload image');
-          }
         } catch (error) {
           console.error('Error uploading image:', error);
+          // Handle error (e.g., display error message to user)
         }
+        
       } else {
-        console.warn('No image selected');
+        alert("Please upload a profile picture");
       }
+    
     };
 
 
@@ -122,16 +151,23 @@ export default function SignUpDetails() {
             </View>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 30 }}>
               <TouchableOpacity style={{backgroundColor: "#000000", width: 135, height: 135, borderRadius: 75, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "#ffffff"}}onPress={pickImage}>
-              {image && <Image source={{ uri: image }} style={{ width: 135, height: 135, marginBottom: 0 }}> 
+              {image && <Image source={{ uri: image }} style={{ width: 135, height: 135, marginBottom: 0, borderRadius:60 }}> 
               
               </Image>}
-              <Text style={{color: "#ffffff", textAlign:"center", fontFamily: "QuickSand"}}> Upload Profile Picture</Text>
+              {!image &&  <Text style={{color: "#ffffff", textAlign:"center", fontFamily: "QuickSand"}}> Upload Profile Picture</Text>}
               </TouchableOpacity>
               {/* <TouchableOpacity onPress={uploadImage}>
                 <Text style={{ color: 'blue', marginTop: 10 }}>Upload Image</Text>
               </TouchableOpacity>  */}
       {/* make the continue button do the work of uploadImage as well */}
     </View>
+    {loading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+            )}
             
             <Text style={styles.textStyle}>First Name</Text>
             <TextInput
@@ -176,7 +212,7 @@ export default function SignUpDetails() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('SignUpDetails2', {role: role, gender: gender, height: height, weight: weight, goal: goal, firstName: firstName, lastName: lastName, email: email, phone: phone, age: age})}>
+            onPress={uploadImage}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>
@@ -241,6 +277,12 @@ backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
     
+  },
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
 
     

@@ -44,7 +44,7 @@ export default function UserProfile() {
         resizeMode="cover"
         imageStyle={{ borderRadius: 9 }}
         style={{
-          width: (screenWidth/2)-35, height: (screenWidth/2)-25, borderRadius: 9, marginBottom:15, marginTop:8,
+          width: (screenWidth/2)-35, height: (screenWidth/2)-15, borderRadius: 9, marginBottom:15, marginTop:8,
             paddingBottom: 0,
             paddingHorizontal: 0,
         }}>
@@ -131,7 +131,7 @@ const shadowopacity = screenWidth * 0.2 / screenWidth;
         source={{
           uri: user.profile_picture,
         }}
-        style={{ width: screenWidth / 2 - 80, height: 95, borderRadius: 120 }}
+        style={{ width: screenWidth / 2 - 60, height: 125, borderRadius: 150 }}
         resizeMode="cover"
       />
       <View style={{flexDirection: "column", alignItems: "center"}}>

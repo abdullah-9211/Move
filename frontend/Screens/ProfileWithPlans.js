@@ -83,6 +83,12 @@ const ProfileWithPlans = () => {
 		  </View>
 		);
 	  }
+
+	  const logout = () => {
+		navigation.navigate('Login');
+	  }
+	
+
   return (
     <View 
 			style = {{
@@ -91,7 +97,7 @@ const ProfileWithPlans = () => {
 			}}>
 			
                 <View style ={{backgroundColor: "#E6E9EB", alignItems:'flex-end', justifyContent: "flex-end"}}>
-                    <MaterialIcons name="more-horiz" size={24} color="#000000" style={{paddingTop:50, marginHorizontal:10}}/>
+					<Text style={{ fontFamily: 'QuickSand', fontSize: 16, color: '#898D8F', marginTop:20, marginRight: 30}} onPress={logout}>Logout</Text>
                 </View>
 				<View 
 					style = {{
@@ -105,11 +111,11 @@ const ProfileWithPlans = () => {
 						source = {{uri:trainer.profile_picture}} 
 						resizeMode = {"cover"}
 						style = {{
-							height: 99,
-                            width: 102,
+							height: 135,
+                            width: 140,
 							marginBottom: 10,
 							marginHorizontal: 0,
-                            borderRadius:70
+                            borderRadius:120
 						}}
 					/>
                     <View style={styles.container}>

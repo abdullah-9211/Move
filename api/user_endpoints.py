@@ -22,10 +22,11 @@ async def add_user(user_data: dict):
     gender = user_data.get("gender")
     user_type = user_data.get("user_type")
     goal_id = user_data.get("goal_id")
+    profile_picture = user_data.get("profile_picture")
     
     if goal_id == "None":
         goal_id = None
-    new_user = User(email, first_name, last_name, phone_number, age, password, gender, user_type, goal_id)
+    new_user = User(email, first_name, last_name, phone_number, age, password, gender, user_type, goal_id, profile_picture)
     user_id = db.add_user(new_user)
     
     return {"user_id": user_id}
