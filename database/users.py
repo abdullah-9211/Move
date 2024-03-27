@@ -124,6 +124,9 @@ def get_subscribed(trainer_id):
         users = []
         for u in res["data"]:
             user = get_user_with_id(u["user_id"])
+            res2 = client.table("Goals").select("*").eq("id", user["goal_id"]).execute()
+            res2 = dict(res2)
+            user["goal"] = res2["data"][0]
             users.append(user)
         return users
     except Exception as e:
