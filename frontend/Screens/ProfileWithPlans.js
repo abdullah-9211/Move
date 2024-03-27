@@ -84,7 +84,7 @@ const ProfileWithPlans = () => {
 		);
 	  }
   return (
-    <SafeAreaView 
+    <View 
 			style = {{
 				flex: 1,
 				backgroundColor: "#FFFFFF",
@@ -161,7 +161,7 @@ const ProfileWithPlans = () => {
 					style = {{
 						width: screenWidth/2,
 						height: 1,
-						marginBottom: 16,
+						marginBottom: 0,
 					}}>
 					<View 
 						style = {{
@@ -183,51 +183,34 @@ const ProfileWithPlans = () => {
 						}}>
 					</View>
 				</View>
-				<View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 9,
-						marginHorizontal: 0,
-					}}>
-					
 				
-				<FlatList
-					contentContainerStyle={{ paddingHorizontal: 10}}
-					data={PLANS.data}
-					renderItem={({ item }) => <ListItem item={item} />}
-					keyExtractor={(item) => item.id}
-					numColumns={2} // Set the number of columns to 2
-					showsHorizontalScrollIndicator={false}
-					nestedScrollEnabled={true}
-				/>
-				</View>
-				<View 
-					style = {{
-						alignItems: "center",
-						backgroundColor: "#900020",
-						borderRadius: 9,
-						paddingVertical: 18,
-						marginBottom: 75,
-						marginHorizontal:10,
-                        marginVertical:10
-					}}>
-					<Pressable onPress={() => navigation.navigate('AddPlan', {user: trainer})}>
-					<Text 
-						style = {{
-							color: "#FFFFFF",
-							fontSize: 16,
-                            fontFamily: 'QuickSandBold'
-						}}>
-						{"Add new"}
-					</Text>
-					</Pressable>
+				<View style={{ flex: 1, justifyContent: "flex-start" }}>
+    <FlatList
+        contentContainerStyle={{ paddingHorizontal: 10 }}
+        data={PLANS.data}
+        renderItem={({ item }) => <ListItem item={item} />}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+    />
+</View>
+			
+
+{/* --------------------------------------------add new button---------------------------------------------------- */}
+
+				<View style={{justifyContent: "flex-start", backgroundColor: 'rgba(255, 255, 255, 0.5)'}}>
+    				<View style={{alignItems: "center", backgroundColor: "#900020", borderRadius: 9, paddingVertical: 18, marginBottom: 20, bottom: 0, marginHorizontal: 10, marginVertical: 0}}>
+        				<Pressable onPress={() => navigation.navigate('AddPlan', {user: trainer})}>
+           					<Text style={{color: "#FFFFFF", fontSize: 16, fontFamily: 'QuickSandBold'}}>
+                				{"Add new"}
+            				</Text>
+        				</Pressable>
+    				</View>
 				</View>
 				
 			
             {/* <NavBarBotTrainer color1= "#000000" color2="#900020"/> */}
-		</SafeAreaView>
+		</View>
   );
 };
 
@@ -268,10 +251,7 @@ export default ProfileWithPlans;
 		justifyContent: "flex-end",
 		alignItems: "flex-start"
 	},
-    container: {
-        width: screenWidth, 
-        alignItems:'center'
-    },
+    
     gradientOverlay: {
 		marginHorizontal:0,
     marginVertical: 0,

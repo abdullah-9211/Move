@@ -188,26 +188,16 @@ const ProfileWithClients = () => {
 						}}>
 					</View>
 				</View>
-				<View 
-					style = {{
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-						marginBottom: 9,
-						marginHorizontal: 0,
-					}}>
-					
-				
-				<FlatList
-					contentContainerStyle={{ paddingHorizontal: 10}}
-					data={CLIENTS.data}
-					renderItem={({ item }) => <ListItem item={item} />}
-					keyExtractor={(item) => item.id}
-					numColumns={2} // Set the number of columns to 2
-					showsHorizontalScrollIndicator={false}
-					nestedScrollEnabled={true}
-				/>
-				</View>
+				<View style={{ flex: 1, justifyContent: "flex-start" }}>
+    <FlatList
+        contentContainerStyle={{ paddingHorizontal: 10 }}
+        data={CLIENTS.data}
+        renderItem={({ item }) => <ListItem item={item} />}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+    />
+</View>
 				
 {/* 			
             <NavBarBotTrainer color1= "#000000" color2={"#900020"}/> */}
