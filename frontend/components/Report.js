@@ -81,7 +81,7 @@ export default function Report() {
 					<View style={[styles.info, {paddingVertical: 10, paddingHorizontal: 17, flexDirection: "column", backgroundColor: "#ffffff", borderColor: "#900020", borderTopWidth:0, borderBottomWidth:0, borderLeftWidth: 1, borderRightWidth: 1}]}>
 						{item.error.map((error, index) => (
 							<View key={index} style={{flexDirection: "row", justifyContent: "space-between"}}>
-								<Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4, marginVertical: 2}}>
+								<Text style={{width: screenWidth/2+20, color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4, marginVertical: 2}}>
 									{error}
 								</Text>
 								<Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4}}>
