@@ -49,7 +49,7 @@ export default function Login() {
                     navigation.navigate("HomePage", {user: data["user"]});
                 }
                 else if (data["user"]["user_type"] == "trainer"){
-                    navigation.navigate("TrainerHomepage", {user: data["user"]});
+                    navigation.navigate("ProfileWithPlans", {user: data["user"]});
                 }
             }
 
