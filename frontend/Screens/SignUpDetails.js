@@ -2,17 +2,31 @@
 
 import * as React from 'react';
 import { Image, Pressable, TouchableOpacity, ImageBackground,TextInput, TimePickerAndroid, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import { useFonts } from 'expo-font';
-import NavBar from '../components/NavBar';
-import MainScreen from '../components/MainScreen';
-import NavBarBot from '../components/NavBarBot'
+
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
-
+import * as firebase from 'firebase/app';
+import { initializeApp } from "firebase/app";
+import { getStorage } from "firebase/storage";
+import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 
 const { width: screenWidth } = Dimensions.get('window');
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBJQ8eu5gLYOgooLU4VKxxDIVYzK1XBjxE",
+  authDomain: "move-1699869988043.firebaseapp.com",
+  projectId: "move-1699869988043",
+  storageBucket: "move-1699869988043.appspot.com",
+  messagingSenderId: "630043626016",
+  appId: "1:630043626016:web:889775012715c7b7b58a45",
+  measurementId: "G-QYD1SXS4VT"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
 export default function SignUpDetails() {
     const navigation = useNavigation();
@@ -66,41 +80,51 @@ export default function SignUpDetails() {
       });
   
       if (!result.cancelled) {
-        setImage(result.uri);
+        setImage(result.assets[0].uri);
+        console.log(image);
       }
+
     };
 
     const uploadImage = async () => {
       if (image) {
-        const response = await fetch(image);
-        const blob = await response.blob();
-        const formData = new FormData();
-        formData.append('file', blob);
-  
         try {
-          const uploadResponse = await fetch('YOUR_UPLOAD_URL', {
-            method: 'POST',
-            body: formData,
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              // Add any necessary headers for authentication or other requirements
-            },
+          const response = await fetch(image);
+          const blob = await response.blob();
+          
+          // Upload image to Firebase Storage
+          const storage = getStorage(app);
+          const storageRef = ref(storage, 'Images/Profile/' + email + '.jpg');
+          const uploadTaskSnapshot = await uploadBytesResumable(storageRef, blob);
+        
+          // Get download URL
+          const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
+        
+          console.log('File available at', downloadURL);
+        
+          // Navigate to next screen with download URL
+          navigation.navigate('SignUpDetails2', {
+            role: role, 
+            gender: gender, 
+            height: height, 
+            weight: weight, 
+            goal: goal, 
+            firstName: firstName, 
+            lastName: lastName,
+            email: email,
+            phone: phone, 
+            age: age,
+            profilePicture: downloadURL
           });
-  
-          if (uploadResponse.ok) {
-            // Assuming the server responds with the URL of the uploaded image
-            const imageUrl = await uploadResponse.text();
-            // Now you can update the user's profile with the imageUrl
-            console.log('Image uploaded successfully:', imageUrl);
-          } else {
-            console.error('Failed to upload image');
-          }
         } catch (error) {
           console.error('Error uploading image:', error);
+          // Handle error (e.g., display error message to user)
         }
+        
       } else {
-        console.warn('No image selected');
+        alert("Please upload a profile picture");
       }
+    
     };
 
 
@@ -176,7 +200,7 @@ export default function SignUpDetails() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('SignUpDetails2', {role: role, gender: gender, height: height, weight: weight, goal: goal, firstName: firstName, lastName: lastName, email: email, phone: phone, age: age})}>
+            onPress={uploadImage}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>
