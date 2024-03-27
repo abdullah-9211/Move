@@ -146,7 +146,7 @@ const ProfileWithClients = () => {
 						marginBottom: 13,
 						marginHorizontal: 70,
 					}}>
-					<Pressable onPress={() => navigation.navigate('ProfileWithPlans', {user: trainer})}>
+					<Pressable onPress={() => navigation.navigate('ProfileWithPlans', {user: trainer, refresh: true})}>
 					<Text 
 						style = {{
 							color: "#898D8F",

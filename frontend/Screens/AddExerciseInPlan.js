@@ -191,7 +191,7 @@ const AddExerciseInPlan = () => {
               const response = await axios.post(apiUrl, savedExercises);
               console.log("Response: ", response.data);
               setLoading(false);
-              navigation.navigate('ProfileWithPlans', {user: trainer});
+              navigation.navigate('ProfileWithPlans', {user: trainer, refresh: true});
           } catch (error) {
               console.log(error);
               setLoading(false);

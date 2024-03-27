@@ -3,16 +3,18 @@ import { SafeAreaView, TouchableOpacity, ScrollView, ImageBackground, Image, Fla
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import NavBarBotTrainer from '../components/NavBarBotTrainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
 import {REACT_APP_API_URL} from "@env"
+import { RefreshControl } from 'react-native-gesture-handler';
 
 const { width: screenWidth } = Dimensions.get('window');
 const ProfileWithPlans = () => {
 
 	const route = useRoute();
 	const trainer = route.params?.user;
+	const refresh = route.params?.refresh;
 
 	const [loading, setLoading] = React.useState(true);
 
@@ -30,6 +32,24 @@ const ProfileWithPlans = () => {
 			console.log(error);
 		})
 	}, []);
+
+	useFocusEffect(
+		React.useCallback(() => {
+			setLoading(true);
+	
+			const apiUrl = REACT_APP_API_URL + '/user/get-trainer-plans/' + trainer.id;
+			axios.get(apiUrl)
+			.then((response) => {
+				// console.log(response.data);
+				PLANS.data = response.data;
+				setLoading(false);
+			})
+			.catch((error) => {
+				console.log(error);
+			})
+		}, [])
+
+	);
 
 	const ListItem = ({ item }) => {
 		return(
@@ -88,6 +108,21 @@ const ProfileWithPlans = () => {
 		navigation.navigate('Login');
 	  }
 	
+
+	  const refreshList = () => {
+		setLoading(true);
+		const apiUrl = REACT_APP_API_URL + '/user/get-trainer-plans/' + trainer.id;
+		axios.get(apiUrl)
+		.then((response) => {
+			// console.log(response.data);
+			PLANS.data = response.data;
+			setLoading(false);
+			refresh = false;
+		})
+		.catch((error) => {
+			console.log(error);
+		})
+	  }
 
   return (
     <View 
@@ -198,6 +233,13 @@ const ProfileWithPlans = () => {
         keyExtractor={(item) => item.id}
         numColumns={2}
         showsVerticalScrollIndicator={false}
+		refreshControl={
+			<RefreshControl
+				refreshing={loading}
+				onRefresh={refreshList}
+				
+			/>
+		}
     />
 </View>
 			
