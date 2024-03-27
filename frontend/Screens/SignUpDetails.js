@@ -1,7 +1,7 @@
 //Sign up screen
 
 import * as React from 'react';
-import { Image, Pressable, TouchableOpacity, ImageBackground,TextInput, TimePickerAndroid, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Image, Pressable, TouchableOpacity, ImageBackground,TextInput, TimePickerAndroid, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, Modal, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useFonts } from 'expo-font';
 
@@ -63,6 +63,7 @@ export default function SignUpDetails() {
     const [email, setEmail] = React.useState('');
     const [phone, setPhone] = React.useState('');
     const [age, setAge] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
 
     const [loaded] = useFonts({
 
@@ -89,6 +90,8 @@ export default function SignUpDetails() {
     const uploadImage = async () => {
       if (image) {
         try {
+          setLoading(true);
+
           const response = await fetch(image);
           const blob = await response.blob();
           
@@ -101,6 +104,8 @@ export default function SignUpDetails() {
           const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
         
           console.log('File available at', downloadURL);
+        
+          setLoading(false);
         
           // Navigate to next screen with download URL
           navigation.navigate('SignUpDetails2', {
@@ -156,6 +161,13 @@ export default function SignUpDetails() {
               </TouchableOpacity>  */}
       {/* make the continue button do the work of uploadImage as well */}
     </View>
+    {loading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+            )}
             
             <Text style={styles.textStyle}>First Name</Text>
             <TextInput
@@ -265,6 +277,12 @@ backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
     
+  },
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
 
     
