@@ -28,6 +28,7 @@ export default function SignUpDetails2() {
     const email = route.params.email;
     const phone = route.params.phone;
     const age = route.params.age;
+    const profilePic = route.params.profilePicture;
     var goal_id = " ";
 
     
@@ -113,6 +114,8 @@ export default function SignUpDetails2() {
 
 
     function handlePress() {
+        
+
         if (password != confirmPassword) {
             alert("Passwords do not match");
         }
