@@ -179,8 +179,22 @@ const AddExerciseInPlan = () => {
 
 
     async function saveExercises() {
-        setLoading(true);
-    
+        const savedExercises = {
+            exercise_data: exercisesInfo,
+          };
+          setLoading(true);
+
+          const apiUrl = REACT_APP_API_URL + '/exercise/add_plan_exercises';
+          try {
+              const response = await axios.post(apiUrl, savedExercises);
+              console.log("Response: ", response.data);
+              setLoading(false);
+              navigation.navigate('ProfileWithPlans', {user: trainer});
+          } catch (error) {
+              console.log(error);
+              setLoading(false);
+          }
+        
     }
 
 

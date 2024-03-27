@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, ImageBackground, Pressable, StyleSheet, Text, View, Dimensions} from 'react-native';
+import { ScrollView, ImageBackground, Pressable, StyleSheet, Text, View, Dimensions, Modal, ActivityIndicator} from 'react-native';
 import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
@@ -11,6 +11,9 @@ import { useFonts } from 'expo-font';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MaterialIcons } from '@expo/vector-icons';
 const { width: screenWidth } = Dimensions.get('window');
+import axios from 'axios';
+import {REACT_APP_API_URL} from "@env"
+
 const Card = ({ cardInfo}) => {
   return (
     <View style={styles.card}>
@@ -22,46 +25,32 @@ const Card = ({ cardInfo}) => {
 export default function PlanDescription() {
 
   const route = useRoute();
-  const user = route.params?.user;
+  const trainer = route.params?.user;
   const workout = route.params?.workout;
-  const exercises = route.params?.exercises;
-  const trainer = route.params?.trainer;
-  const [trainerName, setTrainerName] = React.useState("");
-  const [totalExercises, setTotalExercises] = React.useState(0);
-  const [totalDuration, setTotalDuration] = React.useState(0);
-  const [exercisesData, setExercisesData] = React.useState([]);
-  const [exerciseNames, setExerciseNames] = React.useState([]);
 
+  const [loading, setLoading] = React.useState(false);
+  const total_duration = React.useRef(0);
 
-  var data = [];
-  var exerciseNamesTemp = [];
 
   React.useEffect(() => {
     console.log(workout);
-    console.log(exercises);
     console.log(trainer);
-    setTrainerName(trainer["first_name"] + " " + trainer["last_name"]);
 
-    // Iterate over exercises and add up total duration
-    var total_duration = 0;
-    var total_exercises = 0;
-    for (var i = 0; i < exercises.length; i++) {
-      if (exercises[i]["duration"] == null) {
-        total_duration += exercises[i]["reps"] * 3;
-        data.push({title: exercises[i]["Exercise"]["exercise_name"].charAt(0).toUpperCase() + exercises[i]["Exercise"]["exercise_name"].slice(1), description: exercises[i]["reps"] + " reps"});
-      }
-      else{
-        total_duration += exercises[i]["duration"];
-        data.push({title: exercises[i]["Exercise"]["exercise_name"].charAt(0).toUpperCase() + exercises[i]["Exercise"]["exercise_name"].slice(1), description: exercises[i]["duration"] + " seconds"});
-      }
-      exerciseNamesTemp.push(exercises[i]["Exercise"]["exercise_name"]);
-      total_exercises += 1;
+    setLoading(true);
 
-    }
-    setTotalDuration(total_duration);
-    setTotalExercises(total_exercises);
-    setExercisesData(data);
-    setExerciseNames(exerciseNamesTemp);
+    const apiUrl = REACT_APP_API_URL + '/exercise/get-exercises/' + workout["id"];
+    axios.get(apiUrl)
+      .then((res) => {
+        console.log(res.data);
+        total_duration.current = res.data[0]["total_duration"];
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(`Error fetching data: ${error}`);
+        setLoading(false);
+      });
+    
+
 
   }, []);
 
@@ -73,6 +62,19 @@ export default function PlanDescription() {
     if (!loaded) {
       return null;
     }
+
+	  if (loading) {
+      return (
+        <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'white'}}>
+          <Modal transparent={true} animationType="fade">
+          <View style={styles.modal}>
+            <ActivityIndicator size="large" color="#fff" />
+          </View>
+          </Modal>
+        </View>
+      );
+      }
+
     return (
 
       <View style = {{flex: 1, justifyContent: "flex-start", backgroundColor:"#FFFFFF"}}>
@@ -86,12 +88,12 @@ export default function PlanDescription() {
         style={styles.gradient}
       >
         <View style={{ flex: 1, justifyContent: "flex-start", backgroundColor: "transparent" }}>
-          <Pressable onPress={() => navigation.navigate('WorkoutScreen')}>
+          <Pressable onPress={() => navigation.navigate('ProfileWithPlans', {user: trainer})}>
           <MaterialIcons name="navigate-before" size={36} color="#000000" style={{paddingTop:50, marginHorizontal:20}}/>
           </Pressable>
           <View style={{ flex: 1, alignItems: "flex-start", justifyContent: "flex-end" }}>
             <Text style={styles.headingtext}>
-              {workout["plan_name"]}
+              { workout["plan_name"] }
             </Text>
           </View>
           {/* ... (rest of your content) */}
@@ -101,7 +103,7 @@ export default function PlanDescription() {
             <View style={{flex:1}}>
             <View style={{flexDirection: "row", marginTop:5, justifyContent: 'space-between', marginRight:20}}>
                 <Text style={styles.trainerText}>
-                {trainerName}
+                {trainer.first_name + " " + trainer.last_name}
                 </Text>
                 <View style={{flexDirection: 'row', marginTop:3}}>
                 <Icon name="dumbbell" size={20} color="#000000" style={styles.icon}/>
@@ -113,15 +115,15 @@ export default function PlanDescription() {
                 <View style={{flexDirection: "row", marginTop:5}}>
                 <Icon name="clock-outline" size={20} color="#000000" style={styles.icon}/>
                 <Text style={styles.subtext}>
-                  {totalDuration + " seconds"}
+                  {total_duration.current + " seconds"}
                 </Text>
                 </View>
                 <View style={styles.container}>
-                  {exercisesData.map((info, index) => (
+                  {/* {exercisesData.map((info, index) => (
                     <Card key={index} cardInfo={info} />
-                  ))}
+                  ))} */}
                 </View>
-                ``
+                
             </View>
         
       </View>
@@ -193,6 +195,12 @@ export default function PlanDescription() {
       marginRight:20,
       fontFamily: 'QuickSand',
     },
+    modal: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+      },
     
   
   });

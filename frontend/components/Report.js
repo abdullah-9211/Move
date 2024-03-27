@@ -21,90 +21,105 @@ const ListItem = ({ item }) => (
 	</View>
   );
 
-const ExpandableListItem = ({ item }) => { 
-    const [expanded, setExpanded] = useState(false); 
-  
-    const toggleExpand = () => { 
-        setExpanded(!expanded); 
-    }; 
-  
-    return ( 
-        <View style={{marginBottom: 0,
-			
-			
-			}}> 
-            <TouchableOpacity 
-                onPress={toggleExpand} 
-                style = {[styles.info,styles.infoOdd, {justifyContent: "space-between"}]} 
-            >
-                <Text style={{color: "#000000",
-								fontSize: 16,
-								fontFamily: "QuickSand",
-								marginRight: 4,}}> 
-                    {item.exercise} 
-                </Text> 
-				<View style= {{flexDirection: "row"}}>
-				
-				<Text 
-							style = {{
-								alignItems: "flex-end",
-								justifyContent: "flex-end",
-								marginLeft:20,
-								color: "#000000",
-								fontSize: 16,
-								fontFamily: "QuickSand"
 
-							}}>
-							{item.accuracy}
-						</Text>
-						<Octicons name="chevron-right" size={24} color={"#000000"} style = {{
-                        width: 14,
-                        height: 20,
-                        marginTop: 0,
-						marginBottom: 2,
-                        marginLeft: 15,
-                    }}/>
-					</View>
-            </TouchableOpacity> 
-            {expanded && ( 
-                <View style={[styles.info,{paddingTop: 12,justifyContent:"space-between", borderTopWidth:0,borderBottomWidth:0, borderLeftWidth:1,borderRightWidth: 1,borderColor: "#900020"}]}>
-					<Text style={{color: "#900020",
-								fontSize: 14,
-								fontFamily: "QuickSand",
-								marginRight: 4,}}> 
-                    	{item.error[0]} 
-                	</Text>
-					<Text style={{color: "#900020",
-								fontSize: 14,
-								fontFamily: "QuickSand",
-								marginRight: 4,}}> 
-                    	{"00:" + item.error_time[0]}
-
-					</Text>
-				</View>
-            )} 
-        </View> 
-    ); 
-}; 
-
-const ExpandableList = ({ data }) => { 
-    const renderItem = ({ item }) => ( 
-        <ExpandableListItem item={item} /> 
-    ); 
-  
-    return ( 
-        <FlatList 
-		style={{marginBottom: 0,
-			marginHorizontal: 25,
-			marginTop:0,
-			width: screenWidth*0.9,}}
-            data={data[0].info} 
-            renderItem={renderItem} 
-            keyExtractor={(item) => item.id.toString()} 
-        /> 
-    ); 
-}; 
 export default function Report() {
+
+
+	// ===============================================================================
+	// =========================== Expandable List Part===============================
+	// ===============================================================================
+
+	const ExpandableListItem = ({ item, data }) => { 
+		const [expanded, setExpanded] = useState(false); 
+	  
+		const toggleExpand = () => { 
+			setExpanded(!expanded); 
+		}; 
+	  
+		return ( 
+			<View style={{marginBottom: 0}}> 
+				<TouchableOpacity 
+					onPress={toggleExpand} 
+					style={[styles.info, styles.infoOdd, {justifyContent: "space-between"}]} 
+				>
+					<Text style={{color: "#000000", fontSize: 16, fontFamily: "QuickSand", marginRight: 4}}> 
+						{item.exercise.charAt(0).toUpperCase() + item.exercise.slice(1)} 
+					</Text> 
+					<View style={{flexDirection: "row"}}>
+						<Text style={{alignItems: "flex-end", justifyContent: "flex-end", marginLeft: 20, color: "#000000", fontSize: 16, fontFamily: "QuickSand"}}>
+							{item.accuracy + "%"}
+						</Text>
+						<Octicons name="plus" size={24} color={"#000000"} style={{width: 18, height: 20, marginTop: 0, marginBottom: 2, marginLeft: 15}} />
+					</View>
+				</TouchableOpacity> 
+				<View style= {{flexDirection: "column"}}>
+				{expanded && ( 
+					<ExpandableListItem2 item={item} data={data} />
+					// <View style={[styles.info, {paddingTop: 12, justifyContent: "space-between", borderTopWidth: 0, borderBottomWidth: 0, borderLeftWidth: 1, borderRightWidth: 1, borderColor: "#900020"}]}>
+					//     <Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4}}> 
+					//         {item.error[0]} 
+					//     </Text>
+					//     <Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4}}> 
+					//         {"00:" + item.error_time[0]}
+					//     </Text>
+					// </View>
+				)} 
+				</View>
+			</View> 
+		); 
+	};
+	const ExpandableListItem2 = ({ item, data }) => { 
+		const [expanded, setExpanded] = useState(false); 
+	  
+		const toggleExpand = () => { 
+			setExpanded(!expanded); 
+		}; 
+	  
+		return ( 
+			<View style={{marginBottom: 0}}> 
+				<TouchableOpacity onPress={toggleExpand}>
+					<View style={[styles.info, {paddingVertical: 10, paddingHorizontal: 17, flexDirection: "column", backgroundColor: "#ffffff", borderColor: "#900020", borderTopWidth:0, borderBottomWidth:0, borderLeftWidth: 1, borderRightWidth: 1}]}>
+						{item.error.map((error, index) => (
+							<View key={index} style={{flexDirection: "row", justifyContent: "space-between"}}>
+								<Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4, marginVertical: 2}}>
+									{error}
+								</Text>
+								<Text style={{color: "#900020", fontSize: 14, fontFamily: "QuickSand", marginRight: 4}}>
+									{item.error_time[index] + "s"}
+								</Text>
+							</View>
+						))}
+					</View>
+				</TouchableOpacity>
+			</View> 
+		); 
+	};
+	
+	
+	const ExpandableList = ({ data }) => { 
+		const renderItem = ({ item }) => ( 
+			<ExpandableListItem item={item} data={data} />
+		); 
+	  
+		return ( 
+			<FlatList 
+			style={{marginBottom: 0,
+				marginHorizontal: 25,
+				marginTop:0,
+				width: screenWidth*0.9,}}
+				data={render_data.current} 
+				renderItem={renderItem} 
+				keyExtractor={(item) => item.id.toString()} 
+			/> 
+		); 
+	}; 
+
+
+	// ===============================================================================
+	// =========================== Report Part========================================
+	// ===============================================================================
+
+
 
   const route = useRoute();
 //   const [expanded, setExpanded] = useState(false);
@@ -124,31 +139,34 @@ export default function Report() {
 
 
   React.useEffect(() => {
-
-	let error_data = [];
-
-	for (let i = 0; i < exercises.length; i++) {
+	if (exercises && accuracies && errors && error_times && exercise_translator) {
+	  let error_data = [];
+  
+	  for (let i = 0; i < exercises.length; i++) {
 		let exercise = exercises[i];
 		let exerciseAccuracy = accuracies[i];
 		let exerciseErrors = errors[exercise_translator[exercise]];
 		let exerciseErrorTimes = error_times[exercise_translator[exercise]];
-		
+  
 		let object = {
-			id: i+1,
-			exercise: exercise,
-			accuracy: exerciseAccuracy,
-			error: exerciseErrors,
-			error_time: exerciseErrorTimes
+		  id: i + 1,
+		  exercise: exercise,
+		  accuracy: exerciseAccuracy,
+		  error: exerciseErrors,
+		  error_time: exerciseErrorTimes
 		};
-
+  
 		error_data.push(object);
-		console.log(data[0].info);
+	  }
+	  
+	  render_data.current = error_data;
+	  print(render_data.current);
 
 	}
+  }, [exercises, accuracies, errors, error_times, exercise_translator]);
 
-	data[0].info = error_data;
+  const render_data = React.useRef([]);
 
-  }, []);
   const data = [ 
 	{ 
 		title: "Errors",
@@ -157,22 +175,22 @@ export default function Report() {
 				id: 1, 
 				exercise: "Pushups", 
 				accuracy: "85%",
-				error: [`Elbow angle too low`],
-				error_time: ['32'] 
+				error: [`Elbow angle too low`, 'Elbow angle too high'],
+				error_time: ['32', '35'] 
 			},
 			{
 				id: 2, 
 				exercise: "Plank", 
 				accuracy: "55%",
-				error: [`Elbow angle too low`],
-				error_time: ['32'] 
+				error: [`Elbow angle too high`],
+				error_time: ['34'] 
 			},
 			{
 				id: 3, 
 				exercise: "Squat", 
 				accuracy: "15%",
 				error: [`Elbow angle too low`],
-				error_time: ['32'] 
+				error_time: ['35'] 
 			},
 		]
 			

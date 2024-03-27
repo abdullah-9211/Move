@@ -141,7 +141,18 @@ def get_plan_exercises(plan_id):
         workout_plan_exercises_table = "Workout Plan Exercises"
         res = client.table(workout_plan_exercises_table).select('exercise_id', 'plan_id', 'reps', 'duration', 'Exercise(exercise_name)').eq("plan_id", plan_id).execute()
         res = dict(res)
+        
+        total_duration = 0
+        
+        for exercise in res["data"]:
+            if exercise["duration"] is not None:
+                total_duration += exercise["duration"]
+            else:
+                total_duration += exercise["reps"] * 2
+                
+        res["data"][0]["total_duration"] = total_duration
         return res["data"]
+        
     except Exception as e:
         print("\nError retrieving workouts. Exception Thrown:\n", e)
         
