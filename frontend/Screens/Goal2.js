@@ -46,7 +46,7 @@ export default function Goal2() {
             <Text style={styles.textStyle}>Height</Text>
             <View style={[styles.input,{flexDirection: "row", padding: 10,color: '#ffffff', justifyContent: "space-between"}]}>
             <TextInput
-                style={{color: "#ffffff", fontFamily: "QuickSand", fontSize: 18}}
+                style={{width: '90%', color: "#ffffff", fontFamily: "QuickSand", fontSize: 18}}
                 placeholder="171cm"
                 value={height}
                 onChangeText={(text) => setheight(text)}
@@ -56,7 +56,7 @@ export default function Goal2() {
             <Text style={styles.textStyle}>Weight</Text>
             <View style={[styles.input,{flexDirection: "row", padding: 10,color: '#ffffff', justifyContent: "space-between"}]}>
             <TextInput
-                style={{color: "#ffffff", fontFamily:"QuickSand", fontSize: 18}}
+                style={{width:'90%', color: "#ffffff", fontFamily:"QuickSand", fontSize: 18}}
                 placeholder="60kg"
                 value={weight}
                 onChangeText={(text) => setweight(text)}
