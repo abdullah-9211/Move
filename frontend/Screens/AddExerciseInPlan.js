@@ -171,7 +171,7 @@ const AddExerciseInPlan = () => {
             setExercisesInfo((prevExercisesInfo) => [...prevExercisesInfo, exercise]);
             exercisesAdded.current.push(exercise_name);
 
-            if (exercise_name == 'plank') {
+            if (exercise_name == 'plank' || exercise_name == 'pushup') {
                 const postData = {
                     plan_id: planID.current,
                     exercise_name: exercise_name,

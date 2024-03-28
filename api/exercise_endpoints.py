@@ -59,7 +59,9 @@ async def analyze_exercise(exercise_data: dict):
         all_error_times[exercise_id] = error_times
     elif exercise == "pushup":
         pushup_instance = Pushup(client_video, trainer_video)
-        reps, errors, error_times, accuracy, duration = pushup_instance.run_process()
+        angles = db.get_angles_from_db(plan_id, exercise_id)
+        angles = angles[0]['trainer_angles']
+        errors, error_times, accuracy, duration = pushup_instance.assess_client(angles['elbow_state1'], angles['elbow_state2'], angles['elbow_state3'], angles['shoulder_state1'], angles['shoulder_state2'], angles['shoulder_state3'], angles['hip_state1'], angles['hip_state2'], angles['hip_state3'], angles['knee_state1'], angles['knee_state2'], angles['knee_state3'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'])
         exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
         all_errors[exercise_id] = errors
         all_error_times[exercise_id] = error_times
@@ -162,7 +164,54 @@ def get_trainer_angles(video_data: dict):
         
     elif exercise == "pushup":
         pushup_instance = Pushup("", trainer_video)
-        return pushup_instance.get_trainer_angles()
+        
+        thresholds = pushup_instance.get_trainer_angles()
+        angles = pushup_instance.get_trainer_angles()
+        
+        elbow_state1 = (angles[0], angles[1])
+        elbow_state2 = (angles[2], angles[3])
+        elbow_state3 = (angles[4], angles[5])
+        
+        shoulder_state1 = (angles[6], angles[7])
+        shoulder_state2 = (angles[8], angles[9])
+        shoulder_state3 = (angles[10], angles[11])
+        
+        hip_state1 = (angles[12], angles[13])
+        hip_state2 = (angles[14], angles[15])
+        hip_state3 = (angles[16], angles[17])
+        
+        knee_state1 = (angles[18], angles[19])
+        knee_state2 = (angles[20], angles[21])
+        knee_state3 = (angles[22], angles[23])
+        
+        angles_data = {
+            "elbow_state1": elbow_state1,
+            "elbow_state2": elbow_state2,
+            "elbow_state3": elbow_state3,
+            "shoulder_state1": shoulder_state1,
+            "shoulder_state2": shoulder_state2,
+            "shoulder_state3": shoulder_state3,
+            "hip_state1": hip_state1,
+            "hip_state2": hip_state2,
+            "hip_state3": hip_state3,
+            "knee_state1": knee_state1,
+            "knee_state2": knee_state2,
+            "knee_state3": knee_state3,
+            "state_1_threshold": thresholds[0],
+            "state_2_threshold": thresholds[1],
+            "state_3_threshold": thresholds[2]
+        }
+            
+        
+        data = {
+            "trainer_angles": angles_data,
+            "trainer_id": trainer_id,
+            "plan_id": plan_id,
+            "exercise_id": exercise_id,
+        }
+        return db.add_trainer_angles(data)
+        
+        
     elif exercise == "squat":
         squat_instance = Squat("", trainer_video)
         return squat_instance.get_trainer_angles()
