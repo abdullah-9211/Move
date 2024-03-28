@@ -106,6 +106,11 @@ async def add_subscription(subscription_data: dict):
 async def get_profile_info(user_id: int):
     return db.get_user_profile_info(user_id)
 
+@router.get("/get-profile-info-trainer-side/{user_id}/{trainer_id}")
+async def get_profile_info(user_id: int, trainer_id: int):
+    return db.get_user_profile_info_trainer_side(user_id, trainer_id)
+
+
 @router.get("/get-workout-stats/{workout_id}")
 async def get_workout_stats(workout_id: int):
     return db.get_workout_stats(workout_id)

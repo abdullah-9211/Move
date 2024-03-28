@@ -167,6 +167,28 @@ def get_user_profile_info(user_id):
         return return_dict
     except Exception as e:
         print("\n\nError retrieving user profile info, Exception Thrown: \n\n", e)
+
+def get_user_profile_info_trainer_side(user_id, trainer_id):
+    client = connect()
+    try:
+        return_dict = {}
+        res = client.table("Workout History").select("workout_id", "created_at", "plan_id", "client_id", "duration", "accuracy", "Workout Plan(id, plan_name, plan_trainer, plan_image)").eq("client_id", user_id).execute()
+        res = dict(res)
+        
+        # Filter out workouts that are not from the trainer
+        res["data"] = [workout for workout in res["data"] if workout["Workout Plan"]["plan_trainer"] == trainer_id]
+        
+        return_dict["Workouts Performed"] = res["data"]
+        return_dict["Number of Workouts"] = len(res["data"])
+        
+        res = client.table("Trainers Subscribed").select("*").eq("user_id", user_id).execute()
+        res = dict(res)
+        return_dict["Number of Subscribed"] = len(res["data"])
+        return return_dict
+    except Exception as e:
+        print("\n\nError retrieving user profile info, Exception Thrown: \n\n", e)
+
+
         
 def get_workout_stats(workout_id):
     client = connect()

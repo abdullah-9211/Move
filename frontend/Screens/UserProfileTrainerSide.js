@@ -72,7 +72,7 @@ export default function UserProfile() {
       setLoading(true);
       setWhiteScreen(true);
 
-      const apiUrl = REACT_APP_API_URL + '/user/get-profile-info/' + user.id;
+      const apiUrl = REACT_APP_API_URL + '/user/get-profile-info-trainer-side/' + user.id + '/' + trainer.id;
       axios.get(apiUrl)
       .then((response) => {
         WORKOUTS[0].data = response.data["Workouts Performed"]
