@@ -457,7 +457,7 @@ const AddExerciseInPlan = () => {
         <Modal transparent={true} animationType="fade">
             <View style={styles.modal}>
             <Text style={styles.uploadingText}>
-                    {`Uploading video... ${uploadProgress}%`}
+            {uploaded ? 'Analyzing video...' : `Uploading video... ${uploadProgress}%`}
                   </Text>
                 <ActivityIndicator size="large" color="#fff" />
             </View>
