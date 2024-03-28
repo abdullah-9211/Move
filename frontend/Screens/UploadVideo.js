@@ -113,6 +113,7 @@ export default function UploadVideo() {
         exercise: exercise_name,
         client_video: client_url,
         trainer_video: trainer_url,
+        plan_id: workout['id'],
       };
       const response = await axios.post(apiUrl, requestBody);
       console.log(response.data);

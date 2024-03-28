@@ -41,7 +41,7 @@ class Plank:
         i = 0
 
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-            while cap.isOpened() and i < 100:
+            while cap.isOpened() and i < 120:
                 # cap.set(cv2.CAP_PROP_POS_FRAMES, i)
                 i += 1
                 ret, frame = cap.read()
@@ -395,7 +395,7 @@ class Plank:
 
 if "__main__" == __name__:
     
-    plank = Plank("sample_videos/bilal_footage.mp4", "sample_videos/aizaaz_footage.mp4")
+    plank = Plank("sample_videos/bilal_footage.mp4", "")
 
     print(plank.run_process())
     
