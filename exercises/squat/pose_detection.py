@@ -74,7 +74,7 @@ class Squat:
         i = 0
 
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-            while cap.isOpened() and i < 120:
+            while cap.isOpened() and i < 110:
                 i += 1
                 ret, frame = cap.read()
                 
@@ -176,7 +176,7 @@ class Squat:
         i = 0
 
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-            while cap.isOpened() and i < 120:
+            while cap.isOpened() and i < 110:
                 i += 1
                 ret, frame = cap.read()
                 
