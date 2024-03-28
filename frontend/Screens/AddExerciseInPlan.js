@@ -52,10 +52,12 @@ const AddExerciseInPlan = () => {
     const [counter, setCounter] = useState(0); // Initialize counter here
     const [loading, setLoading] = useState(false);
     const planID = React.useRef(0);
+    const exercisesAdded = React.useRef([]);
     const [numVideos, setNumVideos] = useState(0);
     const [exerciseURL, setExerciseURL] = useState(''); // Initialize exerciseURL here
     const [uploaded, setUploaded] = useState(false); // Initialize uploaded here
     const [exercisesInfo, setExercisesInfo] = useState([]); // Initialize exercisesInfo here
+
 
     React.useEffect(() => {
         console.log('Plan Name: ', planName);
@@ -79,6 +81,11 @@ const AddExerciseInPlan = () => {
         if (!permissionResult.granted) {
           Alert.alert('Permissions required', 'Permission to access media library is required to select a video.');
           return;
+        }
+
+        if (exercisesAdded.current.includes(exerciseName)) {
+            alert('Exercise already added to the plan');
+            return;
         }
     
         if (numVideos == 0)
@@ -163,6 +170,7 @@ const AddExerciseInPlan = () => {
                 exercise_type: secOrReps,
             };
             setExercisesInfo((prevExercisesInfo) => [...prevExercisesInfo, exercise]);
+            exercisesAdded.current.push(exercise_name);
           });
         });
     
@@ -191,7 +199,7 @@ const AddExerciseInPlan = () => {
               alert('Please add exercises to the plan');
               setLoading(false);
               return;
-          )
+          }
 
           const apiUrl = REACT_APP_API_URL + '/exercise/add_plan_exercises';
           try {
