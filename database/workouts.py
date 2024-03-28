@@ -212,3 +212,28 @@ def get_category_workouts(category):
         return res["data"]
     except Exception as e:
         print("\nError retrieving workouts. Exception Thrown:\n", e)
+        
+        
+def add_trainer_angles(video_data):
+    client = connect()
+    try:
+        response = client.table("Trainer Angles").insert([{
+            "plan_id": video_data["plan_id"],
+            "exercise_id": video_data["exercise_id"],
+            "trainer_angles": video_data["trainer_angles"]
+            
+        }]).execute()
+        response = dict(response)
+        return response["data"][0]["trainer_angles"]
+    except Exception as e:
+        print("\n\nError inserting trainer angles into database: ", e)
+        
+        
+def get_angles_from_db(plan_id, exercise_id):
+    client = connect()
+    try:
+        response = client.table("Trainer Angles").select("trainer_angles").eq("plan_id", plan_id).eq("exercise_id", exercise_id).execute()
+        response = dict(response)
+        return response["data"]
+    except Exception as e:
+        print("\n\nError retrieving trainer angles from database: ", e)

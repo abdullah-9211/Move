@@ -395,7 +395,7 @@ class Plank:
 
 if "__main__" == __name__:
     
-    plank = Plank("sample_videos/bilal_footage.mp4", "sample_videos/aizaaz_footage.mp4")
+    plank = Plank("sample_videos/bilal_footage.mp4", "")
 
     print(plank.run_process())
     

@@ -15,6 +15,8 @@ router = APIRouter()
 # Exercise analysis and workout completion endpoints
 #===============================================================================
 
+
+
 # list of exercises 
 completed_exercises = []
 all_errors = {}
@@ -38,16 +40,20 @@ async def analyze_exercise(exercise_data: dict):
     exercise = exercise_data.get("exercise")
     client_video = exercise_data.get("client_video")
     trainer_video = exercise_data.get("trainer_video")
+    exercise_id = db.get_exercise_id(exercise)
+    plan_id = exercise_data.get("plan_id")
 
     # Get exercise id
-    exercise_id = db.get_exercise_id(exercise)
     exercises.append(exercise)
     exercise_translator[exercise] = exercise_id
 
     # Initialize and analyze based on exercise type
     if exercise == "plank":
         plank_instance = Plank(trainer_video, client_video)
-        errors, error_times, accuracy, duration = plank_instance.run_process()
+        
+        angles = db.get_angles_from_db(plan_id, exercise_id)
+        
+        errors, error_times, accuracy, duration = plank_instance.assess_client(angles[0], angles[1], angles[2], angles[3], angles[4], angles[5], angles[6], angles[7])
         exercise_stats = Exercise(0, exercise_id, None, duration, accuracy)
         all_errors[exercise_id] = errors
         all_error_times[exercise_id] = error_times
@@ -120,6 +126,51 @@ async def finish_workout(workout_data: dict):
     completed_exercises.clear()
         
     return {"workout": workout_id, "total_duration": total_duration, "accuracy": round(accuracy, 1), "errors": all_errors, "error_times": all_error_times, "exercises": exercises, "exerciseNum": len(exercises), "exercise_translator": exercise_translator, "accuracies": accuracies}
+
+
+@router.post("/get-trainer-angles")
+def get_trainer_angles(video_data: dict):
+    trainer_id = video_data.get("trainer_id")
+    plan_id = video_data.get("plan_id")
+    exercise = video_data.get("exercise_name")
+    trainer_video = video_data.get("exercise_video")
+    exercise_id = db.get_exercise_id(exercise)
+    
+    if exercise == "plank":
+        plank_instance = Plank(trainer_video, "")
+        angles = plank_instance.get_trainer_angles()
+        
+        
+        angles_data = {
+            "elbow_min": angles[0],
+            "elbow_max": angles[1],
+            "shoulder_min": angles[2],
+            "shoulder_max": angles[3],
+            "hip_min": angles[4],
+            "hip_max": angles[5],
+            "knee_min": angles[6],
+            "knee_max": angles[7]
+        }
+        
+        data = {
+            "trainer_angles": angles_data,
+            "trainer_id": trainer_id,
+            "plan_id": plan_id,
+            "exercise_id": exercise_id,
+        }
+        return db.add_trainer_angles(data)
+        
+    elif exercise == "pushup":
+        pushup_instance = Pushup("", trainer_video)
+        return pushup_instance.get_trainer_angles()
+    elif exercise == "squat":
+        squat_instance = Squat("", trainer_video)
+        return squat_instance.get_trainer_angles()
+    elif exercise == "jumping jack":
+        jj_instance = JumpingJack("", trainer_video)
+        return jj_instance.get_trainer_angles()
+    else:
+        raise HTTPException(status_code=404, detail="Exercise not found")
 
 
 # =============================================================================

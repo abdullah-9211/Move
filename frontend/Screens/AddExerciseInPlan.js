@@ -157,7 +157,6 @@ const AddExerciseInPlan = () => {
         await uploadTask.then(() => {
           console.log('Uploaded a blob or file!');
           setNumVideos((prevNumVideos) => prevNumVideos + 1);
-          setLoading(false);
           setUploaded(true);
           getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + name)).then((url1) => {
             console.log("Uploaded Video URL: ", url1);
@@ -171,6 +170,20 @@ const AddExerciseInPlan = () => {
             };
             setExercisesInfo((prevExercisesInfo) => [...prevExercisesInfo, exercise]);
             exercisesAdded.current.push(exercise_name);
+            const postData = {
+                plan_id: planID.current,
+                exercise_name: exercise_name,
+                exercise_video: url1,
+              };
+            const apiUrl = REACT_APP_API_URL + '/exercise/get-trainer-angles';
+            axios.post(apiUrl, postData)
+            .then(response => {
+                console.log("Response: ", response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.log(error);
+            });
           });
         });
     
