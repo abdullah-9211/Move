@@ -44,7 +44,7 @@ export default function Login() {
                 alert("Invalid email or password, Login failed")
             }
             else{
-                alert("Login successful")
+                // alert("Login successful")
                 if (data["user"]["user_type"] == "user"){
                     navigation.navigate("HomePage", {user: data["user"]});
                 }

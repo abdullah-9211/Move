@@ -326,8 +326,8 @@ class Pushup:
 
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
             while cap.isOpened():
-                cap.set(cv2.CAP_PROP_POS_FRAMES, i)
-                i += 6
+                # cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+                # i += 6
                 ret, frame = cap.read()
                 
                 if not ret:
