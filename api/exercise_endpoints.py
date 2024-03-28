@@ -165,7 +165,7 @@ def get_trainer_angles(video_data: dict):
     elif exercise == "pushup":
         pushup_instance = Pushup("", trainer_video)
         
-        thresholds = pushup_instance.get_trainer_angles()
+        thresholds = pushup_instance.set_state_thresholds()
         angles = pushup_instance.get_trainer_angles()
         
         elbow_state1 = (angles[0], angles[1])
@@ -214,6 +214,42 @@ def get_trainer_angles(video_data: dict):
         
     elif exercise == "squat":
         squat_instance = Squat("", trainer_video)
+        
+        thresholds = squat_instance.get_trainer_angles()
+        angles = squat_instance.get_trainer_angles()
+        
+        knee_angle_state1 = angles[0], angles[1]
+        knee_angle_state2 = angles[2], angles[3]
+        knee_angle_state3 = angles[4], angles[5]
+        
+        hip_angle_state1 = angles[6], angles[7]
+        hip_angle_state2 = angles[8], angles[9]
+        hip_angle_state3 = angles[10], angles[11]
+        
+        knee_feet_ratio_state1 = angles[12], angles[13]
+        feet_shoulder_ratio_state1 = angles[14], angles[15]
+        
+        knee_feet_ratio_state2 = angles[16], angles[17]
+        feet_shoulder_ratio_state2 = angles[18], angles[19]
+        
+        knee_feet_ratio_state3 = angles[20], angles[21]
+        feet_shoulder_ratio_state3 = angles[22], angles[23]
+        
+        angles_data = {
+            "knee_angle_state1": knee_angle_state1,
+            "knee_angle_state2": knee_angle_state2,
+            "knee_angle_state3": knee_angle_state3,
+            "hip_angle_state1": hip_angle_state1,
+            "hip_angle_state2": hip_angle_state2,
+            "hip_angle_state3": hip_angle_state3,
+            "knee_feet_ratio_state1": knee_feet_ratio_state1,
+            "feet_shoulder_ratio_state1": feet_shoulder_ratio_state1,
+            "knee_feet_ratio_state2": knee_feet_ratio_state2,
+            "feet_shoulder_ratio_state2": feet_shoulder_ratio_state2,
+            "knee_feet_ratio_state3": knee_feet_ratio_state3,
+            "feet_shoulder_ratio_state3": feet_shoulder_ratio_state3
+        }
+        
         return squat_instance.get_trainer_angles()
     elif exercise == "jumping jack":
         jj_instance = JumpingJack("", trainer_video)
