@@ -57,6 +57,9 @@ const AddExerciseInPlan = () => {
     const [exerciseURL, setExerciseURL] = useState(''); // Initialize exerciseURL here
     const [uploaded, setUploaded] = useState(false); // Initialize uploaded here
     const [exercisesInfo, setExercisesInfo] = useState([]); // Initialize exercisesInfo here
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [isDone, setIsDone] = useState(false);
+
 
 
     React.useEffect(() => {
@@ -148,6 +151,7 @@ const AddExerciseInPlan = () => {
         uploadTask.on('state_changed',
           (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(progress.toFixed(1));
             console.log('Upload is ' + progress + '% done');
           },
         )
@@ -194,10 +198,10 @@ const AddExerciseInPlan = () => {
         const savedExercises = {
             exercise_data: exercisesInfo,
           };
-          setLoading(true);
+          setIsDone(true);
           if (exercisesInfo.length == 0) {
               alert('Please add exercises to the plan');
-              setLoading(false);
+              setIsDone(false);
               return;
           }
 
@@ -205,11 +209,11 @@ const AddExerciseInPlan = () => {
           try {
               const response = await axios.post(apiUrl, savedExercises);
               console.log("Response: ", response.data);
-              setLoading(false);
+              setIsDone(false);
               navigation.navigate('ProfileWithPlans', {user: trainer, refresh: true});
           } catch (error) {
               console.log(error);
-              setLoading(false);
+              setIsDone(false);
           }
         
     }
@@ -433,11 +437,25 @@ const AddExerciseInPlan = () => {
     {loading && (
         <Modal transparent={true} animationType="fade">
             <View style={styles.modal}>
+            <Text style={styles.uploadingText}>
+                    {`Uploading video... ${uploadProgress}%`}
+                  </Text>
                 <ActivityIndicator size="large" color="#fff" />
             </View>
        </Modal>
       )}
-                    
+
+      {isDone && (
+        <Modal transparent={true} animationType="fade">
+            <View style={styles.modal}>
+            <Text style={styles.uploadingText}>
+                    {`Saving Workout Plan...`}
+                  </Text>
+                <ActivityIndicator size="large" color="#fff" />
+            </View>
+       </Modal>
+      )}
+
 {/* -------------------------------------Set plan name-----------------------------------------------------------------------------------------*/}
            <View style={{flexDirection: "row"}}>
            <View 
@@ -665,5 +683,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+      },
+      uploadingText: {
+        color: '#fff',
+        fontSize: 18,
+        fontFamily: 'QuickSandBold',
+        marginBottom: 20, // Adjust this value as needed
+      },
+      analyzingText: {
+        color: '#fff',
+        fontSize: 18,
+        fontFamily: 'QuickSandBold',
+        marginBottom: 20, // Adjust this value as needed
       },
     });
