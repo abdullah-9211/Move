@@ -170,20 +170,26 @@ const AddExerciseInPlan = () => {
             };
             setExercisesInfo((prevExercisesInfo) => [...prevExercisesInfo, exercise]);
             exercisesAdded.current.push(exercise_name);
-            const postData = {
-                plan_id: planID.current,
-                exercise_name: exercise_name,
-                exercise_video: url1,
-              };
-            const apiUrl = REACT_APP_API_URL + '/exercise/get-trainer-angles';
-            axios.post(apiUrl, postData)
-            .then(response => {
-                console.log("Response: ", response.data);
+
+            if (exercise_name == 'plank') {
+                const postData = {
+                    plan_id: planID.current,
+                    exercise_name: exercise_name,
+                    exercise_video: url1,
+                  };
+                const apiUrl = REACT_APP_API_URL + '/exercise/get-trainer-angles';
+                axios.post(apiUrl, postData)
+                .then(response => {
+                    console.log("Response: ", response.data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            }else {
                 setLoading(false);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+            }
+
           });
         });
     
