@@ -61,13 +61,15 @@ async def analyze_exercise(exercise_data: dict):
         pushup_instance = Pushup(client_video, trainer_video)
         angles = db.get_angles_from_db(plan_id, exercise_id)
         angles = angles[0]['trainer_angles']
-        errors, error_times, accuracy, duration = pushup_instance.assess_client(angles['elbow_state1'], angles['elbow_state2'], angles['elbow_state3'], angles['shoulder_state1'], angles['shoulder_state2'], angles['shoulder_state3'], angles['hip_state1'], angles['hip_state2'], angles['hip_state3'], angles['knee_state1'], angles['knee_state2'], angles['knee_state3'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'])
+        reps, errors, error_times, accuracy, duration = pushup_instance.assess_client(angles['elbow_state1'], angles['elbow_state2'], angles['elbow_state3'], angles['shoulder_state1'], angles['shoulder_state2'], angles['shoulder_state3'], angles['hip_state1'], angles['hip_state2'], angles['hip_state3'], angles['knee_state1'], angles['knee_state2'], angles['knee_state3'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'])
         exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
         all_errors[exercise_id] = errors
         all_error_times[exercise_id] = error_times
     elif exercise == "squat":
         squat_instance = Squat(client_video, trainer_video)
-        reps, errors, error_times, accuracy, duration = squat_instance.run_process()
+        angles = db.get_angles_from_db(plan_id, exercise_id)
+        angles = angles[0]['trainer_angles']
+        reps, errors, error_times, accuracy, duration = squat_instance.assess_client(angles['knee_angle_state1'], angles['knee_angle_state2'], angles['knee_angle_state3'], angles['hip_angle_state1'], angles['hip_angle_state2'], angles['hip_angle_state3'], angles['knee_feet_ratio_state1'], angles['feet_shoulder_ratio_state1'], angles['knee_feet_ratio_state2'], angles['feet_shoulder_ratio_state2'], angles['knee_feet_ratio_state3'], angles['feet_shoulder_ratio_state3'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'])
         exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
         all_errors[exercise_id] = errors
         all_error_times[exercise_id] = error_times
@@ -247,10 +249,21 @@ def get_trainer_angles(video_data: dict):
             "knee_feet_ratio_state2": knee_feet_ratio_state2,
             "feet_shoulder_ratio_state2": feet_shoulder_ratio_state2,
             "knee_feet_ratio_state3": knee_feet_ratio_state3,
-            "feet_shoulder_ratio_state3": feet_shoulder_ratio_state3
+            "feet_shoulder_ratio_state3": feet_shoulder_ratio_state3,
+            "state_1_threshold": thresholds[0],
+            "state_2_threshold": thresholds[1],
+            "state_3_threshold": thresholds[2]
         }
         
-        return squat_instance.get_trainer_angles()
+        data = {
+            "trainer_angles": angles_data,
+            "trainer_id": trainer_id,
+            "plan_id": plan_id,
+            "exercise_id": exercise_id,
+        }
+        return db.add_trainer_angles(data)
+        
+        
     elif exercise == "jumping jack":
         jj_instance = JumpingJack("", trainer_video)
         return jj_instance.get_trainer_angles()
