@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, FlatList, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { Image, FlatList, Pressable, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -10,7 +10,7 @@ const { width: screenWidth } = Dimensions.get('window');
 export default function Goal() {
   const navigation = useNavigation();
   const route = useRoute();
-
+  
   const role = route.params.role;
   const gender = route.params.gender;
   const height = route.params.height;
@@ -20,27 +20,43 @@ export default function Goal() {
 
   const ListItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => setgoal(item.text)}>
+      <TouchableOpacity onPress={() => {
+        setgoal(item.text);
+        alert("Goal selected: " + item.text);
+      }}>
+        <ImageBackground
+        source={{
+          uri: item.uri,
+        }}
+        resizeMode="cover"
+        imageStyle={{ borderRadius: 9 }}
+        style={{
+          width: screenWidth*0.85, height: 170, borderRadius: 12, marginVertical:10,
+            paddingBottom: 0,
+            paddingHorizontal: 0,
+        }}>
+
+        
         <LinearGradient
-          colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
+          colors={['transparent', 'rgba(0, 0, 0, 1)']} 
           style={styles.gradient}
         >
-        <Image
-          source={{
-            uri: item.uri,
-          }}
-          style={{width: screenWidth*0.85, height: 170, borderRadius: 12}}
-          resizeMode="cover"
-        />
+          <View style={{alignItems: "flex-start",marginHorizontal:11, paddingBottom:9}}>
+            <Text style={styles.planName}>{item.text}</Text>
+                        
+            
+          </View>
+        
         </LinearGradient>
+        </ImageBackground>
       </TouchableOpacity>
     );
   };
   
 
     const [loaded] = useFonts({
-
-        'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf')
+      'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
+        'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf')
     })
     if (!loaded) {
       return null;
@@ -53,9 +69,9 @@ export default function Goal() {
         <Text style={styles.textStyle}>Select Your Goal</Text>
       </View>
       
-      <View style={{flex:5, justifyContent: "center", alignItems:"center"}}>
+      <View style={{flex:5, justifyContent: "center", alignItems:"center", marginBottom: 15}}>
         <FlatList
-          contentContainerStyle={{ paddingHorizontal: 10 }}
+          contentContainerStyle={{ paddingHorizontal: 10, marginVertical:10}}
           data={SECTIONS[0].data}
           renderItem={({ item }) => <ListItem item={item} />}
           keyExtractor={(item) => item.key}
@@ -69,7 +85,16 @@ export default function Goal() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={() => navigation.navigate('SignUpDetails', {role: role, gender: gender, weight: weight, height: height, goal: goal})}>
+            onPress={() => {
+              if (goal == '') {
+                alert("Please select a goal");
+                return;
+              }
+              else{
+                navigation.navigate('SignUpDetails', {role: role, gender: gender, weight: weight, height: height, goal: goal});
+              }
+
+            }}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>
@@ -79,7 +104,6 @@ export default function Goal() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -91,6 +115,16 @@ const styles = StyleSheet.create({
     marginHorizontal:10,
     marginVertical: 20,
   },
+  
+planName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandBold",
+    fontSize: 24,
+    marginHorizontal:5,
+    marginBottom:5,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+},
   textStyle:{
     marginTop:50,
     fontFamily: 'QuickSand',
@@ -103,11 +137,11 @@ const styles = StyleSheet.create({
     fontFamily: 'QuickSand',
   },
   gradient: {
-    marginHorizontal:10,
-    marginVertical: 20,
+    justifyContent: "flex-end",
     flex: 1,
     borderRadius: 12,
   },
+  
   buttonText: {
     fontSize: 16,
     fontFamily: 'QuickSand',
@@ -133,28 +167,28 @@ const SECTIONS = [
     data: [
       {
         key: '1',
-        text: 'Item text 1',
+        text: 'Endurance',
         uri: 'https://www.mindpumpmedia.com/hubfs/Exercise%20for%20more%20than%20just%20aesthetics.png',
       },
       {
         key: '2',
-        text: 'Item text 2',
+        text: 'Yoga',
         uri: 'https://e0.pxfuel.com/wallpapers/995/141/desktop-wallpaper-fitness-yoga-aesthetic.jpg',
       },
 
       {
         key: '3',
-        text: 'Item text 3',
+        text: 'Toning',
         uri: 'https://media.istockphoto.com/id/1151770135/photo/athletic-woman-exercising-push-ups-in-a-health-club.jpg?s=612x612&w=0&k=20&c=c28WRyEbYfWmf0BGG6fyWo1Hwe0JxRIswfsywAsZhKI=',
       },
       {
         key: '4',
-        text: 'Item text 4',
+        text: 'Weight Loss',
         uri: 'https://www.aestheticjunction.com/wp-content/uploads/2014/01/portfolio1.jpg',
       },
       {
         key: '5',
-        text: 'Item text 5',
+        text: 'Strength',
         uri: 'https://wallpapercave.com/wp/wp7661163.jpg',
       },
     ],

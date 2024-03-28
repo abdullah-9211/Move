@@ -29,12 +29,12 @@ export default function NavBarTrainer() {
       <View style={basic.basic2}>
         <View style={basic.basic2}>
           <Pressable onPress={() => navigation.navigate('TrainerDashboard')}>
-            <Text style={basic.text}>Your Plans</Text>
+            <Text style={basic.text}>Dashboard</Text>
           </Pressable>
         </View>
         <View style={basic.basic2}>
           <Pressable onPress={() => navigation.navigate('TrainerClients')}>
-            <Text style={basic.text}>Clients</Text>
+            <Text style={basic.text}>Profile</Text>
           </Pressable>
         </View>
       </View>

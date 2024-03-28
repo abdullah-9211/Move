@@ -6,7 +6,6 @@ import NavBar from '../components/NavBar';
 import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
 import { useNavigation, useRoute } from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 
@@ -45,19 +44,25 @@ export default function Goal2() {
       
             
             <Text style={styles.textStyle}>Height</Text>
+            <View style={[styles.input,{ flexDirection: "row", padding: 10,color: '#ffffff', justifyContent: "space-between"}]}>
             <TextInput
-                style={styles.input}
-                placeholder="Height"
+                style={{width: '90%',color: "#ffffff", fontFamily: "QuickSand", fontSize: 18}}
+                placeholder="171cm"
                 value={height}
                 onChangeText={(text) => setheight(text)}
             />
+            <Text style={{color:"#ffffff", fontFamily: "QuickSand", fontSize:20}}>cm</Text>
+            </View>
             <Text style={styles.textStyle}>Weight</Text>
+            <View style={[styles.input,{flexDirection: "row", padding: 10,color: '#ffffff', justifyContent: "space-between"}]}>
             <TextInput
-                style={styles.input}
+                style={{width: '90%',color: "#ffffff", fontFamily:"QuickSand", fontSize: 18}}
                 placeholder="60kg"
                 value={weight}
                 onChangeText={(text) => setweight(text)}
             />
+            <Text style={{color:"#ffffff", fontFamily: "QuickSand", fontSize:20}}>Kg</Text>
+            </View>
             <View style={{flex:1, justifyContent: "flex-end"}}>
             <Pressable
                 style={({ pressed }) => [styles.button,

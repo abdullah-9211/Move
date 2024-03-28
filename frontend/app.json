@@ -15,12 +15,16 @@
       "**/*"
     ],
     "plugins": [
+      
       [
+        
+        
         "expo-camera",
         {
           "cameraPermission": "Allow $(MoveApp) to access your camera."
         }
       ]
+      
     ],
     "ios": {
       "supportsTablet": true

@@ -1,5 +1,7 @@
 # Entrypoint for the application
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from database.connection import connect
 from api.exercise_endpoints import router as exercise_router
 from api.user_endpoints import router as user_router
@@ -11,6 +13,14 @@ def get_supabase_client():
 
 app.include_router(exercise_router, prefix="/exercise", tags=["exercise"])
 app.include_router(user_router, prefix="/user", tags=["user"])
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == "__main__":
     import uvicorn

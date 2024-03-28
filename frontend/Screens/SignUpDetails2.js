@@ -8,7 +8,7 @@ import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-import {API_URL} from "@env"
+import {REACT_APP_API_URL} from "@env"
 
 
 
@@ -18,16 +18,17 @@ export default function SignUpDetails2() {
     const navigation = useNavigation();
     const route = useRoute();
 
-    const role = route.params.role;
-    const gender = route.params.gender;
-    const height = route.params.height;
-    const weight = route.params.weight;
-    const goal = route.params.goal;
-    const firstName = route.params.firstName;
-    const lastName = route.params.lastName;
-    const email = route.params.email;
-    const phone = route.params.phone;
-    const age = route.params.age;
+    const role = route.params?.role;
+    const gender = route.params?.gender;
+    const height = route.params?.height;
+    const weight = route.params?.weight;
+    const goal = route.params?.goal;
+    const firstName = route.params?.firstName;
+    const lastName = route.params?.lastName;
+    const email = route.params?.email;
+    const phone = route.params?.phone;
+    const age = route.params?.age;
+    const profilePic = route.params?.profilePicture;
     var goal_id = " ";
 
     
@@ -49,7 +50,7 @@ export default function SignUpDetails2() {
 
         if (role == "user") {
             try {
-                const apiUrl = API_URL + '/user/add_goal';
+                const apiUrl = REACT_APP_API_URL + '/user/add_goal';
                 const requestBody = {
                     height: height,
                     weight: weight,
@@ -59,7 +60,7 @@ export default function SignUpDetails2() {
                 goal_id = response.data.goal_id;
                 
                 try {
-                    const apiUrl = API_URL + '/user/add_user';
+                    const apiUrl = REACT_APP_API_URL + '/user/add_user';
                     const requestBody = {
                         email: email,
                         password: password,
@@ -69,12 +70,14 @@ export default function SignUpDetails2() {
                         phone_number: phone,
                         gender: gender,
                         user_type: role,
-                        goal_id: goal_id
+                        goal_id: goal_id,
+                        profile_picture: profilePic
                     };
                     const response = await axios.post(apiUrl, requestBody);
                     user_id = response.data.user_id;
                     alert('User created successfully!', response.data.user_id);
                     console.log(response.data.user_id)
+                    setLoading(false);
                     navigation.navigate('Login', {user_id: response.data.user_id});
                 } catch (error) {
                     alert('Error creating user:', error);
@@ -85,7 +88,7 @@ export default function SignUpDetails2() {
         }
         else{
             try {
-                const apiUrl = API_URL + '/user/add_user';
+                const apiUrl = REACT_APP_API_URL + '/user/add_user';
                 const requestBody = {
                     email: email,
                     password: password,
@@ -95,12 +98,14 @@ export default function SignUpDetails2() {
                     phone_number: phone,
                     gender: gender,
                     user_type: role,
-                    goal_id: "None"
+                    goal_id: "None",
+                    profile_picture: profilePic
                 };
                 const response = await axios.post(apiUrl, requestBody);
                 user_id = response.data.user_id;
                 alert('Trainer created successfully!', response.data.user_id);
                 console.log(response.data.user_id)
+                setLoading(false);
                 navigation.navigate('Login', {user_id: response.data.user_id});
             } catch (error) {
                 alert('Error creating trainer:', error);
@@ -111,6 +116,8 @@ export default function SignUpDetails2() {
 
 
     function handlePress() {
+        
+
         if (password != confirmPassword) {
             alert("Passwords do not match");
         }

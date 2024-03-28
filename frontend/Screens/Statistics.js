@@ -1,14 +1,30 @@
 import * as React from 'react';
-import { StyleSheet, Image, Text, View, Dimensions} from 'react-native';
+import { StyleSheet, Image, Text, View, Dimensions, TouchableOpacity, FlatList, Pressable, } from 'react-native';
 import { useFonts } from 'expo-font';
+import { useState } from 'react';
 import NavBarBot from '../components/NavBarBot';
 import Report from '../components/Report';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation, useRoute } from '@react-navigation/native';
 const { width: screenWidth } = Dimensions.get('window');
 
+
+
 export default function WorkoutCompleted() {
+  const route = useRoute();
+  const navigation = useNavigation();
+
+  const user = route.params?.user;
+  const trainer = route.params?.trainer;
+  const workout = route.params?.workout;
+  const duration = route.params?.duration;
+  const accuracy = route.params?.accuracy;
+
   const [loaded] = useFonts({
-    'Quicksand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
+    'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
+    'QuickSand': require('../assets/fonts/Quicksand-Regular.ttf'),
+    'BakbakOne': require('../assets/fonts/BakbakOne-Regular.ttf'),
+
   });
 
   if (!loaded) {
@@ -17,58 +33,55 @@ export default function WorkoutCompleted() {
 
   // Assuming workout progress as a percentage (0 to 100)
   const workoutProgress = 75; // Change this value based on your actual progress
+  
+  
+  const goAhead = () => {
+    if (trainer != null) {
+      navigation.goBack();
+    }
+    
+    else if (user["user_type"] == "user"){
+      navigation.navigate('UserProfile', {user: user});
+    }
+  }
 
   return (
     <View style={styles.container}>
     <View style={styles.borderstuff}>
-      <Text style={styles.heading2}>Congratulations!</Text>
-      <Text style={styles.heading}>Workout Completed</Text>
-      <View style={styles.level}>
-        <Text style={styles.subtext}> Level 2</Text>
-        <Text style={styles.subtext}> +32 XP</Text>
+      <View style={{backgroundColor: "#000000", width: screenWidth}}>
+      <Text style={[styles.heading2, {marginLeft: 20, paddingTop:20}]}>Congratulations!</Text>
+      <Text style={[styles.heading, {marginLeft:20, marginBottom: 10}]}>Workout Completed</Text>
       </View>
-      <View style={styles.progressBarContainer}>
-
-        <View style={[styles.progressBar, { width: `${workoutProgress}%` }]}>
-          <View style={styles.progressBarTextContainer}>
-            <Text style={styles.progressBarText}>{`126/200 XP`}</Text>
-          </View>
-        </View>
-      </View>
-        <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
-        <Icon name="fire" size={30} color="#900020" />
-        <Text>+1</Text>
-        </View>
+        
       
       <Report />
-      <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center", marginBottom: 100 }}>
-  <Text style={styles.heading}>Badges Progressed</Text>
-  <View style={{ flexDirection: "row", marginTop: 20 }}>
-    <Image
-      source={require('../assets/images/clock.png')}
-      style={{ width: 70, height: 60 }}
-      resizeMode="center"
-    />
-    <Image
-      source={require('../assets/images/clock.png')}
-      style={{ width: 80, height: 60 }}
-      resizeMode="center"
-    />
-    <Image
-      source={require('../assets/images/clock.png')}
-      style={{ width: 80, height: 60 }}
-      resizeMode="center"
-    />
-    <Image
-      source={require('../assets/images/clock.png')}
-      style={{ width: 80, height: 60 }}
-      resizeMode="center"
-    />
-  </View>
-</View>
+      <Pressable onPress={goAhead}>
+      <View 
+                style = {{
+                    alignItems: "center",
+                    backgroundColor: "#900020",
+                    borderRadius: 9,
+                    paddingVertical: 19,
+					          marginTop:20,
+                    bottom: 0,
+                    marginBottom:12,
+                    width: screenWidth*0.9,
+                    marginHorizontal: 25,
+                }}>
+                <Text 
+                    style = {{
+                        color: "#ffffff",
+                        fontSize: 16,
+                        
+                        fontFamily: "QuickSandBold"
+                    }}>
+                    {"Continue"}
+                </Text>
+            </View>
+          </Pressable>
     </View>
-    <NavBarBot />
-
+    
+    
     </View>
   );
 }
@@ -76,7 +89,8 @@ export default function WorkoutCompleted() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingTop: 0,
+    backgroundColor: "#ffffff",
   },
   borderstuff:{
     alignItems: 'center',
@@ -87,55 +101,22 @@ const styles = StyleSheet.create({
     borderColor: "#900020",
   },
   
-  level: {
-    
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    width: '80%',
-    marginTop: 10,
-    marginBottom: 3, // Adjust as needed
-  },
   heading: {
-    fontSize: 21,
-    fontFamily: 'Quicksand',
-    color: '#000000',
+    fontSize: 18,
+    fontFamily: 'QuickSand',
+    color: '#ffffff',
     marginTop: 10,
   },
   subtext: {
-    fontSize: 14,
-    fontFamily: 'Quicksand',
+    fontSize: 16,
+    fontFamily: 'QuickSand',
   },
   heading2: {
     fontSize: 30,
-    fontWeight: 'bold',
-    fontFamily: 'Quicksand',
-    color: '#900020',
+    
+    fontFamily: 'QuickSandBold',
+    color: '#ffffff',
     marginTop: 20,
   },
-  progressBarTextContainer: {
-    
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  progressBarText: {
-    color: 'white',
-    fontSize: 14,
-    marginBottom: 4,
-    fontFamily: 'Quicksand',
-  },
-  progressBarContainer: {
-    width: '80%',
-    height: 20,
-    backgroundColor: '#e0e0e0', // Background color of the progress bar container
-    borderRadius: 10,
 
-  },
-  progressBar: {
-    height: '100%',
-    borderRadius: 10,
-    position: 'relative',
-    backgroundColor: '#900020', // Color of the progress bar
-  },
 });

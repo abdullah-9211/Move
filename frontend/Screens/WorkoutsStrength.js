@@ -1,33 +1,86 @@
 import * as React from 'react';
-import { Image, FlatList, horizontal, View, StyleSheet, Text, Dimensions } from 'react-native';
+import { Image, FlatList, TouchableOpacity, ImageBackground, horizontal, View, StyleSheet, Text, Dimensions, Pressable, Modal, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import NavBarBot from '../components/NavBarBot';
 import NavBar from '../components/NavBar';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import axios from 'axios';
+import {REACT_APP_API_URL} from "@env"
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const ListItem = ({ item }) => {
-  
-  return (
-    <LinearGradient
-      colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)']}
-      style={styles.gradient}
-    >
-      <Image
-        source={{
-          uri: item.uri,
-        }}
-        style={{ width: screenWidth / 2 - 40, height: 135, borderRadius: 9 }}
-        resizeMode="cover"
-      />
-    </LinearGradient>
-  );
-};
 
 export default function WorkoutsStrength() {
+
+  const ListItem = ({ item }) => {
+  
+    const navigation = useNavigation();
+  
+    const route = useRoute();
+    const user = route.params?.user;
+    const workouts = route.params?.workouts;
+  
+    const handleWorkoutClick = (item) => () => {
+      setLoading(true);
+  
+      const apiUrl = REACT_APP_API_URL + '/exercise/get-exercises/' + item.id;
+      axios.get(apiUrl)
+      .then((response) => {
+        console.log(response.data);
+        const exercises_data = response.data;
+        const apiUrl = REACT_APP_API_URL + '/exercise/get-plan-trainer/' + item.plan_trainer;
+        axios.get(apiUrl)
+        .then((response) => {
+          console.log(response.data);
+          setLoading(false);
+          navigation.navigate('StartWorkout', {user: user, workout: item, exercises: exercises_data, trainer: response.data[0]});
+        }
+        )
+      })
+      .catch((error) => {
+        console.log(error);
+      })    
+  
+    }
+
+    return (
+      <TouchableOpacity style={{marginHorizontal:12, marginVertical:10}} onPress={handleWorkoutClick(item)}>
+      <ImageBackground
+      source={{
+        uri: item.plan_image,
+      }}
+      resizeMode="cover"
+      imageStyle={{ borderRadius: 9 }}
+      style={{
+        width: (screenWidth/2)-35, height: (screenWidth/2)-25, borderRadius: 9, marginBottom:15, marginTop:8,
+          paddingBottom: 0,
+          paddingHorizontal: 0,
+      }}>
+      <LinearGradient
+        colors={['transparent', 'rgba(0, 0, 0, 0.75)']} 
+        style={styles.gradient}
+      >
+      <View style={{}}>
+            <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:0}}>
+            <Text style={styles.trainerName}>{item.plan_name}</Text>
+            
+            </View>
+            
+          </View>
+      </LinearGradient>
+      </ImageBackground>
+    </TouchableOpacity>
+    );
+  };
+  
+
   const navigation = useNavigation();
+  const route = useRoute();
+  const user = route.params?.user;
+  const workouts = route.params?.workouts;
+  const [loading, setLoading] = React.useState(false);
+
   const [loaded] = useFonts({
     'QuickSand': require('../assets/fonts/Quicksand-SemiBold.ttf'),
   });
@@ -38,7 +91,7 @@ export default function WorkoutsStrength() {
 
   return (
     <View style={styles.container}>
-      <View style={{marginTop: 10, flexDirection:"row",justifyContent: "space-between", alignItems: "center", marginRight:25}}>
+      <View style={{marginTop: 10, flexDirection:"row",justifyContent: "space-between", marginRight:25}}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Text style={styles.headingtext}>STRENGTH</Text>
         <Image source={require('../assets/images/filter.png')} 
@@ -47,12 +100,18 @@ export default function WorkoutsStrength() {
         <Image source={require('../assets/images/sort.png')}
             style={{ width: 20, height: 20 }} />
       </View>
-
+      {loading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+      )}
       <FlatList
-        contentContainerStyle={{ paddingHorizontal: 10 }}
-        data={SECTIONS[0].data}
+        contentContainerStyle={{ paddingHorizontal: 10}}
+        data={workouts}
         renderItem={({ item }) => <ListItem item={item} />}
-        keyExtractor={(item) => item.key}
+        keyExtractor={(item) => item.id}
         numColumns={2} 
         showsHorizontalScrollIndicator={false}
       />
@@ -89,10 +148,36 @@ const styles = StyleSheet.create({
     fontFamily: 'QuickSand',
   },
   gradient: {
-    marginHorizontal: 20,
-    marginVertical: 20,
+    marginHorizontal:0,
+    marginVertical: 0,
     flex: 1,
+    justifyContent: "flex-end",
     borderRadius: 12,
+  },
+  
+  trainerName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandMedium",
+    fontSize: 16,
+    marginHorizontal:10,
+    marginBottom:10,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+  },
+  planName: {
+    color: "#ffffff",
+    fontFamily: "QuickSandBold",
+    fontSize: 16,
+    marginHorizontal:10,
+    marginBottom:0,
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
+},
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
 });
 

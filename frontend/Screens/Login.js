@@ -7,7 +7,7 @@ import MainScreen from '../components/MainScreen';
 import NavBarBot from '../components/NavBarBot'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-import {API_URL} from "@env"
+import {REACT_APP_API_URL} from "@env"
 
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -30,30 +30,49 @@ export default function Login() {
     async function handlePress() {
         setLoading(true);
         try {
-            const apiUrl = API_URL + '/user/login';
+            const apiUrl = REACT_APP_API_URL + '/user/login';
+            console.log("test : " + apiUrl);
             const requestBody = {
                 email: email,
                 password: password
             };
             const response = await axios.post(apiUrl, requestBody);
             const data = response.data;
+            console.log(data);
 
             if (data["user"] == "None"){
                 alert("Invalid email or password, Login failed")
             }
             else{
-                alert("Login successful")
+                // alert("Login successful")
                 if (data["user"]["user_type"] == "user"){
                     navigation.navigate("HomePage", {user: data["user"]});
                 }
                 else if (data["user"]["user_type"] == "trainer"){
-                    navigation.navigate("TrainerDashboard", {user: data["user"]});
+                    navigation.navigate("ProfileWithPlans", {user: data["user"], refresh: false});
                 }
             }
 
-        } catch (error) {
-            console.log(error);
+        } 
+        catch (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.log(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+            }
         }
+        
+        // catch (error) {
+        //     console.log(error);
+        // }
         setLoading(false);
     }
 
@@ -90,6 +109,7 @@ export default function Login() {
             <Text style={styles.textStyle}>Password</Text>
             <TextInput
                 style={styles.input}
+                secureTextEntry={true}
                 placeholder="Password"
                 value={password}
                 onChangeText={(text) => setpassword(text)}
@@ -106,7 +126,18 @@ export default function Login() {
                 Continue
             </Text>
             </Pressable>
+            <Pressable
+        style={({ pressed }) => [
+            styles.SignUp,
+        
+        ]}
+        onPress={() => navigation.navigate('AccountSelect')}>
+        <Text style={styles.SignUpText}>
+            Join Us
+        </Text>
+      </Pressable>
             </View>
+            
           
           
         </View>
@@ -144,7 +175,9 @@ export default function Login() {
     padding: 10,
     color: '#ffffff'
   },
-
+  SignUp: {
+    justifyContent: "flex-start", alignItems: "center", marginBottom: 30,
+  },
   buttonText: {
     fontSize: 16,
     fontFamily: 'QuickSand',
@@ -158,7 +191,7 @@ button: {
     height: 60,
     marginHorizontal:10,
     borderRadius: 9,
-    marginBottom:25,
+    marginBottom:15,
 },
 backgroundImage: {
     flex: 1,
@@ -171,6 +204,12 @@ backgroundImage: {
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
+  SignUpText: {
+    fontSize: 15,
+    fontFamily: 'QuickSand',
+    textDecorationLine: "underline",
+    color: "#ffffff",
+},
 
     
   });
