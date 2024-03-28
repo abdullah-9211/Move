@@ -1,5 +1,3 @@
-//Sign up screen
-
 import * as React from 'react';
 import { Image, Pressable, TouchableOpacity, ImageBackground,TextInput, TimePickerAndroid, Button, FlatList, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, Modal, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -132,6 +130,25 @@ export default function SignUpDetails() {
     
     };
 
+    const handleSubmit = () => {
+      // Validate form data
+      const email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if (firstName == '' || lastName == '' || email == '' || phone == '' || age == '') {
+        alert("Please fill in all fields");
+      } else if (phone.length < 10) {
+        alert("Please enter a valid phone number");
+      } else if (isNaN(phone)) {
+        alert("Please enter a valid phone number");
+      } else if (isNaN(age)) {
+        alert("Please enter a valid age");
+      } else if (!email_regex.test(email)) {
+        alert("Please enter a valid email address");
+      } else {
+        uploadImage();
+      }
+
+    }
+
 
     return (
         <ImageBackground
@@ -212,7 +229,7 @@ export default function SignUpDetails() {
                 backgroundColor: pressed ? '#140004' : '#900020',
             },
                 ]}
-            onPress={uploadImage}>
+            onPress={handleSubmit}>
             <Text style={styles.buttonText}>
                 Continue
             </Text>
