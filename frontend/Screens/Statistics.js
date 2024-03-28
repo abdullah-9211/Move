@@ -34,6 +34,15 @@ export default function WorkoutCompleted() {
   const workoutProgress = 75; // Change this value based on your actual progress
   
   
+  const goAhead = () => {
+    if (user["user_type"] == "user"){
+      navigation.navigate('UserProfile', {user: user});
+    }
+    else{
+      navigation.goBack();
+    }
+  }
+
   return (
     <View style={styles.container}>
     <View style={styles.borderstuff}>
@@ -44,6 +53,7 @@ export default function WorkoutCompleted() {
         
       
       <Report />
+      <Pressable onPress={goAhead}>
       <View 
                 style = {{
                     alignItems: "center",
@@ -66,6 +76,7 @@ export default function WorkoutCompleted() {
                     {"Continue"}
                 </Text>
             </View>
+          </Pressable>
     </View>
     
     
