@@ -47,7 +47,27 @@ export default function MainScreen() {
   const ListItem = ({ item }) => {
 
     const showWorkout = () => {
-      navigation.navigate('PlanDescription', {user: item["Users"], workout: item});
+      setLoading(true);
+  
+      const apiUrl = REACT_APP_API_URL + '/exercise/get-exercises/' + item.id;
+      console.log("test : " + apiUrl);
+      axios.get(apiUrl)
+      .then((response) => {
+        console.log(response.data);
+        const exercises_data = response.data;
+        const apiUrl = REACT_APP_API_URL + '/exercise/get-plan-trainer/' + item.plan_trainer;
+        axios.get(apiUrl)
+        .then((response) => {
+          console.log(response.data);
+          setLoading(false);
+          navigation.navigate('StartWorkout', {user: user, workout: item, exercises: exercises_data, trainer: response.data[0]});
+        }
+        )
+      })
+      .catch((error) => {
+        console.log(error);
+      })    
+
     }
 
     return (
@@ -158,6 +178,13 @@ export default function MainScreen() {
           showsHorizontalScrollIndicator={false}
         />
       </View>
+      {loading && (
+                <Modal transparent={true} animationType="fade">
+                <View style={styles.modal}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+                </Modal>
+      )}
       <Text style={styles.headingtext}>Suggested Trainers For You</Text>
       <View>
         <FlatList
