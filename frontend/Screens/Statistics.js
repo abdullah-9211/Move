@@ -15,6 +15,7 @@ export default function WorkoutCompleted() {
   const navigation = useNavigation();
 
   const user = route.params?.user;
+  const trainer = route.params?.trainer;
   const workout = route.params?.workout;
   const duration = route.params?.duration;
   const accuracy = route.params?.accuracy;
@@ -35,11 +36,12 @@ export default function WorkoutCompleted() {
   
   
   const goAhead = () => {
-    if (user["user_type"] == "user"){
-      navigation.navigate('UserProfile', {user: user});
-    }
-    else{
+    if (trainer != null) {
       navigation.goBack();
+    }
+    
+    else if (user["user_type"] == "user"){
+      navigation.navigate('UserProfile', {user: user});
     }
   }
 

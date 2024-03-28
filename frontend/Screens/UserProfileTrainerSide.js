@@ -26,7 +26,7 @@ export default function UserProfile() {
       .then((response) => {
         console.log(response.data);
         setLoading(false);
-        navigation.navigate('Statistics', {user: user, duration: item.duration, accuracy: item.accuracy, workout: item.workout_id, exercises: response.data.exercises, numExercises: response.data.exerciseNum, errors: response.data.errors, error_times: response.data.error_times, exercise_translator: response.data.exercise_translator, accuracies: response.data.accuracies})
+        navigation.navigate('Statistics', {user: user, duration: item.duration, accuracy: item.accuracy, workout: item.workout_id, exercises: response.data.exercises, numExercises: response.data.exerciseNum, errors: response.data.errors, error_times: response.data.error_times, exercise_translator: response.data.exercise_translator, accuracies: response.data.accuracies, trainer: trainer})
       })
       .catch((error) => {
         console.log(error);
@@ -93,6 +93,7 @@ const shadowopacity = screenWidth * 0.2 / screenWidth;
   const route = useRoute();
 
   const user = route.params?.user;
+  const trainer = route.params?.trainer;
   const [loading, setLoading] = React.useState(false);
   const [whiteScreen, setWhiteScreen] = React.useState(false);
   const [numSubscribed, setNumSubscribed] = React.useState(0);
