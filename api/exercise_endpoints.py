@@ -75,7 +75,9 @@ async def analyze_exercise(exercise_data: dict):
         all_error_times[exercise_id] = error_times
     elif exercise == "jumping jack":
         jj_instance = JumpingJack(client_video, trainer_video)
-        reps, errors, error_times, accuracy, duration = jj_instance.run_process()
+        angles = db.get_angles_from_db(plan_id, exercise_id)
+        angles = angles[0]['trainer_angles']
+        reps, errors, error_times, accuracy, duration = jj_instance.assess_client(angles['shoulder_1_r'], angles['shoulder_2_r'], angles['shoulder_3_r'], angles['hip_1_r'], angles['hip_2_r'], angles['hip_3_r'], angles['knee_1_r'], angles['knee_2_r'], angles['knee_3_r'], angles['shoulder_1_l'], angles['shoulder_2_l'], angles['shoulder_3_l'], angles['hip_1_l'], angles['hip_2_l'], angles['hip_3_l'], angles['knee_1_l'], angles['knee_2_l'], angles['knee_3_l'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'])
         exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
         all_errors[exercise_id] = errors
         all_error_times[exercise_id] = error_times
@@ -217,7 +219,7 @@ def get_trainer_angles(video_data: dict):
     elif exercise == "squat":
         squat_instance = Squat("", trainer_video)
         
-        thresholds = squat_instance.get_trainer_angles()
+        thresholds = squat_instance.set_state_thresholds()
         angles = squat_instance.get_trainer_angles()
         
         knee_angle_state1 = angles[0], angles[1]
@@ -266,7 +268,67 @@ def get_trainer_angles(video_data: dict):
         
     elif exercise == "jumping jack":
         jj_instance = JumpingJack("", trainer_video)
-        return jj_instance.get_trainer_angles()
+        
+        thresholds = jj_instance.set_state_thresholds()
+        angles = jj_instance.get_trainer_angles()
+        
+        shoulder_1_r = angles[0], angles[1]
+        shoulder_2_r = angles[2], angles[3]
+        shoulder_3_r = angles[4], angles[5]
+        
+        hip_1_r = angles[6], angles[7]
+        hip_2_r = angles[8], angles[9]
+        hip_3_r = angles[10], angles[11]
+        
+        knee_1_r = angles[12], angles[13]
+        knee_2_r = angles[14], angles[15]
+        knee_3_r = angles[16], angles[17]
+        
+        shoulder_1_l = angles[18], angles[19]
+        shoulder_2_l = angles[20], angles[21]
+        shoulder_3_l = angles[22], angles[23]
+        
+        hip_1_l = angles[24], angles[25]
+        hip_2_l = angles[26], angles[27]
+        hip_3_l = angles[28], angles[29]
+        
+        knee_1_l = angles[30], angles[31]
+        knee_2_l = angles[32], angles[33]
+        knee_3_l = angles[34], angles[35]
+        
+        angles_data = {
+            "shoulder_1_r": shoulder_1_r,
+            "shoulder_2_r": shoulder_2_r,
+            "shoulder_3_r": shoulder_3_r,
+            "hip_1_r": hip_1_r,
+            "hip_2_r": hip_2_r,
+            "hip_3_r": hip_3_r,
+            "knee_1_r": knee_1_r,
+            "knee_2_r": knee_2_r,
+            "knee_3_r": knee_3_r,
+            "shoulder_1_l": shoulder_1_l,
+            "shoulder_2_l": shoulder_2_l,
+            "shoulder_3_l": shoulder_3_l,
+            "hip_1_l": hip_1_l,
+            "hip_2_l": hip_2_l,
+            "hip_3_l": hip_3_l,
+            "knee_1_l": knee_1_l,
+            "knee_2_l": knee_2_l,
+            "knee_3_l": knee_3_l,
+            "state_1_threshold": thresholds[0],
+            "state_2_threshold": thresholds[1],
+            "state_3_threshold": thresholds[2]
+        }
+        
+        data = {
+            "trainer_angles": angles_data,
+            "trainer_id": trainer_id,
+            "plan_id": plan_id,
+            "exercise_id": exercise_id,
+        }
+        return db.add_trainer_angles(data)
+        
+        
     else:
         raise HTTPException(status_code=404, detail="Exercise not found")
 
