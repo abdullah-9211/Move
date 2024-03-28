@@ -71,9 +71,11 @@ class Squat:
         cap = cv2.VideoCapture(self.trainer_url)
 
         knee_angles = []
+        i = 0
 
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-            while cap.isOpened():
+            while cap.isOpened() and i < 120:
+                i += 1
                 ret, frame = cap.read()
                 
                 if not ret:
@@ -171,9 +173,11 @@ class Squat:
         cap = cv2.VideoCapture(self.trainer_url)
 
         self.state = 0
+        i = 0
 
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-            while cap.isOpened():
+            while cap.isOpened() and i < 120:
+                i += 1
                 ret, frame = cap.read()
                 
                 if not ret:

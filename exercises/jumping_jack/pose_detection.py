@@ -80,9 +80,11 @@ class JumpingJack:
         cap = cv2.VideoCapture(self.trainer_url)
 
         shoulder_angles = []
+        i = 0
 
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-            while cap.isOpened():
+            while cap.isOpened() and i < 120:
+                i += 1
                 ret, frame = cap.read()
                 
                 if not ret:
@@ -165,9 +167,11 @@ class JumpingJack:
 
         r_state = 0
         l_state = 0
+        i = 0
 
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-            while cap.isOpened():
+            while cap.isOpened() and i < 120:
+                i += 1
                 ret, frame = cap.read()
                 
                 if not ret:
@@ -832,4 +836,4 @@ if __name__ == "__main__":
 
     jj = JumpingJack(client_url, trainer_url)
     
-    print(jj.run_process())
+    print(jj.set_state_thresholds())
