@@ -39,7 +39,7 @@ const ProfileWithClients = () => {
 			<ImageBackground 
                     source={{uri:item.profile_picture}} 
                     resizeMode="cover"
-                    imageStyle={{ borderRadius: 12 }}
+                    imageStyle={{ borderRadius: 140 }}
                     style={{
                         width: (screenWidth/2)-26, height: (screenWidth/2)-25, borderRadius: 12, marginBottom:0, marginTop:8,
           paddingBottom: 0,
@@ -257,7 +257,7 @@ export default ProfileWithClients;
 		paddingTop:0,
     	flex: 1,
 		justifyContent: "flex-end",
-    	borderRadius: 75,
+    	borderRadius: 175,
     },
 
 	modal: {
