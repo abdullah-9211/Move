@@ -187,11 +187,7 @@ const AddExerciseInPlan = () => {
             exercise_data: exercisesInfo,
           };
           setLoading(true);
-          if (exercisesInfo.length == 0) {
-              alert('Please add exercises to the plan');
-              setLoading(false);
-              return;
-          )
+          
 
           const apiUrl = REACT_APP_API_URL + '/exercise/add_plan_exercises';
           try {
