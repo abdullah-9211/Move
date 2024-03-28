@@ -449,13 +449,17 @@ class Squat:
                         states_visited.append(3)
                     elif knee_angle < (state1_angle_threshold[0] - self.leniency):
                         self.state = 1
-                        self.errors.append("Knee Angle too low")
+                        if current_time not in self.error_times:
+                            self.errors.append("Knee Angle too low")
+                            self.error_times.append(current_time)
                         self.error_bool = True
                         self.client_incorrect.append(knee_angle)
                         self.trainer_incorrect.append(state1_angle_threshold[0] - self.leniency)
                     elif knee_angle > (state3_angle_threshold[1] + self.leniency):
                         self.state = 3
-                        self.errors.append("Knee Angle too high")
+                        if current_time not in self.error_times:
+                            self.errors.append("Knee Angle too high")
+                            self.error_times.append(current_time)
                         self.error_bool = True
                         self.client_incorrect.append(knee_angle)
                         self.trainer_incorrect.append(state3_angle_threshold[1] + self.leniency)
