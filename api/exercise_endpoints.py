@@ -52,8 +52,8 @@ async def analyze_exercise(exercise_data: dict):
         plank_instance = Plank(trainer_video, client_video)
         
         angles = db.get_angles_from_db(plan_id, exercise_id)
-        
-        errors, error_times, accuracy, duration = plank_instance.assess_client(angles[0], angles[1], angles[2], angles[3], angles[4], angles[5], angles[6], angles[7])
+        angles = angles[0]['trainer_angles']
+        errors, error_times, accuracy, duration = plank_instance.assess_client(angles['elbow_min'], angles['elbow_max'], angles['shoulder_min'], angles['shoulder_max'], angles['hip_min'], angles['hip_max'], angles['knee_min'], angles['knee_max'])
         exercise_stats = Exercise(0, exercise_id, None, duration, accuracy)
         all_errors[exercise_id] = errors
         all_error_times[exercise_id] = error_times
