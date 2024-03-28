@@ -190,3 +190,25 @@ def add_errors(workout_id, exercise_id, errors, error_times):
         return response["data"][0]["workout_id"]
     except Exception as e:
         print("\n\nError inserting errors into database: ", e)
+        
+        
+def get_category_workouts(category):
+    client = connect()
+    try:
+        res = client.table("Workout Plan").select("*", "Users(*)").eq("workout_type", category).execute()
+        res = dict(res)
+        
+        trainers = []
+        for plan in res["data"]:
+            trainer = plan["Users"]
+            if trainer not in trainers:
+                trainers.append(trainer)
+                
+        if len(res["data"]) > 5:
+            res["data"] = random.sample(res["data"], 5)
+        
+        res["data"][0]["trainers"] = trainers
+        
+        return res["data"]
+    except Exception as e:
+        print("\nError retrieving workouts. Exception Thrown:\n", e)

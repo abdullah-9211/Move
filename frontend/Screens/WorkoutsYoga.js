@@ -63,7 +63,7 @@ export default function WorkoutsYoga() {
       >
       <View style={{}}>
             <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:0}}>
-            <Text style={styles.trainerName}>Plan name</Text>
+            <Text style={styles.trainerName}>{item.plan_name}</Text>
             
             </View>
             

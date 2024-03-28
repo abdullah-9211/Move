@@ -166,3 +166,7 @@ async def add_plan(plan_data: dict):
 @router.post("/add_plan_exercises")
 async def add_plan_exercises(plan_exercises: dict):
     return db.add_plan_exercises(plan_exercises)
+
+@router.get("/get_category_workouts/{category}")
+async def get_category_workouts(category: str):
+    return db.get_category_workouts(category)

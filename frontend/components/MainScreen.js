@@ -1,23 +1,103 @@
 import * as React from 'react';
-import { Image, FlatList, TouchableOpacity, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, ImageBackground } from 'react-native';
+import { Image, FlatList, TouchableOpacity, SafeAreaView, Modal, ActivityIndicator, ScrollView, SectionList, StyleSheet, Text, View, Dimensions, ImageBackground } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import axios from 'axios';
+import {REACT_APP_API_URL} from "@env"
+
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const ListItem = ({ item }) => {
-  return (
 
-    <TouchableOpacity style={{marginHorizontal:5}}>
+
+export default function MainScreen() {
+
+  const route = useRoute();
+  const user = route.params?.user;
+  const navigation = useNavigation();
+
+  const suggestedTrainers = React.useRef([]);
+  const suggestedPlans = React.useRef([]);
+  const [loading, setLoading] = React.useState(false);
+  const [whiteScreen, setWhiteScreen] = React.useState(false);
+
+
+  React.useEffect(() => {
+    setLoading(true);
+    setWhiteScreen(true);
+
+		const apiUrl = REACT_APP_API_URL + '/exercise/get_category_workouts/' + user["goal"]["goal"];
+		axios.get(apiUrl)
+		.then((response) => {
+			console.log(response.data);
+			suggestedPlans.current = response.data;
+      suggestedTrainers.current = response.data[0]["trainers"];
+			setLoading(false);
+      setWhiteScreen(false);
+		})
+		.catch((error) => {
+			console.log(error);
+      setLoading(false);
+      setWhiteScreen(false);
+		})
+
+  }, []);
+
+  const ListItem = ({ item }) => {
+
+    const showWorkout = () => {
+      navigation.navigate('PlanDescription', {user: item["Users"], workout: item});
+    }
+
+    return (
+  
+      <TouchableOpacity style={{marginHorizontal:5}} onPress={showWorkout}>
+        <ImageBackground
+        source={{
+          uri: item.plan_image,
+        }}
+        resizeMode="cover"
+        imageStyle={{ borderRadius: 9 }}
+        style={{
+          width: screenWidth*0.9, height: 250, borderRadius: 12, marginVertical:10,
+            paddingBottom: 0,
+            paddingHorizontal: 0,
+        }}>
+        <LinearGradient
+          colors={['transparent', 'rgba(0, 0, 0, 0.75)']} 
+          style={styles.gradient}
+        >
+        <View style={{}}>
+              <Text style={styles.planName}>{item.plan_name}</Text>
+              <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:15}}>
+              <Text style={styles.trainerName}>{item["Users"]["first_name"] + " " + item["Users"]["last_name"]}</Text>
+  
+              </View>
+              
+            </View>
+        </LinearGradient>
+        </ImageBackground>
+      </TouchableOpacity>
+    );
+  };
+  const ListItemTrainer = ({ item }) => {
+
+
+    const showTrainerProfile = () => {
+      navigation.navigate('TrainerProfileUserSide', {trainer: item, user: user});
+    }
+
+    return (
+      <TouchableOpacity style={{marginHorizontal:5}} onPress={showTrainerProfile}>
       <ImageBackground
       source={{
-        uri: item.uri,
+        uri: item.profile_picture,
       }}
       resizeMode="cover"
       imageStyle={{ borderRadius: 9 }}
       style={{
-        width: screenWidth*0.9, height: 250, borderRadius: 12, marginVertical:10,
+        width: screenWidth*0.45, height: 250, borderRadius: 12, marginVertical:10,
           paddingBottom: 0,
           paddingHorizontal: 0,
       }}>
@@ -26,59 +106,19 @@ const ListItem = ({ item }) => {
         style={styles.gradient}
       >
       <View style={{}}>
-            <Text style={styles.planName}>Plan Name</Text>
+            <Text style={styles.TName}>{item["first_name"] + " " + item["last_name"]}</Text>
             <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:15}}>
-            <Text style={styles.trainerName}>Trainer name</Text>
-            <View style={{flexDirection: "row"}}>
-              <Text style={styles.trainerName}>Beginner</Text>
-              <Text style={styles.trainerName}> - </Text>
-              <Text style={styles.trainerName}>3 weeks</Text>
-            </View>
+            
+            
             </View>
             
           </View>
       </LinearGradient>
       </ImageBackground>
     </TouchableOpacity>
-  );
-};
-const ListItemTrainer = ({ item }) => {
-  return (
-    <TouchableOpacity style={{marginHorizontal:5}}>
-    <ImageBackground
-    source={{
-      uri: item.uri,
-    }}
-    resizeMode="cover"
-    imageStyle={{ borderRadius: 9 }}
-    style={{
-      width: screenWidth*0.45, height: 250, borderRadius: 12, marginVertical:10,
-        paddingBottom: 0,
-        paddingHorizontal: 0,
-    }}>
-    <LinearGradient
-      colors={['transparent', 'rgba(0, 0, 0, 0.75)']} 
-      style={styles.gradient}
-    >
-    <View style={{}}>
-          <Text style={styles.TName}>Trainer Name</Text>
-          <View  style={{flexDirection: "row", justifyContent: "space-between", marginHorizontal:15}}>
-          
-          
-          </View>
-          
-        </View>
-    </LinearGradient>
-    </ImageBackground>
-  </TouchableOpacity>
-  );
-};
-
-
-export default function MainScreen() {
-
-  const route = useRoute();
-  const user = route.params?.user;
+    );
+  };
+  
 
 
     const [loaded] = useFonts({
@@ -90,6 +130,19 @@ export default function MainScreen() {
     if (!loaded) {
       return null;
     }
+
+	  if (loading && whiteScreen) {
+      return (
+        <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'white'}}>
+          <Modal transparent={true} animationType="fade">
+          <View style={styles.modal}>
+            <ActivityIndicator size="large" color="#fff" />
+          </View>
+          </Modal>
+        </View>
+      );
+      }
+
   return (
     
     <View style={styles.container}>
@@ -98,7 +151,7 @@ export default function MainScreen() {
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
-          data={SECTIONS[0].data}
+          data={suggestedPlans.current}
           renderItem={({ item }) => <ListItem item={item} />}
           keyExtractor={(item) => item.key}
           horizontal
@@ -109,7 +162,7 @@ export default function MainScreen() {
       <View>
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 10 }}
-          data={SECTIONS[0].data}
+          data={suggestedTrainers.current}
           renderItem={({ item }) => <ListItemTrainer item={item} />}
           keyExtractor={(item) => item.key}
           horizontal
@@ -174,6 +227,12 @@ trainerName: {
   justifyContent: "flex-end",
   alignItems: "flex-start"
 },
+modal: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
 
 });
 

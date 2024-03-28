@@ -101,7 +101,7 @@ export default function PlanDescription() {
         style={styles.gradient}
       >
         <View style={{ flex: 1, justifyContent: "flex-start", backgroundColor: "transparent" }}>
-          <Pressable onPress={() => navigation.navigate('ProfileWithPlans', {user: trainer})}>
+          <Pressable onPress={() => navigation.goBack()}>
           <MaterialIcons name="navigate-before" size={36} color="#000000" style={{paddingTop:50, marginHorizontal:20}}/>
           </Pressable>
           <View style={{ flex: 1, alignItems: "flex-start", justifyContent: "flex-end" }}>
