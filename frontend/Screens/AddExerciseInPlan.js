@@ -52,10 +52,15 @@ const AddExerciseInPlan = () => {
     const [counter, setCounter] = useState(0); // Initialize counter here
     const [loading, setLoading] = useState(false);
     const planID = React.useRef(0);
+    const exercisesAdded = React.useRef([]);
     const [numVideos, setNumVideos] = useState(0);
     const [exerciseURL, setExerciseURL] = useState(''); // Initialize exerciseURL here
     const [uploaded, setUploaded] = useState(false); // Initialize uploaded here
     const [exercisesInfo, setExercisesInfo] = useState([]); // Initialize exercisesInfo here
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [isDone, setIsDone] = useState(false);
+
+
 
     React.useEffect(() => {
         console.log('Plan Name: ', planName);
@@ -79,6 +84,11 @@ const AddExerciseInPlan = () => {
         if (!permissionResult.granted) {
           Alert.alert('Permissions required', 'Permission to access media library is required to select a video.');
           return;
+        }
+
+        if (exercisesAdded.current.includes(exerciseName)) {
+            alert('Exercise already added to the plan');
+            return;
         }
     
         if (numVideos == 0)
@@ -141,6 +151,7 @@ const AddExerciseInPlan = () => {
         uploadTask.on('state_changed',
           (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(progress.toFixed(1));
             console.log('Upload is ' + progress + '% done');
           },
         )
@@ -150,7 +161,6 @@ const AddExerciseInPlan = () => {
         await uploadTask.then(() => {
           console.log('Uploaded a blob or file!');
           setNumVideos((prevNumVideos) => prevNumVideos + 1);
-          setLoading(false);
           setUploaded(true);
           getDownloadURL(ref(getStorage(), "Videos/" + exercise_name + "/trainer/" + name)).then((url1) => {
             console.log("Uploaded Video URL: ", url1);
@@ -163,6 +173,27 @@ const AddExerciseInPlan = () => {
                 exercise_type: secOrReps,
             };
             setExercisesInfo((prevExercisesInfo) => [...prevExercisesInfo, exercise]);
+            exercisesAdded.current.push(exercise_name);
+
+            if (exercise_name == 'plank' || exercise_name == 'pushup' || exercise_name == 'squat' || exercise_name == 'jumping jack') {
+                const postData = {
+                    plan_id: planID.current,
+                    exercise_name: exercise_name,
+                    exercise_video: url1,
+                  };
+                const apiUrl = REACT_APP_API_URL + '/exercise/get-trainer-angles';
+                axios.post(apiUrl, postData)
+                .then(response => {
+                    console.log("Response: ", response.data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            }else {
+                setLoading(false);
+            }
+
           });
         });
     
@@ -186,22 +217,22 @@ const AddExerciseInPlan = () => {
         const savedExercises = {
             exercise_data: exercisesInfo,
           };
-          setLoading(true);
+          setIsDone(true);
           if (exercisesInfo.length == 0) {
               alert('Please add exercises to the plan');
-              setLoading(false);
+              setIsDone(false);
               return;
-          )
+          }
 
           const apiUrl = REACT_APP_API_URL + '/exercise/add_plan_exercises';
           try {
               const response = await axios.post(apiUrl, savedExercises);
               console.log("Response: ", response.data);
-              setLoading(false);
+              setIsDone(false);
               navigation.navigate('ProfileWithPlans', {user: trainer, refresh: true});
           } catch (error) {
               console.log(error);
-              setLoading(false);
+              setIsDone(false);
           }
         
     }
@@ -425,11 +456,25 @@ const AddExerciseInPlan = () => {
     {loading && (
         <Modal transparent={true} animationType="fade">
             <View style={styles.modal}>
+            <Text style={styles.uploadingText}>
+            {uploaded ? 'Analyzing video...' : `Uploading video... ${uploadProgress}%`}
+                  </Text>
                 <ActivityIndicator size="large" color="#fff" />
             </View>
        </Modal>
       )}
-                    
+
+      {isDone && (
+        <Modal transparent={true} animationType="fade">
+            <View style={styles.modal}>
+            <Text style={styles.uploadingText}>
+                    {`Saving Workout Plan...`}
+                  </Text>
+                <ActivityIndicator size="large" color="#fff" />
+            </View>
+       </Modal>
+      )}
+
 {/* -------------------------------------Set plan name-----------------------------------------------------------------------------------------*/}
            <View style={{flexDirection: "row"}}>
            <View 
@@ -657,5 +702,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+      },
+      uploadingText: {
+        color: '#fff',
+        fontSize: 18,
+        fontFamily: 'QuickSandBold',
+        marginBottom: 20, // Adjust this value as needed
+      },
+      analyzingText: {
+        color: '#fff',
+        fontSize: 18,
+        fontFamily: 'QuickSandBold',
+        marginBottom: 20, // Adjust this value as needed
       },
     });

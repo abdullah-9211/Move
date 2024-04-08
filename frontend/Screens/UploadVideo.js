@@ -52,6 +52,8 @@ export default function UploadVideo() {
   const [uploaded, setUploaded] = useState(false);
   const [exercises, setExercises] = useState(exerciseNames);
   const exerciseText = exercises[counter] || "Exercise";
+  const [uploadProgress, setUploadProgress] = useState(0);
+
   
   // const recordingOptions = {
   //   quality: Camera.Constants.VideoQuality['720p'],
@@ -111,6 +113,7 @@ export default function UploadVideo() {
         exercise: exercise_name,
         client_video: client_url,
         trainer_video: trainer_url,
+        plan_id: workout['id'],
       };
       const response = await axios.post(apiUrl, requestBody);
       console.log(response.data);
@@ -137,6 +140,7 @@ export default function UploadVideo() {
     uploadTask.on('state_changed',
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setUploadProgress(progress.toFixed(1));
         console.log('Upload is ' + progress + '% done');
       },
     )
@@ -292,6 +296,9 @@ export default function UploadVideo() {
         {loading && (
                 <Modal transparent={true} animationType="fade">
                 <View style={styles.modal}>
+                <Text style={styles.uploadingText}>
+                    {uploaded ? 'Analyzing video...' : `Uploading video... ${uploadProgress}%`}
+                  </Text>
                     <ActivityIndicator size="large" color="#fff" />
                 </View>
                 </Modal>
@@ -404,6 +411,18 @@ export default function UploadVideo() {
       color: '#000000',
       marginRight:20,
       fontFamily: 'QuickSand',
+    },
+    uploadingText: {
+      color: '#fff',
+      fontSize: 18,
+      fontFamily: 'QuickSandBold',
+      marginBottom: 20, // Adjust this value as needed
+    },
+    analyzingText: {
+      color: '#fff',
+      fontSize: 18,
+      fontFamily: 'QuickSandBold',
+      marginBottom: 20, // Adjust this value as needed
     },
     
   
