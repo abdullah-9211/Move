@@ -1,0 +1,7 @@
+supabase
+fastapi
+opencv-python
+mediapipe
+uvicorn
+firebase-admin
+datetime
