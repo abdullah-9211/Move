@@ -1,17 +1,14 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-from firebase_admin import credentials, storage
-import database.firebase_config as firebase_config
 from datetime import datetime
+timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+
 import os
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-# set up firebase
-firebase_app = firebase_config.get_firebase_app()
 
-bucket = storage.bucket()
 
 class Pushup:
     def __init__(self, client_url, trainer_url):
@@ -338,13 +335,12 @@ class Pushup:
         return min(self.trainer_elbow_angle_state1), max(self.trainer_elbow_angle_state1), min(self.trainer_elbow_angle_state2), max(self.trainer_elbow_angle_state2), min(self.trainer_elbow_angle_state3), max(self.trainer_elbow_angle_state3), min(self.trainer_shoulder_angle_state1), max(self.trainer_shoulder_angle_state1), min(self.trainer_shoulder_angle_state2), max(self.trainer_shoulder_angle_state2), min(self.trainer_shoulder_angle_state3), max(self.trainer_shoulder_angle_state3), min(self.trainer_hip_angle_state1), max(self.trainer_hip_angle_state1), min(self.trainer_hip_angle_state2), max(self.trainer_hip_angle_state2), min(self.trainer_hip_angle_state3), max(self.trainer_hip_angle_state3), min(self.trainer_knee_angle_state1), max(self.trainer_knee_angle_state1), min(self.trainer_knee_angle_state2), max(self.trainer_knee_angle_state2), min(self.trainer_knee_angle_state3), max(self.trainer_knee_angle_state3)
             
             
-    def assess_client(self, elbow_state1, elbow_state2, elbow_state3, shoulder_state1, shoulder_state2, shoulder_state3, hip_state1, hip_state2, hip_state3, knee_state1, knee_state2, knee_state3, state_1_threshold, state_2_threshold, state_3_threshold):
+    def assess_client(self, elbow_state1, elbow_state2, elbow_state3, shoulder_state1, shoulder_state2, shoulder_state3, hip_state1, hip_state2, hip_state3, knee_state1, knee_state2, knee_state3, state_1_threshold, state_2_threshold, state_3_threshold, filename):
         correct_frames = 0
         incorrect_frames = 0
         
         cap = cv2.VideoCapture(self.client_url)
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         filename = f"pushup_{timestamp}.mp4"
         out = cv2.VideoWriter(filename, fourcc, 20.0, (640, 480))
         images = []
@@ -692,12 +688,7 @@ class Pushup:
                 image = cv2.resize(image, (640, 480))
                 out.write(image)
             out.release()
-            try:
-                blob = bucket.blob(f"Videos/pushup/user/feedback/{filename}")
-                blob.upload_from_filename(filename)
-                os.remove(filename)
-            except Exception as e:
-                print("Error uploading video to firebase", e)
+           
         
         self.accuracy = round((correct_frames/(correct_frames + incorrect_frames))*100.0, 1)
         

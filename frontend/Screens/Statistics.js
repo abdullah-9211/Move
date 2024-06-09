@@ -20,6 +20,8 @@ export default function WorkoutCompleted() {
   const duration = route.params?.duration;
   const accuracy = route.params?.accuracy;
   const filenames = route.params?.filenames;
+  const workout_id = route.params?.id;
+  
 
   const [loaded] = useFonts({
     'QuickSandBold': require('../assets/fonts/Quicksand-SemiBold.ttf'),
@@ -38,7 +40,6 @@ export default function WorkoutCompleted() {
   
   
   const goAhead = () => {
-    console.log(filenames)
     if (trainer != null) {
       navigation.goBack();
     }
@@ -57,7 +58,10 @@ export default function WorkoutCompleted() {
       </View>
         
       
-      <Report />
+      <Report 
+        workout_id={workout_id}
+        user={user}
+      />
       <Pressable onPress={goAhead}>
       <View 
                 style = {{

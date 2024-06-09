@@ -1,19 +1,18 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-import firebase_admin
-import database.firebase_config as firebase_config
 
-from firebase_admin import credentials, storage
+
+
 from datetime import datetime
+timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 import os
+
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
 # set up firebase
-firebse_app = firebase_config.get_firebase_app()
 
-bucket = storage.bucket()
 
 class JumpingJack:
     def __init__(self, client_url, trainer_url):
@@ -324,10 +323,11 @@ class JumpingJack:
         return min(self.trainer_shoulder_angle_state1_r), max(self.trainer_shoulder_angle_state1_r), min(self.trainer_shoulder_angle_state2_r), max(self.trainer_shoulder_angle_state2_r), min(self.trainer_shoulder_angle_state3_r), max(self.trainer_shoulder_angle_state3_r), min(self.trainer_hip_angle_state1_r), max(self.trainer_hip_angle_state1_r), min(self.trainer_hip_angle_state2_r), max(self.trainer_hip_angle_state2_r), min(self.trainer_hip_angle_state3_r), max(self.trainer_hip_angle_state3_r), min(self.trainer_knee_angle_state1_r), max(self.trainer_knee_angle_state1_r), min(self.trainer_knee_angle_state2_r), max(self.trainer_knee_angle_state2_r), min(self.trainer_knee_angle_state3_r), max(self.trainer_knee_angle_state3_r), min(self.trainer_shoulder_angle_state1_l), max(self.trainer_shoulder_angle_state1_l), min(self.trainer_shoulder_angle_state2_l), max(self.trainer_shoulder_angle_state2_l), min(self.trainer_shoulder_angle_state3_l), max(self.trainer_shoulder_angle_state3_l), min(self.trainer_hip_angle_state1_l), max(self.trainer_hip_angle_state1_l), min(self.trainer_hip_angle_state2_l), max(self.trainer_hip_angle_state2_l), min(self.trainer_hip_angle_state3_l), max(self.trainer_hip_angle_state3_l), min(self.trainer_knee_angle_state1_l), max(self.trainer_knee_angle_state1_l), min(self.trainer_knee_angle_state2_l), max(self.trainer_knee_angle_state2_l), min(self.trainer_knee_angle_state3_l), max(self.trainer_knee_angle_state3_l)
            
             
-    def assess_client(self, shoulder_angle_state1_r, shoulder_angle_state2_r, shoulder_angle_state3_r, hip_angle_state1_r, hip_angle_state2_r, hip_angle_state3_r, knee_angle_state1_r, knee_angle_state2_r, knee_angle_state3_r, shoulder_angle_state1_l, shoulder_angle_state2_l, shoulder_angle_state3_l, hip_angle_state1_l, hip_angle_state2_l, hip_angle_state3_l, knee_angle_state1_l, knee_angle_state2_l, knee_angle_state3_l, state1_angle_threshold, state2_angle_threshold, state3_angle_threshold):
+    def assess_client(self, shoulder_angle_state1_r, shoulder_angle_state2_r, shoulder_angle_state3_r, hip_angle_state1_r, hip_angle_state2_r, hip_angle_state3_r, knee_angle_state1_r, knee_angle_state2_r, knee_angle_state3_r, shoulder_angle_state1_l, shoulder_angle_state2_l, shoulder_angle_state3_l, hip_angle_state1_l, hip_angle_state2_l, hip_angle_state3_l, knee_angle_state1_l, knee_angle_state2_l, knee_angle_state3_l, state1_angle_threshold, state2_angle_threshold, state3_angle_threshold, filename):
         correct_frames = 0
         incorrect_frames = 0
-        
+        # use timestamp to create unique filename
+                
         cap = cv2.VideoCapture(self.client_url)
 
         self.state = 0
@@ -335,8 +335,7 @@ class JumpingJack:
         
         cap = cv2.VideoCapture(self.client_url)
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        filename = f"jumping_jack_{timestamp}.mp4"
+        filename = f"jumping jack_{timestamp}.mp4"
         out = cv2.VideoWriter(filename, fourcc, 20.0, (640, 480))
         images = []
         
@@ -817,13 +816,7 @@ class JumpingJack:
                 image = cv2.resize(image, (640, 480))
                 out.write(image)
             out.release()
-            try:
-                blob = bucket.blob(f"Videos/jumping jack/user/feedback/{filename}")
-                blob.upload_from_filename(filename)
-                os.remove(filename)
             
-            except Exception as e:
-                print("Error uploading video to firebase", e)
             
         
         

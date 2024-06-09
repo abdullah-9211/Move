@@ -7,6 +7,13 @@ from models.Exercise import Exercise
 from models.Workout import Workout
 import database.workouts as db
 import database.users as user_db
+from firebase_admin import credentials, storage
+import firebase_admin
+import database.firebase_config as firebase_config
+firebse_app = firebase_config.get_firebase_app()
+import os
+
+bucket = storage.bucket()
 
 
 router = APIRouter()
@@ -44,8 +51,11 @@ async def analyze_exercise(exercise_data: dict):
     trainer_video = exercise_data.get("trainer_video")
     exercise_id = db.get_exercise_id(exercise)
     plan_id = exercise_data.get("plan_id")
+    workout_id = exercise_data.get("workout_id")
+    user_email = exercise_data.get("user_email")
+    print("USER EMAIL: ", user_email)
     print(exercise_id, plan_id, trainer_video)
-
+    video_filename = ""
     # Get exercise id
     exercises.append(exercise)
     exercise_translator[exercise] = exercise_id
@@ -56,8 +66,7 @@ async def analyze_exercise(exercise_data: dict):
         
         angles = db.get_angles_from_db(plan_id, exercise_id)
         angles = angles[0]['trainer_angles']
-        errors, error_times, accuracy, duration, filename = plank_instance.assess_client(angles['elbow_min'], angles['elbow_max'], angles['shoulder_min'], angles['shoulder_max'], angles['hip_min'], angles['hip_max'], angles['knee_min'], angles['knee_max'])
-        filenames.append(filename)
+        errors, error_times, accuracy, duration, filename = plank_instance.assess_client(angles['elbow_min'], angles['elbow_max'], angles['shoulder_min'], angles['shoulder_max'], angles['hip_min'], angles['hip_max'], angles['knee_min'], angles['knee_max'], video_filename)
         exercise_stats = Exercise(0, exercise_id, None, duration, accuracy)
         all_errors[exercise_id] = errors
         all_error_times[exercise_id] = error_times
@@ -65,8 +74,7 @@ async def analyze_exercise(exercise_data: dict):
         pushup_instance = Pushup(client_video, trainer_video)
         angles = db.get_angles_from_db(plan_id, exercise_id)
         angles = angles[0]['trainer_angles']
-        reps, errors, error_times, accuracy, duration, filename = pushup_instance.assess_client(angles['elbow_state1'], angles['elbow_state2'], angles['elbow_state3'], angles['shoulder_state1'], angles['shoulder_state2'], angles['shoulder_state3'], angles['hip_state1'], angles['hip_state2'], angles['hip_state3'], angles['knee_state1'], angles['knee_state2'], angles['knee_state3'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'])
-        filenames.append(filename)
+        reps, errors, error_times, accuracy, duration, filename = pushup_instance.assess_client(angles['elbow_state1'], angles['elbow_state2'], angles['elbow_state3'], angles['shoulder_state1'], angles['shoulder_state2'], angles['shoulder_state3'], angles['hip_state1'], angles['hip_state2'], angles['hip_state3'], angles['knee_state1'], angles['knee_state2'], angles['knee_state3'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'], video_filename)
         exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
         all_errors[exercise_id] = errors
         all_error_times[exercise_id] = error_times
@@ -74,8 +82,7 @@ async def analyze_exercise(exercise_data: dict):
         squat_instance = Squat(client_video, trainer_video)
         angles = db.get_angles_from_db(plan_id, exercise_id)
         angles = angles[0]['trainer_angles']
-        reps, errors, error_times, accuracy, duration, filename = squat_instance.assess_client(angles['knee_angle_state1'], angles['knee_angle_state2'], angles['knee_angle_state3'], angles['hip_angle_state1'], angles['hip_angle_state2'], angles['hip_angle_state3'], angles['knee_feet_ratio_state1'], angles['feet_shoulder_ratio_state1'], angles['knee_feet_ratio_state2'], angles['feet_shoulder_ratio_state2'], angles['knee_feet_ratio_state3'], angles['feet_shoulder_ratio_state3'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'])
-        filenames.append(filename)
+        reps, errors, error_times, accuracy, duration, filename = squat_instance.assess_client(angles['knee_angle_state1'], angles['knee_angle_state2'], angles['knee_angle_state3'], angles['hip_angle_state1'], angles['hip_angle_state2'], angles['hip_angle_state3'], angles['knee_feet_ratio_state1'], angles['feet_shoulder_ratio_state1'], angles['knee_feet_ratio_state2'], angles['feet_shoulder_ratio_state2'], angles['knee_feet_ratio_state3'], angles['feet_shoulder_ratio_state3'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'], video_filename)
         exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
         all_errors[exercise_id] = errors
         all_error_times[exercise_id] = error_times
@@ -83,8 +90,7 @@ async def analyze_exercise(exercise_data: dict):
         jj_instance = JumpingJack(client_video, trainer_video)
         angles = db.get_angles_from_db(plan_id, exercise_id)
         angles = angles[0]['trainer_angles']
-        reps, errors, error_times, accuracy, duration, filename = jj_instance.assess_client(angles['shoulder_1_r'], angles['shoulder_2_r'], angles['shoulder_3_r'], angles['hip_1_r'], angles['hip_2_r'], angles['hip_3_r'], angles['knee_1_r'], angles['knee_2_r'], angles['knee_3_r'], angles['shoulder_1_l'], angles['shoulder_2_l'], angles['shoulder_3_l'], angles['hip_1_l'], angles['hip_2_l'], angles['hip_3_l'], angles['knee_1_l'], angles['knee_2_l'], angles['knee_3_l'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'])
-        filenames.append(filename)
+        reps, errors, error_times, accuracy, duration, filename = jj_instance.assess_client(angles['shoulder_1_r'], angles['shoulder_2_r'], angles['shoulder_3_r'], angles['hip_1_r'], angles['hip_2_r'], angles['hip_3_r'], angles['knee_1_r'], angles['knee_2_r'], angles['knee_3_r'], angles['shoulder_1_l'], angles['shoulder_2_l'], angles['shoulder_3_l'], angles['hip_1_l'], angles['hip_2_l'], angles['hip_3_l'], angles['knee_1_l'], angles['knee_2_l'], angles['knee_3_l'], angles['state_1_threshold'], angles['state_2_threshold'], angles['state_3_threshold'], video_filename)
         exercise_stats = Exercise(0, exercise_id, reps, duration, accuracy)
         all_errors[exercise_id] = errors
         all_error_times[exercise_id] = error_times
@@ -92,6 +98,9 @@ async def analyze_exercise(exercise_data: dict):
     else:
         raise HTTPException(status_code=404, detail="Exercise not found")
 
+    # append user email at the end of the filename
+    filename = filename.replace(".mp4", f"_{user_email}.mp4")
+    filenames.append(filename)
     # Add exercise stats
     completed_exercises.append(exercise_stats)
     accuracies.append(exercise_stats.accuracy)
@@ -103,7 +112,6 @@ async def analyze_exercise(exercise_data: dict):
         print(exercise.duration)
         print(exercise.accuracy)
     
-    return {"filenames": filenames}
         
 # Finalize workout and add to database            
 @router.post("/finish-workout")
@@ -130,6 +138,7 @@ async def finish_workout(workout_data: dict):
 
     workout = Workout(plan_id, client_id, total_duration, accuracy)
     workout_id = db.add_workout(workout)
+    print("WORKOUT ID:   ", workout_id)
 
     for exercise in completed_exercises:
         exercise.workout_id = workout_id
@@ -138,9 +147,39 @@ async def finish_workout(workout_data: dict):
             db.add_errors(workout_id, exercise.exercise_id, all_errors[exercise.exercise_id][i], all_error_times[exercise.exercise_id][i])
 
     completed_exercises.clear()
-    temp_filenames = filenames
+    # Upload files to Firebase
+    for file_path in filenames:
+        try:
+            # Parse filename components
+            print("FILE PATH: ", file_path)
+            parts = file_path.split("_")
+            exercise_name = parts[0]
+            n = len(parts[2].split("."))
+            user_email_parts = parts[2].split(".")[:n-1]
+            user_email = user_email_parts[0]
+            for i in range(1, len(user_email_parts)):
+                user_email += f".{user_email_parts[i]}"
+            print("USER EMAIL: ", user_email)
+            print("EXERCISE NAME: ", exercise_name)
+            # Create a new filename for Firebase storage
+            new_filename = f"{user_email}_{workout_id}.mp4"
+            # remove the user email from the file_path
+            file_path = file_path.replace(f"_{user_email}", "")
+            # Construct the full path for Firebase storage
+            firebase_path = f"Videos/{exercise_name}/user/feedback/{new_filename}"
+            
+            # Upload the video to Firebase Storage
+            blob = bucket.blob(firebase_path)
+            blob.upload_from_filename(file_path)
+            blob.make_public()
+            os.remove(file_path)
+            
+            # Print Firebase path
+            print(f"File uploaded to: {firebase_path}")
+        except Exception as e:
+            print(f"Error uploading file: {e}")
     filenames.clear()
-    return {"workout": workout_id, "total_duration": total_duration, "accuracy": round(accuracy, 1), "errors": all_errors, "error_times": all_error_times, "exercises": exercises, "exerciseNum": len(exercises), "exercise_translator": exercise_translator, "accuracies": accuracies, filenames: temp_filenames}
+    return {"workout": workout_id, "total_duration": total_duration, "accuracy": round(accuracy, 1), "errors": all_errors, "error_times": all_error_times, "exercises": exercises, "exerciseNum": len(exercises), "exercise_translator": exercise_translator, "accuracies": accuracies}
 
 
 @router.post("/get-trainer-angles")

@@ -1,18 +1,14 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-import firebase_admin
-import database.firebase_config as firebase_config
 
-from firebase_admin import credentials, storage
 from datetime import datetime
+timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 import os
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-firebase_app = firebase_config.get_firebase_app()
 
-bucket = storage.bucket()
                               
 
 
@@ -175,7 +171,7 @@ class Plank:
             
         return min(self.trainer_elbow_angle), max(self.trainer_elbow_angle), min(self.trainer_shoulder_angle), max(self.trainer_shoulder_angle), min(self.trainer_hip_angle), max(self.trainer_hip_angle), min(self.trainer_knee_angle), max(self.trainer_knee_angle)
             
-    def assess_client(self, elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max):
+    def assess_client(self, elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max,  filename):
         
         correct_frames = 0
         incorrect_frames = 0
@@ -197,8 +193,7 @@ class Plank:
         
         cap = cv2.VideoCapture(self.client_video_url)
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        filename = f"plank_video_{timestamp}.mp4"
+        filename = f"plank_{timestamp}.mp4"
         out = cv2.VideoWriter(filename, fourcc, 20.0, (640, 480))
         images = []
         i = 0
@@ -408,12 +403,6 @@ class Plank:
             out.write(image)
         out.release()
         
-        try:
-            blob = bucket.blob(f"Videos/plank/user/feedback/{filename}")
-            blob.upload_from_filename(filename)
-            os.remove(filename)
-        except Exception as e:
-            print("Error uploading video to firebase", e)
         
         
         return self.errors, self.error_times, self.accuracy, int(round(self.duration, 0)), filename
@@ -422,9 +411,9 @@ class Plank:
     def run_process(self):
         elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max = self.get_trainer_angles()
         
-        self.errors, self.error_times, self.accuracy, self.duration = self.assess_client(elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max)
+        self.errors, self.error_times, self.accuracy, self.duration, filename = self.assess_client(elbow_min, elbow_max, shoulder_min, shoulder_max, hip_min, hip_max, knee_min, knee_max)
         
-        return self.errors, self.error_times, self.accuracy, self.duration
+        return self.errors, self.error_times, self.accuracy, self.duration, filename
         
 
 if "__main__" == __name__:

@@ -46,7 +46,6 @@ export default function UploadVideo() {
   const trainer = route.params?.trainer;
   const exerciseNames = route.params?.exerciseNames;
   const workout = route.params?.workout;
-  const filenames = route.params?.filenames; 
   const [hasPermission, setHasPermission] = useState(null);
   const [counter, setCounter] = useState(0); // Initialize counter here
   const [loading, setLoading] = useState(false);
@@ -115,10 +114,11 @@ export default function UploadVideo() {
         client_video: client_url,
         trainer_video: trainer_url,
         plan_id: workout['id'],
+        user_email: user.email,
+        workout_id: workout.id
       };
       const response = await axios.post(apiUrl, requestBody);
       console.log(response.data);
-      filenames.push(response.data.filenames[0]);
       setLoading(false);     
       handleFinish();
     } catch (error) {
@@ -178,10 +178,9 @@ export default function UploadVideo() {
         trainer_id: workout.plan_trainer,
       };
       const response = await axios.post(apiUrl, requestBody);
-      console.log('Workout finished: ' + filenames);
-      console.log(response.data);
+      console.log("\n\nWorkout Completed: " + response.data);
       setLoading(false);
-      navigation.navigate('Statistics', {user: user, duration: response.data.total_duration, accuracy: response.data.accuracy, workout: response.data.workout, exercises: response.data.exercises, numExercises: response.data.exerciseNum, errors: response.data.errors, error_times: response.data.error_times, exercise_translator: response.data.exercise_translator, accuracies: response.data.accuracies, filenames: filenames});
+      navigation.navigate('Statistics', {user: user, duration: response.data.total_duration, accuracy: response.data.accuracy, workout: response.data.workout, exercises: response.data.exercises, numExercises: response.data.exerciseNum, errors: response.data.errors, error_times: response.data.error_times, exercise_translator: response.data.exercise_translator, accuracies: response.data.accuracies, id: workout.id});
     } catch (error) {
       alert('Error finishing workout:', error);
       setLoading(false);
@@ -194,7 +193,7 @@ export default function UploadVideo() {
 
     if (counter < workouts - 1) {
       setUploaded(false);
-      navigation.navigate('UploadVideo', { workouts:workouts, user: user, trainer: trainer, exerciseNames: exerciseNames, workout: workout, filenames: filenames});
+      navigation.navigate('UploadVideo', { workouts:workouts, user: user, trainer: trainer, exerciseNames: exerciseNames, workout: workout});
     } else {
       finishWorkout();
     }

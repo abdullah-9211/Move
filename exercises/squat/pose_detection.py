@@ -2,19 +2,13 @@ import cv2
 import mediapipe as mp
 import math
 import numpy as np
-import firebase_admin
-import database.firebase_config as firebase_config
-
-from firebase_admin import credentials, storage
 from datetime import datetime
+timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+
 import os
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-# set up firebase
-firebase_app = firebase_config.get_firebase_app()
-
-bucket = storage.bucket()
 
 class Squat:
     def __init__(self, client_url, trainer_url):
@@ -338,14 +332,12 @@ class Squat:
            
            
             
-    def assess_client(self, knee_angle_state1, knee_angle_state2, knee_angle_state3, hip_angle_state1, hip_angle_state2, hip_angle_state3, knee_feet_ratio_state1, feet_shoulder_ratio_state1, knee_feet_ratio_state2, feet_shoulder_ratio_state2, knee_feet_ratio_state3, feet_shoulder_ratio_state3, state1_angle_threshold, state2_angle_threshold, state3_angle_threshold):
+    def assess_client(self, knee_angle_state1, knee_angle_state2, knee_angle_state3, hip_angle_state1, hip_angle_state2, hip_angle_state3, knee_feet_ratio_state1, feet_shoulder_ratio_state1, knee_feet_ratio_state2, feet_shoulder_ratio_state2, knee_feet_ratio_state3, feet_shoulder_ratio_state3, state1_angle_threshold, state2_angle_threshold, state3_angle_threshold, filename):
         correct_frames = 0
         incorrect_frames = 0
-        
+        filename = f"squat_{timestamp}.mp4"
         cap = cv2.VideoCapture(self.client_url)
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        filename = f"squat_{timestamp}.mp4"
         out = cv2.VideoWriter(filename, fourcc, 20.0, (640, 480))
         self.state = 0
         states_visited = []
@@ -704,12 +696,7 @@ class Squat:
                 image = cv2.resize(image, (640, 480))
                 out.write(image)
             out.release()
-            try:
-                blob = bucket.blob(f"Videos/squat/user/feedback/{filename}")
-                blob.upload_from_filename(filename)
-                os.remove(filename)
-            except Exception as e:
-                print("Error uploading video to firebase", e)
+            
         
         self.accuracy = round((correct_frames/(correct_frames + incorrect_frames))*100.0, 1)
         
@@ -737,9 +724,9 @@ class Squat:
         knee_feet_ratio_state3 = angles[20], angles[21]
         feet_shoulder_ratio_state3 = angles[22], angles[23]
         
-        self.reps, self.errors, self.error_times, self.accuracy, self.duration = self.assess_client(knee_angle_state1, knee_angle_state2, knee_angle_state3, hip_angle_state1, hip_angle_state2, hip_angle_state3, knee_feet_ratio_state1, feet_shoulder_ratio_state1, knee_feet_ratio_state2, feet_shoulder_ratio_state2, knee_feet_ratio_state3, feet_shoulder_ratio_state3, thresholds[0], thresholds[1], thresholds[2])
+        self.reps, self.errors, self.error_times, self.accuracy, self.duration, filename = self.assess_client(knee_angle_state1, knee_angle_state2, knee_angle_state3, hip_angle_state1, hip_angle_state2, hip_angle_state3, knee_feet_ratio_state1, feet_shoulder_ratio_state1, knee_feet_ratio_state2, feet_shoulder_ratio_state2, knee_feet_ratio_state3, feet_shoulder_ratio_state3, thresholds[0], thresholds[1], thresholds[2])
         
-        return self.reps, self.errors, self.error_times, self.accuracy, self.duration
+        return self.reps, self.errors, self.error_times, self.accuracy, self.duration, filename
     
     
 if __name__ == "__main__":

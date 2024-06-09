@@ -204,7 +204,7 @@ export default function SignUpDetails() {
             <Text style={styles.textStyle}>Your email</Text>
             <TextInput
                 style={styles.input}
-                placeholder="email"
+                placeholder="Email (abc@gmail.com)"
                 value={email}
                 onChangeText={(text) => setEmail(text)}
             />
